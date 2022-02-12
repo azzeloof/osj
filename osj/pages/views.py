@@ -127,9 +127,9 @@ class JewelryCreateView(CreateView):
         imageFormset = ThingImageFormset(self.request.POST, self.request.FILES)
         fileFormset = ThingFileFormset(self.request.POST, self.request.FILES)
         if form.is_valid():
-            for fs in [imageFormset, fileFormset]:
-                if fs.is_valid():
-                    fs.save()
+            #for fs in [imageFormset, fileFormset]:
+            #    if fs.is_valid():
+            #        fs.save()
             return self.form_valid(form, imageFormset, fileFormset)
         else:
             return self.form_invalid(form, imageFormset, fileFormset)
@@ -138,6 +138,7 @@ class JewelryCreateView(CreateView):
         self.object = form.save(commit=False)
         self.object.creator = self.request.user
         self.object.save()
+        """
         images = imageFormset.save(commit=False)
         files = fileFormset.save(commit=False)
         for image in images:
@@ -146,6 +147,13 @@ class JewelryCreateView(CreateView):
         for file in files:
             file.thing = self.object
             file.save()
+        """
+        for fs in [imageFormset, fileFormset]:
+            if fs.is_valid():
+                objSet = fs.save(commit=False)
+                for obj in objSet:
+                    obj.thing = self.object
+                    obj.save()
         return redirect(reverse('jewelry'))
 
     def form_invalid(self, form, imageFormset, fileFormset):
