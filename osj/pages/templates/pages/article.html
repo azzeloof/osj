@@ -1,0 +1,19 @@
+{% extends 'pages/base.html' %}
+    {% block content %}
+        <div class="jumbotron vertical-center">
+            <div class="col-12">
+                
+            </div>
+        </div>
+
+        <div class="jumbotron d-flex align-items-center min-vh-100">
+            <div class="container text-center">
+                <h1>{{ article.title }}</h1>
+                <h3>Published {{ article.created }}</h3>
+                <div class='page-content'>
+                    {{ article.content }}
+                </div>
+            </div>
+          </div>
+
+    {% endblock %}

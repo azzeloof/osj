@@ -1,0 +1,33 @@
+{% extends 'pages/base.html' %}
+    {% block content %}
+        <div class="">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <h1>{{ piece.title }}</h1>
+                            </div>
+                            <div class="col-auto">
+                                {% if editable %}
+                                    <a href="{{ piece.id }}/edit" style="font-size: 2rem;" class="bi-pencil-square"></a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <h3>by {{ piece.creator }}</h3>
+                        <h3>created {{ piece.created }}, modified {{ piece.modified }}</h3>
+                        <div class='page-content'>
+                            {% for image in images %}
+                                <img src="{{ image.image.url }}", alt="{{ image.image.alt }}", width="100%">
+                            {% endfor %}
+                            {{ piece.description|safe }}
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+
+                    </div>
+                </div>
+            </div>
+          </div>
+
+    {% endblock %}

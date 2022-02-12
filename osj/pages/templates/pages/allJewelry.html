@@ -1,0 +1,46 @@
+{% extends 'pages/base.html' %}
+    {% block scripts %}
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+        </script>
+        <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+    {% endblock %}
+
+    {% block content %}
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>Jewelry</h1>
+                    <div class='page-content'>
+                        <div class="grid">
+                            <div class=".grid-sizer"></div>
+                            {% for piece in pieces %}
+                                <div class="grid-item">
+                                    <div class="jewelry-box">
+                                        {% if piece.featuredImage.image %}
+                                            <a href="/jewelry/{{ piece.piece.id }}"><image src="{{ piece.featuredImage.image.url }}" href="/jewelry/{{ piece.piece.id }}" class="grid-image"></a>
+                                            <a class="jewelry-box-title" href="/jewelry/{{ piece.piece.id }}">{{ piece.piece.title }}</a>
+                                        {% else %}
+                                            <a href="/jewelry/{{ piece.piece.id }}"><image src="/profile_photos/default.png" class="grid-image"></a>
+                                            <a class="jewelry-box-title" href="/jewelry/{{ piece.piece.id }}">{{ piece.piece.title }}</a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <script>
+                            $('.grid').isotope({
+                                itemSelector: '.grid-item',
+                                percentPosition: true,
+                                masonry: {
+                                    columnWidth: 300
+                                }
+                              });
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% endblock %}

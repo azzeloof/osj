@@ -1,0 +1,87 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+
+{% block content %}
+
+{{ form.media }}
+<div class="container">
+    <form method="POST" enctype='multipart/form-data' class="message-form">{% csrf_token %}
+        <div class="row mb-3s align-items-center">
+            <div class="col-auto">
+                {{ form.title }}
+            </div>
+            <div class="col-auto">
+                <div id="titleHelp" class="form-text">Title</div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            {{ form.description }}
+        </div>
+        <div class="row mb-3 align-items-center">
+            <div class="col-auto">
+                <label class="col-form-label">
+                    Repo:
+                </label>
+            </div>
+            <div class="col-auto">
+                {{ form.repo }}
+            </div>
+            <div class="col-auto">
+                <div id="repoHelp" class="form-text">External repository for project files</div>
+            </div>
+        </div>
+        <div class="row mb-3 align-items-center">
+            <div class="col-auto">
+                <label class="col-form-label">
+                    Category:
+                </label>
+            </div>
+            <div class="col-auto">
+                {{ form.category }}
+            </div>
+            <div class="col-auto">
+                <div id="categoryHelp" class="form-text">Choose the category that best describes your work!</div>
+            </div>
+        </div>
+        <h2>Images:</h2> 
+            {{ imageFormset.non_form_errors }}
+            {{ imageFormset.management_form }}
+            {% for form in imageFormset %}
+            <div class="row mb-3 image-formset-row">
+                <div class="col-auto">
+                    {{ form.image }}
+                </div>
+                <div class="col-auto">
+                    Alt text: {{ form.alt }}
+                </div>
+            </div>
+            {% endfor %}
+        <h2>Files:</h2>
+            {{ fileFormset.non_form_errors }}
+            {{ fileFormset.management_form }}
+            {% for form in fileFormset %}
+            <div class="file-formset-row">
+                <div>{{ form.file }}</div>
+                <div class="ml-4">Name: {{ form.name }}</div>
+            </div>
+            {% endfor %}
+        <button type="submit" class="save btn btn-primary">Save</button>
+    </form>
+</div>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="{% static 'pages/formset/jquery.formset.js' %}"></script>
+<script type="text/javascript">
+    $('.image-formset-row').formset({
+        addText: '<i class="bi-file-plus" style="font-size: 2rem;"></i>',
+        deleteText: '<i class="bi-trash-fill" style="font-size: 2rem;"></i>',
+        prefix: 'image_set'
+    });
+</script>
+<script type="text/javascript">
+    $('.file-formset-row').formset({
+        addText: '<i class="bi-file-plus" style="font-size: 2rem;"></i>',
+        deleteText: '<i class="bi-trash-fill" style="font-size: 2rem;"></i>',
+        prefix: 'file_set'
+    });
+</script>
+{% endblock %}
