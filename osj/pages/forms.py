@@ -1,5 +1,5 @@
 from django import forms
-from things.models import Thing, Image, File, Category
+from things.models import Thing, Image, File, Category, Licence
 from tinymce.widgets import TinyMCE
 
 
@@ -19,9 +19,15 @@ class ThingForm(forms.ModelForm):
         )
     )
     category = forms.ModelChoiceField(queryset=Category.objects.all())
+    licence = forms.ModelChoiceField(queryset=Licence.objects.all())
     description = forms.CharField(
         widget=TinyMCEWidget(
             attrs={'required': False, 'cols': 80, 'rows': 20}
+        )
+    )
+    tagline = forms.CharField(
+        widget=TinyMCEWidget(
+            attrs={'required': False, 'cols': 80, 'rows': 10}
         )
     )
     repo = forms.CharField(
@@ -31,7 +37,7 @@ class ThingForm(forms.ModelForm):
     )
     class Meta:
         model = Thing
-        fields = ['title', 'description', 'repo', 'category']
+        fields = ['title', 'tagline', 'description', 'licence', 'repo', 'category']
         
 
 class ThingImageForm(forms.ModelForm):

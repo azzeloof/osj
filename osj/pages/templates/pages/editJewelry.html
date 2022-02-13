@@ -2,45 +2,59 @@
 {% load static %}
 
 {% block content %}
-
 {{ form.media }}
 <div class="container">
     <form method="POST" enctype='multipart/form-data' class="message-form">{% csrf_token %}
-        <div class="row mb-3s align-items-center">
+        <h3>Title</h3>
+        <div class="row mb-3 align-items-center">
             <div class="col-auto">
                 {{ form.title }}
             </div>
             <div class="col-auto">
-                <div id="titleHelp" class="form-text">Title</div>
+                <div id="titleHelp" class="form-text">Make it a good one!</div>
             </div>
         </div>
         <div class="row mb-3">
-            {{ form.description }}
-        </div>
-        <div class="row mb-3 align-items-center">
-            <div class="col-auto">
-                <label class="col-form-label">
-                    Repo:
-                </label>
+            <div class="col-md-8">
+                <div class="row mb-3">
+                    <h3>Tagline</h3>
+                    {{ form.tagline }}
+                </div>
+                <div class="row mb-3">
+                    <h3>Description</h3>
+                    {{ form.description }}
+                </div>
             </div>
-            <div class="col-auto">
-                {{ form.repo }}
-            </div>
-            <div class="col-auto">
-                <div id="repoHelp" class="form-text">External repository for project files</div>
-            </div>
-        </div>
-        <div class="row mb-3 align-items-center">
-            <div class="col-auto">
-                <label class="col-form-label">
-                    Category:
-                </label>
-            </div>
-            <div class="col-auto">
-                {{ form.category }}
-            </div>
-            <div class="col-auto">
-                <div id="categoryHelp" class="form-text">Choose the category that best describes your work!</div>
+            <div class="col-md-4">
+                <h3>Repo</h3>
+                <div class="row mb-3 align-items-center">
+                    <div class="col-auto">
+                        {{ form.repo }}
+                    </div>
+                    <div class="col-auto">
+                        <div id="repoHelp" class="form-text">External repository for project files</div>
+                    </div>
+                </div>
+                <h3>Category</h3>
+                <div class="row mb-3 align-items-center">
+                    <div class="col-auto">
+                        {{ form.category }}
+                    </div>
+                    <div class="col-auto">
+                        <div id="categoryHelp" class="form-text">Choose the category that best describes your work!</div>
+                    </div>
+                </div>
+                <h3>Licence</h3>
+                <div class="row">
+                    <div class="col-auto">
+                        {{ form.licence }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div id="licenceHelp" class="form-text">Choose an appropriate licence. Make sure to fully read and unserstand before selecting!</div>
+                    <h5>Preview:</h5>
+                    <div id="licenceText"></div>
+                </div>
             </div>
         </div>
         <h2>Images:</h2> 
@@ -84,4 +98,35 @@
         prefix: 'file_set'
     });
 </script>
+
+<script>
+    function generateLicenceData() {
+        licences = {};
+        {% for licence in licences %}
+            licences["{{ licence }}"] = {
+                "url": "{{ licence.url }}",
+                "html": '{{ licence.html|safe }}',
+            }
+        {% endfor %}
+    }
+
+    function updateLicenceText() {
+        licenceSelector = document.getElementById('id_licence');
+        licenceText = document.getElementById('licenceText');
+        if(licenceSelector.value){
+            selectedLicence = licenceSelector[licenceSelector.value].text;
+            licenceText.innerHTML = licences[selectedLicence].html;
+        }
+    }
+
+    $("#id_licence").change(function() {
+        updateLicenceText();
+    });
+
+    $(window).load(function() {
+        generateLicenceData();
+        updateLicenceText();
+      });
+</script>
+
 {% endblock %}

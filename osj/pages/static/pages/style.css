@@ -54,3 +54,15 @@ main-slider {
 .jewelry-description {
     margin-top: 40px;
 }
+
+.licence-block {
+    padding: 12px;
+    border: 2px solid #404040;
+    border-radius: 10px;
+}
+
+@media (min-width: 1200px) {
+    .container{
+        max-width: 970px;
+    }
+}

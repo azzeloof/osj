@@ -110,6 +110,13 @@ def article(request, objID):
 #    return render(request, 'pages/editJewelry.html', context)
 
 
+def getLicenceContext():
+    licences = things.models.Licence.objects.all()
+    licenceContext = []
+    for licence in licences:
+        licenceContext.append(licence)
+    return licenceContext
+
 class JewelryCreateView(CreateView):
     form_class = ThingForm
     template_name = 'pages/editJewelry.html'
@@ -119,7 +126,8 @@ class JewelryCreateView(CreateView):
         context.update({
             'imageFormset': ThingImageFormset(),
             'fileFormset': ThingFileFormset()
-        })        
+        })
+        context.update({'licences': getLicenceContext()})
         if self.request.user.is_authenticated:
             context.update(getUserContext(self.request))
         return context
