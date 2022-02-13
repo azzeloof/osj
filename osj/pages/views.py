@@ -49,6 +49,8 @@ def allJewelry(request):
             featuredImage = None
         piecesContext.append({
             'piece': piece,
+            'created': piece.created.date,
+            'modified': piece.modified.date,
             'featuredImage': featuredImage,
             'categories': piece.category
         })
@@ -66,6 +68,8 @@ def jewelryPiece(request, objID):
     images = piece.image_set.all()
     context = {
         'piece': piece,
+        'created': piece.created.date,
+        'modified': piece.modified.date,
         'files': files,
         'images': images
     }

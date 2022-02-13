@@ -18,7 +18,7 @@ class ThingForm(forms.ModelForm):
             }
         )
     )
-    category = forms.ModelMultipleChoiceField(queryset=Category.objects.all())
+    category = forms.ModelChoiceField(queryset=Category.objects.all())
     description = forms.CharField(
         widget=TinyMCEWidget(
             attrs={'required': False, 'cols': 80, 'rows': 20}
@@ -31,7 +31,7 @@ class ThingForm(forms.ModelForm):
     )
     class Meta:
         model = Thing
-        fields = ['title', 'description', 'repo']
+        fields = ['title', 'description', 'repo', 'category']
         
 
 class ThingImageForm(forms.ModelForm):

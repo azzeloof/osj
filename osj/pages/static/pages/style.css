@@ -34,3 +34,23 @@
 .jewelry-box-title:hover {
     color: #68358a;
 }
+
+.splide__slide img {
+    width: 100%;
+}
+
+main-slider {
+    width: 100%;
+    max-height: 400px;
+}
+
+.jewelry-sidebar{
+    margin-top: 70px;
+    border-left: 2px solid #68358a;
+    height: 90%;
+    padding-left: 24px;
+}
+
+.jewelry-description {
+    margin-top: 40px;
+}

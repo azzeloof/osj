@@ -1,12 +1,47 @@
 {% extends 'pages/base.html' %}
+    {% block scripts %}
+        <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@3.6.12/dist/js/splide.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@3.6.12/dist/css/splide.min.css">
+        <script>
+            document.addEventListener( 'DOMContentLoaded', function () {
+                var main = new Splide( '#main-slider', {
+                type      : 'fade',
+                rewind    : true,
+                pagination: false,
+                arrows    : false,
+                } );
+            
+                var thumbnails = new Splide( '#thumbnail-slider', {
+                fixedWidth  : 200,
+                //fixedHeight : 60,
+                gap         : 10,
+                rewind      : true,
+                pagination  : false,
+                //cover       : true,
+                isNavigation: true,
+                breakpoints : {
+                    600: {
+                    fixedWidth : 60,
+                    //fixedHeight: 44,
+                    },
+                },
+                } );
+            
+                main.sync( thumbnails );
+                main.mount();
+                thumbnails.mount();
+            } );
+        </script>
+    {% endblock %}
+
     {% block content %}
         <div class="">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-9">
+                    <div class="col-md-7">
                         <div class="row align-items-center">
                             <div class="col-auto">
-                                <h1>{{ piece.title }}</h1>
+                                <h2>{{ piece.title }}</h2>
                             </div>
                             <div class="col-auto">
                                 {% if editable %}
@@ -14,17 +49,54 @@
                                 {% endif %}
                             </div>
                         </div>
-                        <h3>by {{ piece.creator }}</h3>
-                        <h3>created {{ piece.created }}, modified {{ piece.modified }}</h3>
+                        <div class="row">
+                            <div class="col-auto">
+                                <h6>by {{ piece.creator }}</h6>
+                            </div>
+                            <div class="col-auto">
+                                {% if created == modified %}
+                                    <h6>created {{ created }}</h6>
+                                {% else %}
+                                    <h6>created {{ created }}, updated {{ modified }}</h6>
+                                {% endif %}
+                            </div>
+                        </div>
                         <div class='page-content'>
-                            {% for image in images %}
-                                <img src="{{ image.image.url }}", alt="{{ image.image.alt }}", width="100%">
-                            {% endfor %}
-                            {{ piece.description|safe }}
+                            <div id="main-slider" class="splide">
+                                <div class="splide__track">
+                                    <ul class="splide__list">
+                                        {% for image in images %}
+                                            <li class="splide__slide">
+                                                <img src="{{ image.image.url }}", alt="{{ image.image.alt }}">
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                            <div id="thumbnail-slider" class="splide">
+                                <div class="splide__track">
+                                    <ul class="splide__list">
+                                        {% for image in images %}
+                                            <li class="splide__slide">
+                                                <img src="{{ image.image.url }}", alt="{{ image.image.alt }}" class="splide-display-image">
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
-
+                    <div class="col-md-5">
+                        <div class="jewelry-sidebar">
+                            <p>Tagline!</p>
+                            <p>Category: {{ piece.category }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="jewelry-description">    
+                    <h3>Description</h3>
+                        {{ piece.description|safe }}
                     </div>
                 </div>
             </div>
