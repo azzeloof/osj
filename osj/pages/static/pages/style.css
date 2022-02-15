@@ -1,4 +1,4 @@
-.nav-link {
+.nav-link.main {
     color: #FFFFFF;
 }
 
@@ -45,13 +45,13 @@ main-slider {
 }
 
 .jewelry-sidebar{
-    margin-top: 70px;
-    border-left: 2px solid #68358a;
+    margin-top: 0px;
+    border-left: 2px solid #470077;
     height: 90%;
     padding-left: 24px;
 }
 
-.jewelry-description {
+.jewelry-details {
     margin-top: 40px;
 }
 
@@ -59,10 +59,28 @@ main-slider {
     padding: 12px;
     border: 2px solid #404040;
     border-radius: 10px;
+    margin-top: 20px;
 }
 
 @media (min-width: 1200px) {
     .container{
-        max-width: 970px;
+        max-width: 1000px;
     }
+}
+
+.bg-purple {
+    background-color: #470077;
+}
+
+.edit-button-col {
+    margin-right: 0px;
+    margin-left: auto;
+}
+
+.jewelry-header-subtitle {
+    margin: 0px;
+}
+
+.sidebar-row {
+    margin-bottom: 0px;
 }

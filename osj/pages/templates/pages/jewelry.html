@@ -7,6 +7,8 @@
                 var main = new Splide( '#main-slider', {
                 type      : 'fade',
                 rewind    : true,
+                //height    : 400,
+                autoWidth: true,
                 pagination: false,
                 arrows    : false,
                 } );
@@ -38,29 +40,29 @@
         <div class="page-content">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-8">
-                        <div class="row align-items-center">
-                            <div class="col-auto">
-                                <h2>{{ piece.title }}</h2>
-                            </div>
-                            <div class="col-auto">
-                                {% if editable %}
-                                    <a href="{{ piece.id }}/edit" style="font-size: 2rem;" class="bi-pencil-square"></a>
-                                {% endif %}
-                            </div>
+                    <div class="row align-items-center">
+                        <div class="col-auto">
+                            <h1>{{ piece.title }}</h1>
                         </div>
-                        <div class="row">
-                            <div class="col-auto">
-                                <h6>by {{ piece.creator }}</h6>
+                        <div class="col-auto">
+                            <div class="row">
+                                <h6 class="jewelry-header-subtitle">by {{ piece.creator }}</h6>
                             </div>
-                            <div class="col-auto">
+                            <div class="row">
                                 {% if created == modified %}
-                                    <h6>created {{ created }}</h6>
+                                    <h6 class="jewelry-header-subtitle">created {{ created }}</h6>
                                 {% else %}
-                                    <h6>created {{ created }}, updated {{ modified }}</h6>
+                                    <h6 class="jewelry-header-subtitle">created {{ created }}, updated {{ modified }}</h6>
                                 {% endif %}
                             </div>
                         </div>
+                        <div class="col-auto edit-button-col">
+                            {% if editable %}
+                                <a href="{{ piece.id }}/edit" style="font-size: 2rem;" class="bi-pencil-square"></a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-8">
                         <div id="main-slider" class="splide">
                             <div class="splide__track">
                                 <ul class="splide__list">
@@ -86,18 +88,45 @@
                     </div>
                     <div class="col-md-4">
                         <div class="jewelry-sidebar">
-                            {{ piece.tagline|safe }}
-                            <p>Category: {{ piece.category }}</p>
-                            <div class="licence-block">
-                                {{ piece.licence.html|safe }}
+                            <div class="row sidebar-row">
+                                {{ piece.tagline|safe }}
+                            </div>
+                            <div class="row sidebar-row">
+                                <p>Category: {{ piece.category }}</p>
+                            </div>
+                            <div class="row sidebar-row">
+                                <button class="btn btn-primary"><i class="bi-download"></i> Download Files</button>
+                            </div>
+                            <div class="row sidebar-row">
+                                <div class="licence-block">
+                                    {{ piece.licence.html|safe }}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="jewelry-description">    
-                    <h3>Description</h3>
-                        {{ piece.description|safe }}
+                <div class="jewelry-details">
+                    <div class="row">
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                              <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab" aria-controls="home" aria-selected="true">Description</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                              <button class="nav-link" id="files-tab" data-bs-toggle="tab" data-bs-target="#files" type="button" role="tab" aria-controls="files" aria-selected="false">Files</button>
+                            </li>
+                          </ul>
+                          <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
+                                <h3>Description</h3>
+                                {{ piece.description|safe }}
+                            </div>
+                            <div class="tab-pane fade" id="files" role="tabpanel" aria-labelledby="files-tab">
+                                <h3>Files</h3>
+                                {% for file in files %}
+                                    <a href="{{ file.file.url }}">{{ file.file }}</a>
+                                {% endfor %}
+                            </div>
+                          </div>
                     </div>
                 </div>
             </div>

@@ -62,6 +62,7 @@
             {{ imageFormset.management_form }}
             {% for form in imageFormset %}
             <div class="row mb-3 image-formset-row">
+                {{ form.id }}
                 <div class="col-auto">
                     {{ form.image }}
                 </div>
@@ -75,6 +76,7 @@
             {{ fileFormset.management_form }}
             {% for form in fileFormset %}
             <div class="file-formset-row">
+                {{ form.id }}
                 <div>{{ form.file }}</div>
                 <div class="ml-4">Name: {{ form.name }}</div>
             </div>

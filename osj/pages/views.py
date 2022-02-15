@@ -17,6 +17,7 @@ def getUserContext(request):
     }
     return context
 
+
 def index(request):
     context = {}
     if request.user.is_authenticated:
@@ -187,7 +188,8 @@ class JewelryUpdateView(UpdateView):
         context.update({
             'imageFormset': ThingImageFormset(instance=self.object),
             'fileFormset': ThingFileFormset(instance=self.object)
-        })        
+        })
+        context.update({'licences': getLicenceContext()})
         if self.request.user.is_authenticated:
             context.update(getUserContext(self.request))
         return context
@@ -199,25 +201,29 @@ class JewelryUpdateView(UpdateView):
         imageFormset = ThingImageFormset(self.request.POST, self.request.FILES, instance=self.object)
         fileFormset = ThingFileFormset(self.request.POST, self.request.FILES, instance=self.object)
         if form.is_valid():
-            for fs in [imageFormset, fileFormset]:
-                if fs.is_valid():
-                    fs.save()
+            #for fs in [imageFormset, fileFormset]:
+            #    if fs.is_valid():
+            #        fs.save()
             return self.form_valid(form, imageFormset, fileFormset)
         else:
             return self.form_invalid(form, imageFormset, fileFormset)
 
     def form_valid(self, form, imageFormset, fileFormset):
-        self.object = form.save(commit=True)
+        self.object = form.save(commit=False)
         self.object.save()
-        images = imageFormset.save(commit=True)
-        files = fileFormset.save(commit=True)
-        for image in images:
-            image.thing = self.object
-            image.save()
-        for file in files:
-            file.thing = self.object
-            file.save()
+        for fs in [imageFormset, fileFormset]:
+            if fs.is_valid():
+                objSet = fs.save(commit=False)
+                for obj in objSet:
+                    obj.thing = self.object
+                    obj.save()
+            else:
+                print(fs.errors)
         return redirect(reverse('jewelry'))
+        #return super(JewelryUpdateView, self).form_valid(form)
+
+    #def get_success_url(self):                
+    #   return redirect(reverse('jewelry'))
 
     def form_invalid(self, form, imageFormset, fileFormset):
         return self.render_to_response(
