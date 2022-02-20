@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.fields import GenericRelation
 from taggit.managers import TaggableManager
+from hitcount.models import HitCountMixin, HitCount
 
 
 class Thing(models.Model):
@@ -24,6 +26,8 @@ class Thing(models.Model):
     #tags = TagField(verbose_name="tags", null=True)
     repo = models.URLField(max_length=256, blank=True)
     likes = models.ManyToManyField(User, blank=True, related_name='likes')
+    # hitcounts: https://dev.to/thepylot/how-to-track-number-of-hits-views-for-chosen-objects-in-django-django-packages-series-2-3bcb
+    hitcount_generic = GenericRelation(HitCount, object_id_field='object_pk', related_query_name='hitcount_generic_relation')
 
 
 class Image(models.Model):

@@ -1,5 +1,6 @@
 {% extends 'pages/base.html' %}
 {% load sizify %}
+{% load hitcount_tags %}
 
     {% block scripts %}
         <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@3.6.12/dist/js/splide.min.js"></script>
@@ -124,12 +125,15 @@
                                 <p>Category: {{ piece.category }}</p>
                             </div>
                             <div class="row sidebar-row">
-                            Tags:
+                                <p>Tags:</p>
                                 {% for tag in piece.tags.all %}
                                     {% if tag.slug %}
                                         <a href="{% url 'tagged' tag.slug %}" class="m-1 badge bg-secondary tag-badge">{{ tag }}</a>
                                     {% endif %}
                                 {% endfor %}
+                            </div>
+                            <div class="row sidebar-row">
+                                <p>Views: {% get_hit_count for piece %}</p>
                             </div>
                             <div class="row sidebar-row align-items-center">
                                 <div class="col-auto">

@@ -2,8 +2,6 @@ from django import forms
 from things.models import Thing, Image, File, Category, Licence
 from tinymce.widgets import TinyMCE
 import taggit
-#from tagify.fields import TagField
-#from tagify.widgets import TagInput
 
 
 class TinyMCEWidget(TinyMCE):
@@ -38,24 +36,6 @@ class ThingForm(forms.ModelForm):
         )
     )
 
-    #tags = TagField(
-    #    label='tags',
-    #    place_holder='add a tag',
-    #    delimiters=',',
-    #    max_tags=10,
-    #    data_list=getTags,
-    #    #widget=TagInput(
-    #    #    attrs={'class': 'form-control'}
-    #    #)
-    #    widget=forms.TextInput(attrs={'class': 'form-control'})
-    #)
-
-    
-    #tags = forms.CharField(
-    #    widget=taggit.forms.TagWidget(
-    #        attrs={'class': 'form-control'}
-    #    )
-    #)
     class Meta:
         model = Thing
         fields = ['title', 'tagline', 'description', 'licence', 'repo', 'category', 'tags']

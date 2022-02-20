@@ -11,6 +11,7 @@ import profiles
 from .forms import ThingForm, ThingImageFormset, ThingFileFormset
 import os
 import json
+from hitcount.views import HitCountDetailView
 
 
 def getUserContext(request):
@@ -66,38 +67,45 @@ def allJewelry(request):
     return render(request, 'pages/allJewelry.html', context)
 
 
-def jewelryPiece(request, objID):
-    piece = get_object_or_404(things.models.Thing, id=objID)
-    files = piece.file_set.all()
-    images = piece.image_set.all()
-    likes = piece.likes.all() # set of users
-    nLikes = len(likes)
-    fileContext = []
-    for fileObj in files:
-        fileContext.append({
-            'file': fileObj.file.file,
-            'filename': os.path.basename(fileObj.file.file.name),
-            'name': fileObj.name,
-            'url': fileObj.file.url
-        })
-    context = {
-        'piece': piece,
-        'created': piece.created.date,
-        'modified': piece.modified.date,
-        'files': fileContext,
-        'images': images,
-        'likes': nLikes
-    }
-    if request.user.is_authenticated:
-        context.update(getUserContext(request))
-        userID = request.user.id
-        if(likes.filter(id=userID).exists()):
-            context.update({
-                'liked': True
+class JewelryDetailView(HitCountDetailView):
+    model = things.models.Thing
+    template_name = 'pages/jewelry.html'
+    context_object_name = 'piece'
+    count_hit = True
+
+    def get_context_data(self, **kwargs):
+        piece = self.object
+        files = piece.file_set.all()
+        images = piece.image_set.all()
+        likes = piece.likes.all() # set of users
+        nLikes = len(likes)
+        fileContext = []
+        for fileObj in files:
+            fileContext.append({
+                'file': fileObj.file.file,
+                'filename': os.path.basename(fileObj.file.file.name),
+                'name': fileObj.name,
+                'url': fileObj.file.url
             })
-        if request.user == piece.creator:
-            context.update({'editable': True})
-    return render(request, 'pages/jewelry.html', context)
+        context = super(JewelryDetailView, self).get_context_data(**kwargs)
+        context.update({
+            'piece': piece,
+            'created': piece.created.date,
+            'modified': piece.modified.date,
+            'files': fileContext,
+            'images': images,
+            'likes': nLikes
+        })
+        if self.request.user.is_authenticated:
+            context.update(getUserContext(self.request))
+            userID = self.request.user.id
+            if(likes.filter(id=userID).exists()):
+                context.update({
+                    'liked': True
+                })
+            if self.request.user == piece.creator:
+                context.update({'editable': True})
+        return context
 
 
 def allArticles(request):
