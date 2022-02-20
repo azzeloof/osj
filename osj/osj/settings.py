@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'tags.apps.TagsConfig',
     'articles.apps.ArticlesConfig',
     'pages.apps.PagesConfig',
     'profiles.apps.ProfilesConfig',

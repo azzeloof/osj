@@ -8,6 +8,8 @@ import pages
 import articles
 import profiles
 from .forms import ThingForm, ThingImageFormset, ThingFileFormset
+import os
+import json
 
 
 def getUserContext(request):
@@ -67,15 +69,31 @@ def jewelryPiece(request, objID):
     piece = get_object_or_404(things.models.Thing, id=objID)
     files = piece.file_set.all()
     images = piece.image_set.all()
+    likes = piece.likes.all() # set of users
+    nLikes = len(likes)
+    fileContext = []
+    for fileObj in files:
+        fileContext.append({
+            'file': fileObj.file.file,
+            'filename': os.path.basename(fileObj.file.file.name),
+            'name': fileObj.name,
+            'url': fileObj.file.url
+        })
     context = {
         'piece': piece,
         'created': piece.created.date,
         'modified': piece.modified.date,
-        'files': files,
-        'images': images
+        'files': fileContext,
+        'images': images,
+        'likes': nLikes
     }
     if request.user.is_authenticated:
         context.update(getUserContext(request))
+        userID = request.user.id
+        if(likes.filter(id=userID).exists()):
+            context.update({
+                'liked': True
+            })
         if request.user == piece.creator:
             context.update({'editable': True})
     return render(request, 'pages/jewelry.html', context)
@@ -140,9 +158,6 @@ class JewelryCreateView(CreateView):
         imageFormset = ThingImageFormset(self.request.POST, self.request.FILES)
         fileFormset = ThingFileFormset(self.request.POST, self.request.FILES)
         if form.is_valid():
-            #for fs in [imageFormset, fileFormset]:
-            #    if fs.is_valid():
-            #        fs.save()
             return self.form_valid(form, imageFormset, fileFormset)
         else:
             return self.form_invalid(form, imageFormset, fileFormset)
@@ -151,22 +166,14 @@ class JewelryCreateView(CreateView):
         self.object = form.save(commit=False)
         self.object.creator = self.request.user
         self.object.save()
-        """
-        images = imageFormset.save(commit=False)
-        files = fileFormset.save(commit=False)
-        for image in images:
-            image.thing = self.object
-            image.save()
-        for file in files:
-            file.thing = self.object
-            file.save()
-        """
         for fs in [imageFormset, fileFormset]:
             if fs.is_valid():
                 objSet = fs.save(commit=False)
                 for obj in objSet:
                     obj.thing = self.object
                     obj.save()
+            else:
+                print(fs.errors)
         return redirect(reverse('jewelry'))
 
     def form_invalid(self, form, imageFormset, fileFormset):
@@ -201,9 +208,6 @@ class JewelryUpdateView(UpdateView):
         imageFormset = ThingImageFormset(self.request.POST, self.request.FILES, instance=self.object)
         fileFormset = ThingFileFormset(self.request.POST, self.request.FILES, instance=self.object)
         if form.is_valid():
-            #for fs in [imageFormset, fileFormset]:
-            #    if fs.is_valid():
-            #        fs.save()
             return self.form_valid(form, imageFormset, fileFormset)
         else:
             return self.form_invalid(form, imageFormset, fileFormset)
@@ -231,3 +235,29 @@ class JewelryUpdateView(UpdateView):
                                     imageFormset=imageFormset,
                                     fileFormset=fileFormset)
         )
+
+@login_required
+def like_button(request):
+    #https://medium.com/@nishalk25121999/how-to-make-a-like-button-using-django-ajax-d2db38e6d2f8
+    if request.method =="POST":
+        if request.POST.get("operation") == "like_submit" and request.is_ajax():
+            thingID=request.POST.get("piece_id",None)
+            thing=get_object_or_404(things.models.Thing,pk=thingID)
+            if thing.likes.filter(id=request.user.id): #already liked the content
+                thing.likes.remove(request.user) #remove user from likes 
+                liked=False
+            else:
+                thing.likes.add(request.user) 
+                liked=True
+            context={"likes":thing.totalLikes,"liked":liked,"thingID":thingID}
+            return HttpResponse(json.dumps(context), content_type='application/json')
+    """     
+   contents=things.models.Thing.objects.all()
+   already_liked=[]
+   id=request.user.id
+   for content in contents:
+       if(content.likes.filter(id=id).exists()):
+        already_liked.append(content.id)
+   ctx={"contents":contents,"already_liked":already_liked}
+   return render(request,"like/like_template.html",ctx)
+   """

@@ -60,27 +60,47 @@
         <h2>Images:</h2> 
             {{ imageFormset.non_form_errors }}
             {{ imageFormset.management_form }}
-            {% for form in imageFormset %}
-            <div class="row mb-3 image-formset-row">
-                {{ form.id }}
-                <div class="col-auto">
-                    {{ form.image }}
-                </div>
-                <div class="col-auto">
-                    Alt text: {{ form.alt }}
-                </div>
-            </div>
-            {% endfor %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Alt Text</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for form in imageFormset %}
+                    <tr class="image-formset-row">
+                        {{ form.id }}
+                        <td>
+                            {{ form.image }}
+                        </td>
+                        <td>
+                            {{ form.alt }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         <h2>Files:</h2>
             {{ fileFormset.non_form_errors }}
             {{ fileFormset.management_form }}
-            {% for form in fileFormset %}
-            <div class="file-formset-row">
-                {{ form.id }}
-                <div>{{ form.file }}</div>
-                <div class="ml-4">Name: {{ form.name }}</div>
-            </div>
-            {% endfor %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>File</th>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for form in fileFormset %}
+                    <tr class="file-formset-row">
+                        {{ form.id }}
+                        <td>{{ form.file }}</td>
+                        <td>{{ form.name }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         <button type="submit" class="save btn btn-primary">Save</button>
     </form>
 </div>

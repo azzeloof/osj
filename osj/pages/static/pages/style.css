@@ -84,3 +84,14 @@ main-slider {
 .sidebar-row {
     margin-bottom: 0px;
 }
+
+p.filename {
+    font-size: 12px;
+    font-style: italic;
+    color: #404040;
+}
+
+.likebtn {
+    font-size: 24px;
+    color: #db0000;
+}

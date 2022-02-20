@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
@@ -14,4 +14,6 @@ urlpatterns = [
     path('articles/<int:objID>', views.article, name='article'),
     path('jewelry/new', login_required(views.JewelryCreateView.as_view()), name='newJewelry'),
     path('jewelry/<pk>/edit', login_required(views.JewelryUpdateView.as_view()), name='editJewelry'),
+    #re_path(r'^$',views.like_button, name='like'),
+    path('like/', views.like_button, name='like')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,4 +1,6 @@
 {% extends 'pages/base.html' %}
+{% load sizify %}
+
     {% block scripts %}
         <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@3.6.12/dist/js/splide.min.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@3.6.12/dist/css/splide.min.css">
@@ -33,6 +35,33 @@
                 main.mount();
                 thumbnails.mount();
             } );
+        </script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script>
+        // AJAX CALL
+        $(document).ready(function() {
+            $('.likebtn').click(function(){
+                $.ajax({
+                        type: "POST",
+                        url: "{% url 'like' %}",
+                        data: {'piece_id': $(this).attr('name'),'operation':'like_submit','csrfmiddlewaretoken': '{{ csrf_token }}'},
+                        dataType: "json",
+                        success: function(response) {
+                            selector = document.getElementsByName(response.piece_id);
+                                    if(response.liked==true){
+                                        $('.likebtn').html('<i class="bi-heart-fill"></i>');
+                                        $('#like-counter').html(response.likes);
+                                        //$(selector).css("color","blue");
+                                    }
+                                    else if(response.liked==false){
+                                        $('.likebtn').html('<i class="bi-heart"></i>');
+                                        $('#like-counter').html(response.likes);
+                                        //$(selector).css("color","black");
+                                    }
+                        }
+                    });
+            });
+        });
         </script>
     {% endblock %}
 
@@ -94,6 +123,18 @@
                             <div class="row sidebar-row">
                                 <p>Category: {{ piece.category }}</p>
                             </div>
+                            <div class="row sidebar-row align-items-center">
+                                <div class="col-auto">
+                                    {% if liked %} 
+                                        <a name="{{ piece.id }}" class="likebtn" id="co"><i class="bi-heart-fill"></i></a>
+                                    {% else %}
+                                        <a name="{{ piece.id }}" class="likebtn" id="co"><i class="bi-heart"></i></a>
+                                    {% endif %}
+                                </div>
+                                <div class="col-auto">
+                                    <div id="like-counter" style="padding-bottom:3px;">{{ likes }}</div>
+                                </div>
+                            </div>
                             <div class="row sidebar-row">
                                 <button class="btn btn-primary"><i class="bi-download"></i> Download Files</button>
                             </div>
@@ -122,9 +163,24 @@
                             </div>
                             <div class="tab-pane fade" id="files" role="tabpanel" aria-labelledby="files-tab">
                                 <h3>Files</h3>
-                                {% for file in files %}
-                                    <a href="{{ file.file.url }}">{{ file.file }}</a>
-                                {% endfor %}
+                                <table class="table table-striped">
+                                    <thead>
+
+                                    </thead>
+                                    <tbody>
+                                        {% for file in files %}
+                                        <tr>
+                                            {% if file.name %}
+                                                <td>{{ file.name }} <p class="filename">{{ file.filename }}</p></td>
+                                            {% else %}
+                                                <td>{{ file.filename }}</td>
+                                            {% endif %}
+                                            <td>{{ file.file.size|sizify }}</td>
+                                            <td><a href="{{ file.url }}"><i class="bi-download"></i></a></td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
                             </div>
                           </div>
                     </div>

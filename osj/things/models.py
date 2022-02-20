@@ -1,9 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
+from tags.models import Tag
 
 class Thing(models.Model):
     def __str__(self):
         return self.title
+
+    @property
+    def totalLikes(self):
+        return self.likes.count() 
 
     # Model to handle things
     title = models.CharField(max_length=128)
@@ -14,7 +19,9 @@ class Thing(models.Model):
     creator = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     licence = models.ForeignKey("Licence", on_delete=models.PROTECT)
     category = models.ForeignKey("Category", null=True, on_delete=models.SET_NULL)
+    tags = models.ManyToManyField(Tag)
     repo = models.URLField(max_length=256, blank=True)
+    likes = models.ManyToManyField(User, blank=True, related_name='likes')
 
 
 class Image(models.Model):
@@ -40,10 +47,6 @@ class Category(models.Model):
     def __str__(self):
         return self.name
     name = models.CharField(max_length=256)
-
-
-class Tag(models.Model):
-    name = models.CharField(max_length=128)
 
 
 class Licence(models.Model):
