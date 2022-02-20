@@ -2,17 +2,24 @@
 {% load static %}
 
 {% block scripts %}
-<!--
-    <script src="{% static 'pages/tagsinput/bootstrap-tagsinput.js'%}"></script>
-    <link rel="stylesheet" type="text/css" href="{% static 'pages/tagsinput/bootstrap-tagsinput.css' %}">
+    <script src="https://unpkg.com/@yaireo/tagify"></script>
+    <script src="https://unpkg.com/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
+    <link href="https://unpkg.com/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
     <script>
         $(document).ready(function() {
-            $('#tags-input').tagsinput({
-                tagClass: 'big'
-              });
+            console.log("{{tags}}");
+            console.log("{{ tags }}".split(","));
+            var input = document.querySelector('input[name=tags]')
+            new Tagify(input, {
+                whitelist: "{{ tags }}".split(","),
+                maxTags: 10,
+                dropdown: {
+                    maxItems: 10
+                },
+                originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(',')
+            });
         })
     </script>
--->    
 {% endblock %}
 
 {% block content %}

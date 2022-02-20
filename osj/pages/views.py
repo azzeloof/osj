@@ -130,6 +130,13 @@ def article(request, objID):
 #    return render(request, 'pages/editJewelry.html', context)
 
 
+def getTags():
+    tags = Tag.objects.all()
+    options = ''
+    for tag in tags:
+        options += str(tag) + ','
+    return options.strip(',')
+
 def getLicenceContext():
     licences = things.models.Licence.objects.all()
     licenceContext = []
@@ -145,7 +152,8 @@ class JewelryCreateView(CreateView):
         context = super(JewelryCreateView, self).get_context_data(**kwargs)
         context.update({
             'imageFormset': ThingImageFormset(),
-            'fileFormset': ThingFileFormset()
+            'fileFormset': ThingFileFormset(),
+            'tags': getTags()
         })
         context.update({'licences': getLicenceContext()})
         if self.request.user.is_authenticated:
@@ -196,7 +204,8 @@ class JewelryUpdateView(UpdateView):
         context = super(JewelryUpdateView, self).get_context_data(**kwargs)
         context.update({
             'imageFormset': ThingImageFormset(instance=self.object),
-            'fileFormset': ThingFileFormset(instance=self.object)
+            'fileFormset': ThingFileFormset(instance=self.object),
+            'tags': getTags()
         })
         context.update({'licences': getLicenceContext()})
         if self.request.user.is_authenticated:
