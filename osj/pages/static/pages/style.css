@@ -95,3 +95,12 @@ p.filename {
     font-size: 24px;
     color: #db0000;
 }
+
+.tag-badge {
+    width: auto;
+    text-decoration: none;
+}
+
+.bootstrap-tagsinput .tag {
+    color: #000000;
+}

@@ -1,6 +1,20 @@
 {% extends 'pages/base.html' %}
 {% load static %}
 
+{% block scripts %}
+<!--
+    <script src="{% static 'pages/tagsinput/bootstrap-tagsinput.js'%}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'pages/tagsinput/bootstrap-tagsinput.css' %}">
+    <script>
+        $(document).ready(function() {
+            $('#tags-input').tagsinput({
+                tagClass: 'big'
+              });
+        })
+    </script>
+-->    
+{% endblock %}
+
 {% block content %}
 {{ form.media }}
 <div class="container">
@@ -42,6 +56,15 @@
                     </div>
                     <div class="col-auto">
                         <div id="categoryHelp" class="form-text">Choose the category that best describes your work!</div>
+                    </div>
+                </div>
+                <h3>Tags</h3>
+                <div class="row mb-3 align-items-center">
+                    <div class="col-auto">
+                        {{ form.tags }}
+                    </div>
+                    <div class="col-auto">
+                        <div id="tagHelp" class="form-text">Enter some tags!</div>
                     </div>
                 </div>
                 <h3>Licence</h3>

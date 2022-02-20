@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.generic import CreateView, UpdateView
 from django.urls import reverse
+from taggit.models import Tag
 import things
 import pages
 import articles
@@ -55,7 +56,7 @@ def allJewelry(request):
             'created': piece.created.date,
             'modified': piece.modified.date,
             'featuredImage': featuredImage,
-            'categories': piece.category
+            'category': piece.category
         })
     context = {
         'pieces': piecesContext
@@ -166,6 +167,7 @@ class JewelryCreateView(CreateView):
         self.object = form.save(commit=False)
         self.object.creator = self.request.user
         self.object.save()
+        form.save_m2m() # needed to save tags
         for fs in [imageFormset, fileFormset]:
             if fs.is_valid():
                 objSet = fs.save(commit=False)
@@ -215,6 +217,7 @@ class JewelryUpdateView(UpdateView):
     def form_valid(self, form, imageFormset, fileFormset):
         self.object = form.save(commit=False)
         self.object.save()
+        form.save_m2m() # needed to save tags
         for fs in [imageFormset, fileFormset]:
             if fs.is_valid():
                 objSet = fs.save(commit=False)
@@ -240,7 +243,7 @@ class JewelryUpdateView(UpdateView):
 def like_button(request):
     #https://medium.com/@nishalk25121999/how-to-make-a-like-button-using-django-ajax-d2db38e6d2f8
     if request.method =="POST":
-        if request.POST.get("operation") == "like_submit" and request.is_ajax():
+        if request.POST.get("operation") == "like_submit":# and request.is_ajax():
             thingID=request.POST.get("piece_id",None)
             thing=get_object_or_404(things.models.Thing,pk=thingID)
             if thing.likes.filter(id=request.user.id): #already liked the content
@@ -251,13 +254,13 @@ def like_button(request):
                 liked=True
             context={"likes":thing.totalLikes,"liked":liked,"thingID":thingID}
             return HttpResponse(json.dumps(context), content_type='application/json')
-    """     
-   contents=things.models.Thing.objects.all()
-   already_liked=[]
-   id=request.user.id
-   for content in contents:
-       if(content.likes.filter(id=id).exists()):
-        already_liked.append(content.id)
-   ctx={"contents":contents,"already_liked":already_liked}
-   return render(request,"like/like_template.html",ctx)
-   """
+
+
+def tagged(request, slug):
+    tag = get_object_or_404(Tag, slug=slug)
+    pieces = things.models.Thing.objects.filter(tags=tag)
+    context = {
+        'tag':tag,
+        'pieces':pieces,
+    }
+    return render(request, 'home.html', context)

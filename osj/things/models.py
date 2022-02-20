@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from taggit.managers import TaggableManager
 
 
 class Thing(models.Model):
@@ -19,7 +20,8 @@ class Thing(models.Model):
     creator = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     licence = models.ForeignKey("Licence", on_delete=models.PROTECT)
     category = models.ForeignKey("Category", null=True, on_delete=models.SET_NULL)
-    #tags = models.ManyToManyField(Tag)
+    tags = TaggableManager()
+    #tags = TagField(verbose_name="tags", null=True)
     repo = models.URLField(max_length=256, blank=True)
     likes = models.ManyToManyField(User, blank=True, related_name='likes')
 

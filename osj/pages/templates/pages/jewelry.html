@@ -123,6 +123,14 @@
                             <div class="row sidebar-row">
                                 <p>Category: {{ piece.category }}</p>
                             </div>
+                            <div class="row sidebar-row">
+                            Tags:
+                                {% for tag in piece.tags.all %}
+                                    {% if tag.slug %}
+                                        <a href="{% url 'tagged' tag.slug %}" class="m-1 badge bg-secondary tag-badge">{{ tag }}</a>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
                             <div class="row sidebar-row align-items-center">
                                 <div class="col-auto">
                                     {% if liked %} 

@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'tinymce',
+    'taggit',
+    'tagify'
 ]
 
 MIDDLEWARE = [
@@ -164,3 +166,4 @@ TINYMCE_DEFAULT_CONFIG = {
 }
 
 
+TAGGIT_CASE_INSENSITIVE = True
