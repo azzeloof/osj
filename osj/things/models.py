@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from tags.models import Tag
+
 
 class Thing(models.Model):
     def __str__(self):
@@ -19,7 +19,7 @@ class Thing(models.Model):
     creator = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     licence = models.ForeignKey("Licence", on_delete=models.PROTECT)
     category = models.ForeignKey("Category", null=True, on_delete=models.SET_NULL)
-    tags = models.ManyToManyField(Tag)
+    #tags = models.ManyToManyField(Tag)
     repo = models.URLField(max_length=256, blank=True)
     likes = models.ManyToManyField(User, blank=True, related_name='likes')
 
