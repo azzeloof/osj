@@ -8,17 +8,21 @@
         <script>
             document.addEventListener( 'DOMContentLoaded', function () {
                 var main = new Splide( '#main-slider', {
-                type      : 'fade',
-                rewind    : true,
+                type        : 'fade',
+                rewind      : true,
                 //height    : 400,
-                autoWidth: true,
-                pagination: false,
-                arrows    : false,
+                autoWidth   : true,
+                heightRatio : .75,
+                pagination  : false,
+                arrows      : false,
                 } );
             
                 var thumbnails = new Splide( '#thumbnail-slider', {
-                fixedWidth  : 200,
-                //fixedHeight : 60,
+                //fixedWidth  : 200,
+                fixedHeight : 120,
+                autoWidth: true,
+                //perPage: 3,
+                //heightRatio : .75
                 gap         : 10,
                 rewind      : true,
                 pagination  : false,
@@ -26,8 +30,8 @@
                 isNavigation: true,
                 breakpoints : {
                     600: {
-                    fixedWidth : 60,
-                    //fixedHeight: 44,
+                    //fixedWidth : 60,
+                    fixedHeight: 60,
                     },
                 },
                 } );
@@ -98,7 +102,7 @@
                                 <ul class="splide__list">
                                     {% for image in images %}
                                         <li class="splide__slide">
-                                            <img src="{{ image.image.url }}", alt="{{ image.image.alt }}">
+                                            <img class="main-img" src="{{ image.image.url }}", alt="{{ image.image.alt }}">
                                         </li>
                                     {% endfor %}
                                 </ul>
@@ -148,7 +152,7 @@
                                 </div>
                             </div>
                             <div class="row sidebar-row">
-                                <button class="btn btn-primary"><i class="bi-download"></i> Download Files</button>
+                                <button class="btn btn-warning text-purple"><i class="bi-download"></i> Download Files</button>
                             </div>
                             <div class="row sidebar-row">
                                 <div class="licence-block">

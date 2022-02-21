@@ -94,7 +94,10 @@
                 <thead>
                     <tr>
                         <th>Image</th>
+                        <th>Preview</th>
                         <th>Alt Text</th>
+                        <th>Featured</th>
+                        <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -105,7 +108,15 @@
                             {{ form.image }}
                         </td>
                         <td>
+                            {{ form.image.url }}
+                        </td>
+                        <td>
                             {{ form.alt }}
+                        </td>
+                        <td>
+                            {{ form.featured }}
+                        </td>
+                        <td>
                         </td>
                     </tr>
                     {% endfor %}
@@ -119,6 +130,7 @@
                     <tr>
                         <th>File</th>
                         <th>Name</th>
+                        <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -127,6 +139,7 @@
                         {{ form.id }}
                         <td>{{ form.file }}</td>
                         <td>{{ form.name }}</td>
+                        <td></td>
                     </tr>
                     {% endfor %}
                 </tbody>

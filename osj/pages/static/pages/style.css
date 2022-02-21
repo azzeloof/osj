@@ -1,7 +1,3 @@
-.nav-link.main {
-    color: #FFFFFF;
-}
-
 .grid-sizer,
 .grid-item {
     width: 300px;
@@ -36,12 +32,21 @@
 }
 
 .splide__slide img {
-    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
 }
 
-main-slider {
-    width: 100%;
-    max-height: 400px;
+.main-img {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+#main-slider {
+    background: #FFFFFF;
 }
 
 .jewelry-sidebar{
@@ -70,6 +75,19 @@ main-slider {
 
 .bg-purple {
     background-color: #470077;
+}
+
+.bg-orange {
+    background-color: #ffc107;
+}
+
+.text-purple {
+    color: #470077;
+}
+
+a {
+    color: #470077;
+    text-decoration: none;
 }
 
 .edit-button-col {
