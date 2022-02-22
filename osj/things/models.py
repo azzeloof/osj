@@ -49,10 +49,17 @@ class File(models.Model):
     default = models.BooleanField(default=False)
 
 
+class SuperCategory(models.Model):
+    def __str__(self):
+        return self.name
+    name = models.CharField(max_length=256)
+
+
 class Category(models.Model):
     def __str__(self):
         return self.name
     name = models.CharField(max_length=256)
+    parent = models.ForeignKey(SuperCategory, on_delete=models.SET_NULL, null=True, blank=True)
 
 
 class Licence(models.Model):

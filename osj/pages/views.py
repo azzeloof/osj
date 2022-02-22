@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, ListView
 from django.urls import reverse
 from taggit.models import Tag
 import things
@@ -12,6 +12,7 @@ from .forms import ThingForm, ThingImageFormset, ThingFileFormset
 import os
 import json
 from hitcount.views import HitCountDetailView
+import django_filters
 
 
 def getUserContext(request):
@@ -37,34 +38,93 @@ def page(request, slug):
     return render(request, 'pages/page.html', context)
 
 
-def allJewelry(request):
-    pieces = things.models.Thing.objects.all()
-    piecesContext = []
-    for piece in pieces:
-        images = piece.image_set.all()
-        hasFeatured = False
-        if len(images) > 0:
-            for image in images:
-                if image.featured:
-                    hasFeatured = True
-                    featuredImage = image
-            if hasFeatured == False:
-                featuredImage = images[0]
+
+#class JewelryFilter(django_filters.FilterSet):
+#    name = django_filters.CharFilter()
+
+#    class Meta:
+#        model = things.models.Thing
+#        fields = []
+
+
+#class FilteredListView(ListView):
+#    # /https://www.caktusgroup.com/blog/2018/10/18/filtering-and-pagination-django/
+#    filterset_class = None
+
+#    def get_queryset(self):
+#        queryset = super().get_queryset()
+#        self.filterset = self.filterset_class(self.request.GET, queryset=queryset)
+#        return self.filterset.qs.distinct()
+
+#    def get_context_data(self, **kwargs):
+#        context = super().get_context_data(**kwargs)
+#        context['filterset'] = self.filterset
+#        return context
+
+
+class JewelryListView(ListView):
+    model = things.models.Thing
+    template_name = 'pages/allJewelry.html'
+    #filterset_class = JewelryFilter
+    paginate_by = 2
+
+    def get_queryset(self):
+        queryset = self.model.objects.all()
+        category = self.request.GET.get('category', None)
+        area = self.request.GET.get('area', None)
+        if category:
+            return queryset.distinct().filter(category__name=category)
+        elif area:
+            categories = get_object_or_404(things.models.SuperCategory, name=area).category_set.all()
+            catNames = []
+            for category in categories:
+                catNames.append(category.name)
+            return queryset.distinct().filter(category__name__in=catNames)
         else:
-            featuredImage = None
-        piecesContext.append({
-            'piece': piece,
-            'created': piece.created.date,
-            'modified': piece.modified.date,
-            'featuredImage': featuredImage,
-            'category': piece.category
-        })
-    context = {
-        'pieces': piecesContext
-    }
-    if request.user.is_authenticated:
-        context.update(getUserContext(request))
-    return render(request, 'pages/allJewelry.html', context)
+            return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(JewelryListView, self).get_context_data(**kwargs)
+        pieces = context['object_list']
+        piecesContext = []
+        for piece in pieces:
+            images = piece.image_set.all()
+            hasFeatured = False
+            if len(images) > 0:
+                for image in images:
+                    if image.featured:
+                        hasFeatured = True
+                        featuredImage = image
+                if hasFeatured == False:
+                    featuredImage = images[0]
+            else:
+                featuredImage = None
+            piecesContext.append({
+                'piece': piece,
+                'created': piece.created.date,
+                'modified': piece.modified.date,
+                'featuredImage': featuredImage,
+                'category': piece.category
+            })
+        categoryContext = {}
+        bodyParts = things.models.SuperCategory.objects.all()
+        for part in bodyParts:
+            categoryContext.update({
+                part.name: part.category_set.all()
+            })
+        context.update({
+            'pieces': piecesContext,
+            'categories': categoryContext
+            })
+        category = self.request.GET.get('category', None)
+        area = self.request.GET.get('area', None)
+        if category:
+            context.update({'category': category})
+        elif area:
+            context.update({'category': area})
+        if self.request.user.is_authenticated:
+            context.update(getUserContext(self.request))
+        return context
 
 
 class JewelryDetailView(HitCountDetailView):

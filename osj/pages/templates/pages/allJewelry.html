@@ -1,44 +1,126 @@
 {% extends 'pages/base.html' %}
+
+{% load param_replace %}
+
     {% block scripts %}
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"
             integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
             crossorigin="anonymous">
         </script>
         <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('.grid').isotope({
+                    itemSelector: '.grid-item',
+                    percentPosition: true,
+                    masonry: {
+                        columnWidth: 300
+                    }
+                });
+
+                $('[name="{{ category }}"]').addClass("sidebar-selected");
+            });
+        </script>
     {% endblock %}
 
     {% block content %}
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
-                    <h1>Jewelry</h1>
                     <div class='page-content'>
-                        <div class="grid">
-                            <div class=".grid-sizer"></div>
-                            {% for piece in pieces %}
-                                <div class="grid-item">
-                                    <div class="jewelry-box">
-                                        {% if piece.featuredImage.image %}
-                                            <a href="/jewelry/{{ piece.piece.id }}"><image src="{{ piece.featuredImage.image.url }}" href="/jewelry/{{ piece.piece.id }}" class="grid-image"></a>
-                                            <a class="jewelry-box-title" href="/jewelry/{{ piece.piece.id }}">{{ piece.piece.title }}</a>
-                                        {% else %}
-                                            <a href="/jewelry/{{ piece.piece.id }}"><image src="/profile_photos/default.png" class="grid-image"></a>
-                                            <a class="jewelry-box-title" href="/jewelry/{{ piece.piece.id }}">{{ piece.piece.title }}</a>
-                                        {% endif %}
-                                    </div>
+                        <div class="flexbox">
+                            <div class="sidebar" style="width: 240px;">
+                                <ul class="list-unstyled ps-0">
+                                    Categories
+                                    <li class="border-top my-3"></li>
+                                    <li class="mb-1">
+                                        <div name="all" class="sidebar-btn {% if not category %} sidebar-selected {% endif %}"><a href="?" class="link-dark rounded">All Jewelry</a></div>
+                                        {% for category, subCats in categories.items %}
+                                            <div name="{{ category }}" class="sidebar-btn"><a href="?area={{ category }}" class="link-dark rounded">{{ category }}</a></div>
+                                            <ul class="list-unstyled fw-normal pb-1 small">
+                                                {% for subCat in subCats %}
+                                                    <li name="{{ subCat }}" class="sidebar-btn sidebar-subcategory"><a href="?category={{ subCat }}" class="link-dark rounded">{{ subCat }}</a></li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endfor %}
+                                    </li>
+                                    <li class="border-top my-3"></li>
+                                </ul>
+                            </div>
+
+                            <div class="jewelry-grid">
+                                <h1>Jewelry{% if category %}: {{ category }}{% endif %}</h1>
+                                <div class="grid">
+                                    <div class=".grid-sizer"></div>
+                                    {% for piece in pieces %}
+                                        <div class="grid-item">
+                                            <div class="jewelry-box">
+                                                {% if piece.featuredImage.image %}
+                                                    <a href="/jewelry/{{ piece.piece.id }}"><image src="{{ piece.featuredImage.image.url }}" href="/jewelry/{{ piece.piece.id }}" class="grid-image"></a>
+                                                {% else %}
+                                                    <a href="/jewelry/{{ piece.piece.id }}"><image src="/media/profile_photos/default.png" class="grid-image"></a>
+                                                {% endif %}
+                                                <a class="jewelry-box-title" href="/jewelry/{{ piece.piece.id }}">{{ piece.piece.title }}</a>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
                                 </div>
-                            {% endfor %}
+                            </div>
                         </div>
-                        <script>
-                            $('.grid').isotope({
-                                itemSelector: '.grid-item',
-                                percentPosition: true,
-                                masonry: {
-                                    columnWidth: 300
-                                }
-                              });
-                        </script>
+
                     </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                            {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" aria-label="First" href="?{% param_replace page=1 %}">&laquo;&laquo;</a>
+                            </li>
+                                <li class="page-item">
+                                    <a class="page-link" aria-label="Previous" href="?{% param_replace page=page_obj.previous_page_number %}">&laquo;</a>
+                                </li>
+                            {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link" aria-label="First">&laquo;&laquo;</span>
+                            </li>
+                                <li class="page-item disabled">
+                                    <a class="page-link" aria-label="Previous">&laquo;</a>
+                                </li>
+                            {% endif %}
+
+                            {% for n in page_obj.paginator.page_range %}
+                                {% if page_obj.number == n %}
+                                    <li class="page-item active" aria-current="page">
+                                        <a class="page-link" href="#">{{ n }}</a>
+                                    </li>
+                                {% elif n > page_obj.number|add:'-4' and n < page_obj.number|add:'4' %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?{% param_replace page=n %}">{{ n }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" aria-label="Next" href="?{% param_replace page=page_obj.next_page_number %}">&raquo;</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" aria-label="Last" href="?{% param_replace page=paginator.num_pages %}">&raquo;&raquo;</a>
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled">
+                                    <span class="page-link" aria-label="Next">&raquo;</span>
+                                </li>
+                                <li class="page-item disabled">
+                                    <a class="page-link" aria-label="Last">&raquo;&raquo;</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>

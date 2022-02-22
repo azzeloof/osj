@@ -8,7 +8,6 @@
 .grid-image {
     max-width: 100%;
     margin-bottom: 5px;
-    margin-top: 5px;
 }
 
 .jewelry-box {
@@ -65,6 +64,8 @@
     border: 2px solid #404040;
     border-radius: 10px;
     margin-top: 20px;
+    font-size: 10px;
+    text-align: center;
 }
 
 @media (min-width: 1200px) {
@@ -121,4 +122,57 @@ p.filename {
 
 .bootstrap-tagsinput .tag {
     color: #000000;
+}
+
+.vertical-divider-wide {
+    width: 30px;
+    color: #404040;
+    height: 100%;
+    float: right;
+}
+
+.flexbox {
+    display: flex;
+}
+
+.sidebar {
+    margin-top: 40px;
+    margin-right: 20px;
+}
+
+.jewelry-grid {
+    flex: 1;
+    width: 100%;
+}
+
+.btn-toggle::before {
+	width: 1.25em;
+	line-height: 0;
+	content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%280,0,0,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
+	transition: transform .35s ease;
+	transform-origin: .5em 50%;
+}
+
+.btn-toggle-nav a {
+	display: inline-flex;
+	padding: .1875rem .5rem;
+	margin-top: .125rem;
+	margin-left: 2rem;
+	text-decoration: none;
+}
+
+.sidebar-btn:hover, .sidebar-btn:focus {
+	color: rgba(0, 0, 0, .85);
+	background-color: #ffc1077e;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out
+}
+
+.sidebar-selected {
+    background-color:#ffc107;
+}
+
+.sidebar-subcategory {
+	padding: .1875rem .5rem;
+	margin-left: 1rem;
+	text-decoration: none;
 }

@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'tinymce',
     'taggit',
-    'hitcount'
+    'hitcount',
+    'django_filters'
 ]
 
 MIDDLEWARE = [
