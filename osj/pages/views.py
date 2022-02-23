@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from django.views.generic import CreateView, UpdateView, ListView
+from django.views.generic import CreateView, UpdateView, ListView, DetailView
 from django.urls import reverse
 from taggit.models import Tag
 import things
@@ -12,13 +12,36 @@ from .forms import ThingForm, ThingImageFormset, ThingFileFormset
 import os
 import json
 from hitcount.views import HitCountDetailView
-import django_filters
+
+
+def getJewelryContext(jewelry):
+    pieces = []
+    for piece in jewelry:
+        images = piece.image_set.all()
+        hasFeatured = False
+        if len(images) > 0:
+            for image in images:
+                if image.featured:
+                    hasFeatured = True
+                    featuredImage = image
+            if hasFeatured == False:
+                featuredImage = images[0]
+        else:
+            featuredImage = None
+        pieces.append({
+            'piece': piece,
+            'created': piece.created.date,
+            'modified': piece.modified.date,
+            'featuredImage': featuredImage,
+            'category': piece.category
+        })
+    return pieces
 
 
 def getUserContext(request):
     context = {
-        'user': request.user,
-        'profile': profiles.models.Profile.objects.get(user=request.user)
+        #'user': request.user,
+        'currentuserprofile': profiles.models.Profile.objects.get(user=request.user)
     }
     return context
 
@@ -38,35 +61,10 @@ def page(request, slug):
     return render(request, 'pages/page.html', context)
 
 
-
-#class JewelryFilter(django_filters.FilterSet):
-#    name = django_filters.CharFilter()
-
-#    class Meta:
-#        model = things.models.Thing
-#        fields = []
-
-
-#class FilteredListView(ListView):
-#    # /https://www.caktusgroup.com/blog/2018/10/18/filtering-and-pagination-django/
-#    filterset_class = None
-
-#    def get_queryset(self):
-#        queryset = super().get_queryset()
-#        self.filterset = self.filterset_class(self.request.GET, queryset=queryset)
-#        return self.filterset.qs.distinct()
-
-#    def get_context_data(self, **kwargs):
-#        context = super().get_context_data(**kwargs)
-#        context['filterset'] = self.filterset
-#        return context
-
-
 class JewelryListView(ListView):
     model = things.models.Thing
     template_name = 'pages/allJewelry.html'
-    #filterset_class = JewelryFilter
-    paginate_by = 2
+    paginate_by = 20
 
     def get_queryset(self):
         queryset = self.model.objects.all()
@@ -86,26 +84,7 @@ class JewelryListView(ListView):
     def get_context_data(self, **kwargs):
         context = super(JewelryListView, self).get_context_data(**kwargs)
         pieces = context['object_list']
-        piecesContext = []
-        for piece in pieces:
-            images = piece.image_set.all()
-            hasFeatured = False
-            if len(images) > 0:
-                for image in images:
-                    if image.featured:
-                        hasFeatured = True
-                        featuredImage = image
-                if hasFeatured == False:
-                    featuredImage = images[0]
-            else:
-                featuredImage = None
-            piecesContext.append({
-                'piece': piece,
-                'created': piece.created.date,
-                'modified': piece.modified.date,
-                'featuredImage': featuredImage,
-                'category': piece.category
-            })
+        piecesContext = getJewelryContext(pieces)
         categoryContext = {}
         bodyParts = things.models.SuperCategory.objects.all()
         for part in bodyParts:
@@ -341,3 +320,36 @@ def tagged(request, slug):
         'pieces':pieces,
     }
     return render(request, 'home.html', context)
+
+
+class ProfileDetailView(DetailView):
+    model = profiles.models.Profile
+    template_name = 'pages/profile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ProfileDetailView, self).get_context_data(**kwargs)
+        jewelry = self.object.user.thing_set.all()
+        context.update({'pieces': getJewelryContext(jewelry)})
+        if self.request.user.is_authenticated:
+            context.update(getUserContext(self.request))
+            if self.request.user == self.object.user:
+                context.update({'editable': True})
+        return context
+
+
+class ProfileUpdateView(UpdateView):
+    model = profiles.models.Profile
+    fields = '__all__'
+    template_name = 'pages/editProfile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ProfileUpdateView, self).get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            # they had better be authenticated
+            context.update(getUserContext(self.request))
+            if self.request.user == self.object.user:
+                context.update({'editable': True})
+        return context
+
+    def get_success_url(self):
+        return reverse('profile', kwargs={'slug': self.object.slug})

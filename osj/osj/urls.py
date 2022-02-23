@@ -15,11 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from osj import views as core_views
 
 urlpatterns = [
-    path('', include('pages.urls')),
+    path('', include('pages.urls'), name='index'),
     path('admin/', admin.site.urls),
     path('auth/', include('django.contrib.auth.urls')),
+    path('auth/register', core_views.registration, name='registration'),
+    path('auth/whatsnext', core_views.afterRegistration, name='afterRegistration'),
     path('tinymce/', include('tinymce.urls'), name='tinymce'),
     path('hitcount/', include(('hitcount.urls', 'hitcount'), namespace='hitcount')),
 ]

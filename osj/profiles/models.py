@@ -7,15 +7,17 @@ from django.dispatch import receiver
 
 class Profile(models.Model):
     def __str__(self):
-        return self.user
+        return self.user.username
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    slug = models.SlugField()
     description = models.TextField(max_length=1000, blank=True)
-    image = models.ImageField(upload_to='uploads/profile_photos')
+    image = models.ImageField(upload_to='uploads/profile_photos', blank=True)
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        Profile.objects.create(user=instance)
+        Profile.objects.create(user=instance, slug=instance.username)
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):

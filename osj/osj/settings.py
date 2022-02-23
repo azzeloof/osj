@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'tinymce',
     'taggit',
     'hitcount',
-    'django_filters'
 ]
 
 MIDDLEWARE = [

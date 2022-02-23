@@ -1,0 +1,16 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block content %}
+{{ form.media }}
+<div class="container">
+    <form method="POST" enctype='multipart/form-data' class="message-form">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-primary">Save</button>
+    </form>
+</div>
+
+{% endblock %}

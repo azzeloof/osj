@@ -1,0 +1,11 @@
+{% extends 'pages/base.html' %}
+
+{% block content %}
+    <div class="jumbotron d-flex align-items-center min-vh-100">
+        <div class="container text-center">
+            <h1>Welcome to the OJ family, {{ user.username }}!</h1>
+            <h3>Now what?</h3>
+            <p>Either <a href="/user/{{ user.username }}/edit">complete your profile</a> so that other users can see how cool you are, or go <a href="/jewelry">download some jewelry!<a></p>
+        </div>
+    </div>
+{% endblock %}

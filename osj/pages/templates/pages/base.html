@@ -46,8 +46,8 @@
                 {% if user.is_authenticated %}
                     <div class="dropdown text-end">
                         <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                        {% if profile.image %}
-                            <img src="{{ profile.image.url }}" alt="profile photo" class="rounded-circle" width="32" height="32">
+                        {% if currentuserprofile.image %}
+                            <img src="{{ currentuserprofile.image.url }}" alt="profile photo" class="rounded-circle" width="32" height="32">
                         {% else %}
                             <img src="/media/profile_photos/default.png" alt="profile photo" class="rounded-circle" width="32" height="32">
                         {% endif %}
@@ -55,7 +55,7 @@
                         <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1" style="">
                         <li><a class="dropdown-item" href="/jewelry/new">New Jewelry Piece</a></li>
                         <li><a class="dropdown-item" href="/articles/new">New Article</a></li>
-                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li><a class="dropdown-item" href="/user/{{ currentuserprofile.slug }}">Profile</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="/auth/logout">Sign out</a></li>
                         </ul>
