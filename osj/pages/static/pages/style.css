@@ -165,3 +165,9 @@ p.filename {
     width: 100%;
     height: auto;
 }
+
+.grabme {
+    margin: auto;
+    font-size: 24px;
+    cursor: move;
+}

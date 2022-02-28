@@ -5,6 +5,10 @@
     <script src="https://unpkg.com/@yaireo/tagify"></script>
     <script src="https://unpkg.com/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
     <link href="https://unpkg.com/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+    <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
+         rel = "stylesheet">
+         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+      <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
     <script>
         $(document).ready(function() {
             console.log("{{tags}}");
@@ -18,14 +22,47 @@
                 },
                 originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(',')
             });
-        })
+            $(".sortable").sortable({
+                handle: ".grabme",
+                /*
+                update: function() {
+                    $(".sortable").sortable("refresh");
+                    rows = this.children;
+                    nRows = rows.length;
+                    // last row is the "add" button
+                    for (var i=0; i<nRows-1; i++) {
+                        row = rows[i]
+                        // check if row has a file
+                        var hasImage = false;
+                        for (var item in row.children) {
+                            cell = row.children[item];
+                            if (cell.className == "fileCell") {
+                                if (cell.innerHTML.includes("Currently:")) {
+                                    hasImage = true;
+                                }
+                            }
+                        }
+                        if (hasImage) {
+                            for (var item in row.children) {
+                                cell = row.children[item]
+                                if (cell.className == "orderCell") {
+                                    cell.children[0].value = i;
+                                }
+                            }
+                        }
+                    }
+                },
+                */
+            });
+        });
+        
     </script>
 {% endblock %}
 
 {% block content %}
 {{ form.media }}
 <div class="container">
-    <form method="POST" enctype='multipart/form-data' class="message-form">{% csrf_token %}
+    <form method="POST" enctype='multipart/form-data' class="form">{% csrf_token %}
         <h3>Title</h3>
         <div class="row mb-3 align-items-center">
             <div class="col-auto">
@@ -93,6 +130,7 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
+                        <th></th>
                         <th>Image</th>
                         <th>Preview</th>
                         <th>Alt Text</th>
@@ -100,24 +138,17 @@
                         <th>Delete</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="sortable images">
                     {% for form in imageFormset %}
-                    <tr class="image-formset-row">
+                    <tr class="image-formset-row" id="img-{{ form.id.value }} ">
                         {{ form.id }}
-                        <td>
-                            {{ form.image }}
-                        </td>
-                        <td>
-                            {{ form.image.url }}
-                        </td>
-                        <td>
-                            {{ form.alt }}
-                        </td>
-                        <td>
-                            {{ form.featured }}
-                        </td>
-                        <td>
-                        </td>
+                        <td class="orderCell" style="display:one">{{ form.order }}</td>
+                        <td><i class="bi bi-grip-horizontal grabme"></i></td>
+                        <td class="fileCell">{{ form.image }}</td>
+                        <td>{{ form.image.url }}</td>
+                        <td>{{ form.alt }}</td>
+                        <td>{{ form.featured }}</td>
+                        <td></td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -128,17 +159,24 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
+                        <th></th>
                         <th>File</th>
                         <th>Name</th>
                         <th>Delete</th>
+                        <th></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="sortable files">
                     {% for form in fileFormset %}
                     <tr class="file-formset-row">
                         {{ form.id }}
-                        <td>{{ form.file }}</td>
+                        <td class="orderCell" style="display:one">{{ form.order }}</td>
+                        <td><i class="bi bi-grip-horizontal grabme"></i></td>
+                        <td class="fileCell">{{ form.file }}</td>
                         <td>{{ form.name }}</td>
+                        {% if fileFormset.can_delete %}
+                            <td>{{ form.DELETE }}</td>
+                        {% endif %}
                         <td></td>
                     </tr>
                     {% endfor %}
@@ -147,13 +185,16 @@
         <button type="submit" class="save btn btn-primary">Save</button>
     </form>
 </div>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
 <script src="{% static 'pages/formset/jquery.formset.js' %}"></script>
 <script type="text/javascript">
     $('.image-formset-row').formset({
         addText: '<i class="bi-file-plus" style="font-size: 2rem;"></i>',
         deleteText: '<i class="bi-trash-fill" style="font-size: 2rem;"></i>',
-        prefix: 'image_set'
+        prefix: 'image_set',
+        //added: function(row) {
+        //    row.attr("id", "asd");
+        //}
     });
 </script>
 <script type="text/javascript">
@@ -192,6 +233,29 @@
         generateLicenceData();
         updateLicenceText();
       });
+</script>
+<script>
+    $('form').submit(function() {
+        $('.sortable.images').find('tr:visible').each(function(index) {
+            fileCell = $(this).find('td.fileCell');
+            hasHTML = (typeof fileCell.html() != 'undefined');
+            hasVal = (typeof fileCell.find('input').val() != 'undefined');
+            if ((hasHTML && fileCell.html().includes("Currently:")) || (hasVal && fileCell.find('input').val() !== '')) {
+                $(this).find('td.orderCell input').val(index);
+            }    
+        });
+        $('.sortable.files').find('tr:visible').each(function(index) {
+            //console.log($(this));
+            fileCell = $(this).find('td.fileCell');
+            hasHTML = (typeof fileCell.html() != 'undefined');
+            hasVal = (typeof fileCell.find('input').val() != 'undefined');
+            if ((hasHTML && fileCell.html().includes("Currently:")) || (hasVal && fileCell.find('input').val() !== '')) {
+                $(this).find('td.orderCell input').val(index);
+                //console.log(fileCell.html());
+                //console.log(fileCell.find('input').val());
+            }    
+        });
+    });
 </script>
 
 {% endblock %}

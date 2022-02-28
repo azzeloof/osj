@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'tinymce',
     'taggit',
     'hitcount',
+    'django_bleach',
 ]
 
 MIDDLEWARE = [
@@ -153,17 +154,41 @@ TINYMCE_DEFAULT_CONFIG = {
     'toolbar1': '''
             fullscreen preview bold italic underline | fontselect,
             fontsizeselect  | forecolor backcolor | alignleft alignright |
-            aligncenter alignjustify | indent outdent | bullist numlist table |
-            | link image media | codesample |
-            ''',
-    'toolbar2': '''
-            visualblocks visualchars |
-            charmap hr pagebreak nonbreaking anchor |  code |
+            aligncenter alignjustify | bullist numlist table |
+            | link image | codesample | charmap hr | code
             ''',
     'contextmenu': 'formats | link image',
-    'menubar': True,
+    'menubar': False,
     'statusbar': True,
 }
 
 
 TAGGIT_CASE_INSENSITIVE = True
+
+
+# Which HTML tags are allowed
+BLEACH_ALLOWED_TAGS = ['p', 'b', 'i', 'u', 'em', 'strong', 'a', 'span', 'code', 'pre', 'hr', 'img']
+
+# Which HTML attributes are allowed
+BLEACH_ALLOWED_ATTRIBUTES = ['href', 'title', 'style', 'target', 'rel', 'alt', 'width', 'height', 'src', 'class']
+
+# Which CSS properties are allowed in 'style' attributes (assuming
+# style is an allowed attribute)
+BLEACH_ALLOWED_STYLES = [
+    'font-family',
+    'font-weight',
+    'text-decoration',
+    'font-variant',
+    'font-size',
+    'color',
+    'background-color',
+    'text-align'
+    ]
+
+# Strip unknown tags if True, replace with HTML escaped characters if
+# False
+BLEACH_STRIP_TAGS = True
+
+# Strip comments, or leave them in.
+BLEACH_STRIP_COMMENTS = True
+

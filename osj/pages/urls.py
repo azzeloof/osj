@@ -21,5 +21,6 @@ urlpatterns = [
     path('tagged/<str:slug>/', views.tagged, name='tagged'),
     path('tagged/', views.tagged, name='tagged'),
     path('user/<str:slug>/', views.ProfileDetailView.as_view(), name='profile'),
-    path('user/<str:slug>/edit/', login_required(views.ProfileUpdateView.as_view()), name='profileUpdate')
+    path('user/<str:slug>/edit/', login_required(views.ProfileUpdateView.as_view()), name='profileUpdate'),
+    path('file/<int:pk>/', views.downloadFile, name='downloadFile')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

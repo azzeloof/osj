@@ -1,12 +1,52 @@
 {% extends 'pages/base.html' %}
+
+    {% block scripts %}
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+        </script>
+        <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('.grid').masonry({
+                    // options
+                    itemSelector: '.grid-item',
+                    percentPosition: true
+                });
+
+                $('[name="{{ category }}"]').addClass("sidebar-selected");
+            });
+        </script>
+    {% endblock %}
+
     {% block content %}
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-6">
-                    <h3>Jewelry</h3>
+                <div class="p-5 bg-secondary text-white">
+                    <h1>Welcome to Open Jewelry</h1>
+                    <p>The internet's home for open-source wearable art of all kinds</p>
                 </div>
-                <div class="col-md-6">
-                    <h3>Articles</h3>
+            </div>
+            <div class="row">
+                <div class="container">
+                    <h2>Featured Pieces</h2>
+                    <div class="jewelry-grid">
+                        <div class="grid">
+                            <div class=".grid-sizer"></div>
+                            {% for piece in pieces %}
+                                <div class="grid-item">
+                                    <div class="jewelry-box">
+                                        {% if piece.featuredImage.image %}
+                                            <a href="/jewelry/{{ piece.piece.id }}"><image src="{{ piece.featuredImage.image.url }}" href="/jewelry/{{ piece.piece.id }}" class="grid-image"></a>
+                                        {% else %}
+                                            <a href="/jewelry/{{ piece.piece.id }}"><image src="/media/profile_photos/default.png" class="grid-image"></a>
+                                        {% endif %}
+                                        <a class="jewelry-box-title" href="/jewelry/{{ piece.piece.id }}">{{ piece.piece.title }}</a>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

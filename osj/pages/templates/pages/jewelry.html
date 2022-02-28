@@ -92,7 +92,7 @@
                         </div>
                         <div class="col-auto edit-button-col">
                             {% if editable %}
-                                <a href="{{ piece.id }}/edit" style="font-size: 2rem;" class="bi-pencil-square"></a>
+                                <a href="/jewelry/{{ piece.id }}/edit" style="font-size: 2rem;" class="bi-pencil-square"></a>
                             {% endif %}
                         </div>
                     </div>
@@ -125,6 +125,11 @@
                             <div class="row sidebar-row">
                                 {{ piece.tagline|safe }}
                             </div>
+                            <div class="sidebar-row">
+                                {% if piece.repo %}
+                                    <p>Project repo: <a href={{ piece.repo }}>{{ piece.repo }}<a></p>
+                                {% endif %}
+                            </div>
                             <div class="row sidebar-row">
                                 <p>Category: {{ piece.category }}</p>
                             </div>
@@ -154,12 +159,8 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
-                                    <i style="font-size:24px;" class="bi-download"></i>
+                                    <p><i style="font-size:24px;" class="bi-download"></i> {{ downloads }}<p>
                                 </div>
-                            </div>
-                            <div class="row sidebar-row align-items-center">
-                                
-                                
                             </div>
                             <div class="row sidebar-row">
                                 <button class="btn btn-warning text-purple"><i class="bi-download"></i> Download Files</button>
@@ -191,7 +192,10 @@
                                 <h3>Files</h3>
                                 <table class="table table-striped">
                                     <thead>
-
+                                        <th>File</th>
+                                        <th>Downloads</th>
+                                        <th>Size</th>
+                                        <th></th>
                                     </thead>
                                     <tbody>
                                         {% for file in files %}
@@ -201,8 +205,9 @@
                                             {% else %}
                                                 <td>{{ file.filename }}</td>
                                             {% endif %}
+                                            <td>{{ file.downloads }}</td>
                                             <td>{{ file.file.size|sizify }}</td>
-                                            <td><a href="{{ file.url }}"><i class="bi-download"></i></a></td>
+                                            <td><a href="/file/{{ file.id }}"><i class="bi-download"></i></a></td>
                                         </tr>
                                         {% endfor %}
                                     </tbody>

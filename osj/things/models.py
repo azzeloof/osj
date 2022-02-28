@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericRelation
 from taggit.managers import TaggableManager
 from hitcount.models import HitCountMixin, HitCount
+from django_bleach.models import BleachField
 
 
 class Thing(models.Model):
@@ -15,8 +16,8 @@ class Thing(models.Model):
 
     # Model to handle things
     title = models.CharField(max_length=128)
-    tagline = models.TextField(max_length=1024, blank=True)
-    description = models.TextField(max_length=8096)
+    tagline = BleachField(max_length=1024, blank=True)
+    description = BleachField(max_length=8096)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     creator = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
@@ -28,6 +29,7 @@ class Thing(models.Model):
     likes = models.ManyToManyField(User, blank=True, related_name='likes')
     # hitcounts: https://dev.to/thepylot/how-to-track-number-of-hits-views-for-chosen-objects-in-django-django-packages-series-2-3bcb
     hitcount_generic = GenericRelation(HitCount, object_id_field='object_pk', related_query_name='hitcount_generic_relation')
+    featured = models.BooleanField(default=False)
 
 
 class Image(models.Model):
@@ -38,6 +40,10 @@ class Image(models.Model):
     thing = models.ForeignKey(Thing, on_delete=models.CASCADE, related_name='image_set')
     image = models.ImageField(upload_to='images/')
     featured = models.BooleanField(default=False)
+    order = models.IntegerField()#default=0)
+
+    class Meta:
+        ordering = ('order',)
 
 
 class File(models.Model):
@@ -47,6 +53,11 @@ class File(models.Model):
     thing = models.ForeignKey(Thing, on_delete=models.CASCADE, related_name='file_set')
     file = models.FileField(upload_to='files')
     default = models.BooleanField(default=False)
+    downloads = models.IntegerField(default=0)
+    order = models.IntegerField()#default=0)
+
+    class Meta:
+        ordering = ('order',)
 
 
 class SuperCategory(models.Model):

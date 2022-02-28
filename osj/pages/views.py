@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
 from django.views.generic import CreateView, UpdateView, ListView, DetailView
 from django.urls import reverse
@@ -12,6 +12,8 @@ from .forms import ThingForm, ThingImageFormset, ThingFileFormset
 import os
 import json
 from hitcount.views import HitCountDetailView
+from osj.settings import MEDIA_ROOT
+import mimetypes
 
 
 def getJewelryContext(jewelry):
@@ -47,7 +49,10 @@ def getUserContext(request):
 
 
 def index(request):
-    context = {}
+    pieces = things.models.Thing.objects.filter(featured=True).order_by('-id')[:9]
+    context = {
+        'pieces': getJewelryContext(pieces)
+    }
     if request.user.is_authenticated:
         context.update(getUserContext(request))
     return render(request, 'pages/index.html', context)
@@ -119,13 +124,17 @@ class JewelryDetailView(HitCountDetailView):
         likes = piece.likes.all() # set of users
         nLikes = len(likes)
         fileContext = []
+        downloads = 0
         for fileObj in files:
             fileContext.append({
                 'file': fileObj.file.file,
                 'filename': os.path.basename(fileObj.file.file.name),
                 'name': fileObj.name,
-                'url': fileObj.file.url
+                'url': fileObj.file.url,
+                'id': fileObj.id,
+                'downloads': fileObj.downloads
             })
+            downloads += fileObj.downloads
         context = super(JewelryDetailView, self).get_context_data(**kwargs)
         context.update({
             'piece': piece,
@@ -133,7 +142,8 @@ class JewelryDetailView(HitCountDetailView):
             'modified': piece.modified.date,
             'files': fileContext,
             'images': images,
-            'likes': nLikes
+            'likes': nLikes,
+            'downloads': downloads
         })
         if self.request.user.is_authenticated:
             context.update(getUserContext(self.request))
@@ -145,7 +155,6 @@ class JewelryDetailView(HitCountDetailView):
             if self.request.user == piece.creator:
                 context.update({'editable': True})
         return context
-
 
 def allArticles(request):
     articleObjs = articles.models.Article.objects.all()
@@ -225,13 +234,13 @@ class JewelryCreateView(CreateView):
         form.save_m2m() # needed to save tags
         for fs in [imageFormset, fileFormset]:
             if fs.is_valid():
-                objSet = fs.save(commit=False)
+                objSet = fs.save(commit=True)
                 for obj in objSet:
                     obj.thing = self.object
                     obj.save()
-            else:
-                print(fs.errors)
-        return redirect(reverse('jewelry'))
+                #else:
+            #    print(fs.errors)
+        return redirect(reverse('jewelryPiece', kwargs={'pk': self.object.id}))
 
     def form_invalid(self, form, imageFormset, fileFormset):
         return self.render_to_response(
@@ -276,14 +285,22 @@ class JewelryUpdateView(UpdateView):
         form.save_m2m() # needed to save tags
         for fs in [imageFormset, fileFormset]:
             if fs.is_valid():
-                objSet = fs.save(commit=False)
+                objSet = fs.save(commit=True)
                 for obj in objSet:
                     obj.thing = self.object
                     obj.save()
-            else:
-                print(fs.errors)
-        return redirect(reverse('jewelry'))
+            #else:
+            #    print(fs.errors)
+        return redirect(reverse('jewelryPiece', kwargs={'pk': self.object.id}))
         #return super(JewelryUpdateView, self).form_valid(form)
+
+    def dispatch(self, request, *args, **kwargs):
+        handler = super(JewelryUpdateView, self).dispatch(request, *args, **kwargs)
+        # Only allow editing if current user is owner
+        if self.object.creator != request.user:
+            return HttpResponseForbidden(u"Can't touch this.")
+        return handler
+
 
     #def get_success_url(self):                
     #   return redirect(reverse('jewelry'))
@@ -353,3 +370,23 @@ class ProfileUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse('profile', kwargs={'slug': self.object.slug})
+
+    def dispatch(self, request, *args, **kwargs):
+        handler = super(ProfileUpdateView, self).dispatch(request, *args, **kwargs)
+        # Only allow editing if current user is owner
+        if self.object.user != request.user:
+            return HttpResponseForbidden(u"Can't touch this.")
+        return handler
+
+
+
+def downloadFile(request, pk):
+    file = get_object_or_404(things.models.File, pk=pk)
+    file.downloads += 1
+    file.save()
+    filepath = os.path.abspath(file.file.path)
+    path = open(filepath, 'rb')
+    mimetype, _ = mimetypes.guess_type(filepath)
+    response = HttpResponse(path, content_type=mimetype)
+    response['Content-Disposition'] = "attachment; filename=%s" % file.file.name
+    return response
