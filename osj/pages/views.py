@@ -14,6 +14,7 @@ import json
 from hitcount.views import HitCountDetailView
 from osj.settings import MEDIA_ROOT
 import mimetypes
+from django.db.models import Count
 
 
 def getJewelryContext(jewelry):
@@ -74,15 +75,31 @@ class JewelryListView(ListView):
     def get_queryset(self):
         queryset = self.model.objects.all()
         category = self.request.GET.get('category', None)
+        orderBy = self.request.GET.get('orderby', None)
+        direction = self.request.GET.get('direction', None)
         area = self.request.GET.get('area', None)
         if category:
-            return queryset.distinct().filter(category__name=category)
+            queryset = queryset.distinct().filter(category__name=category)
         elif area:
             categories = get_object_or_404(things.models.SuperCategory, name=area).category_set.all()
             catNames = []
             for category in categories:
                 catNames.append(category.name)
-            return queryset.distinct().filter(category__name__in=catNames)
+            queryset = queryset.distinct().filter(category__name__in=catNames)
+        allowedFields = [f.name for f in things.models.Thing._meta.get_fields()] # maybe this list should just be hardcoded
+        print(category)
+        print(orderBy)
+        print(direction)
+        print(allowedFields)
+        if orderBy in allowedFields:
+            if orderBy == "likes":
+                queryset = queryset.annotate(nLikes=Count('likes')).order_by('nLikes')
+            else:
+                queryset = queryset.order_by(orderBy)
+            if direction == 'descending':
+                return queryset.reverse()
+            else:
+                return queryset
         else:
             return queryset
 
@@ -126,9 +143,15 @@ class JewelryDetailView(HitCountDetailView):
         fileContext = []
         downloads = 0
         for fileObj in files:
+            try:
+                file = fileObj.file.file
+                fileName = os.path.basename(fileObj.file.file.name)
+            except:
+                file = None
+                fileName = "File Not Found"
             fileContext.append({
-                'file': fileObj.file.file,
-                'filename': os.path.basename(fileObj.file.file.name),
+                'file': file,
+                'filename': fileName,
                 'name': fileObj.name,
                 'url': fileObj.file.url,
                 'id': fileObj.id,
@@ -385,8 +408,11 @@ def downloadFile(request, pk):
     file.downloads += 1
     file.save()
     filepath = os.path.abspath(file.file.path)
-    path = open(filepath, 'rb')
-    mimetype, _ = mimetypes.guess_type(filepath)
-    response = HttpResponse(path, content_type=mimetype)
-    response['Content-Disposition'] = "attachment; filename=%s" % file.file.name
+    try:
+        path = open(filepath, 'rb')
+        mimetype, _ = mimetypes.guess_type(filepath)
+        response = HttpResponse(path, content_type=mimetype)
+        response['Content-Disposition'] = "attachment; filename=%s" % file.file.name
+    except:
+        response = HttpResponse("File not found")
     return response

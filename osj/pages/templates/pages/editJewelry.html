@@ -62,11 +62,14 @@
 {% block content %}
 {{ form.media }}
 <div class="container">
-    <form method="POST" enctype='multipart/form-data' class="form">{% csrf_token %}
+    <form method="POST" enctype='multipart/form-data' class="form m-2">{% csrf_token %}
         <h3>Title</h3>
         <div class="row mb-3 align-items-center">
             <div class="col-auto">
                 {{ form.title }}
+                {% for error in form.title.errors %}
+                    <strong>{{ error|escape }}</strong>
+                {% endfor %}
             </div>
             <div class="col-auto">
                 <div id="titleHelp" class="form-text">Make it a good one!</div>
@@ -77,10 +80,16 @@
                 <div class="row mb-3">
                     <h3>Tagline</h3>
                     {{ form.tagline }}
+                    {% for error in form.tagline.errors %}
+                        <strong>{{ error|escape }}</strong>
+                    {% endfor %}
                 </div>
                 <div class="row mb-3">
                     <h3>Description</h3>
                     {{ form.description }}
+                    {% for error in form.description.errors %}
+                        <strong>{{ error|escape }}</strong>
+                    {% endfor %}
                 </div>
             </div>
             <div class="col-md-4">
@@ -88,6 +97,9 @@
                 <div class="row mb-3 align-items-center">
                     <div class="col-auto">
                         {{ form.repo }}
+                        {% for error in form.repo.errors %}
+                            <strong>{{ error|escape }}</strong>
+                        {% endfor %}
                     </div>
                     <div class="col-auto">
                         <div id="repoHelp" class="form-text">External repository for project files</div>
@@ -97,6 +109,9 @@
                 <div class="row mb-3 align-items-center">
                     <div class="col-auto">
                         {{ form.category }}
+                        {% for error in form.category.errors %}
+                            <strong>{{ error|escape }}</strong>
+                        {% endfor %}
                     </div>
                     <div class="col-auto">
                         <div id="categoryHelp" class="form-text">Choose the category that best describes your work!</div>
@@ -106,6 +121,9 @@
                 <div class="row mb-3 align-items-center">
                     <div class="col-auto">
                         {{ form.tags }}
+                        {% for error in form.tags.errors %}
+                            <strong>{{ error|escape }}</strong>
+                        {% endfor %}
                     </div>
                     <div class="col-auto">
                         <div id="tagHelp" class="form-text">Enter some tags!</div>
@@ -115,6 +133,9 @@
                 <div class="row">
                     <div class="col-auto">
                         {{ form.licence }}
+                        {% for error in form.licence.errors %}
+                            <strong>{{ error|escape }}</strong>
+                        {% endfor %}
                     </div>
                 </div>
                 <div class="row">
@@ -142,7 +163,7 @@
                     {% for form in imageFormset %}
                     <tr class="image-formset-row" id="img-{{ form.id.value }} ">
                         {{ form.id }}
-                        <td class="orderCell" style="display:one">{{ form.order }}</td>
+                        <td class="orderCell" style="display:none">{{ form.order }}</td>
                         <td><i class="bi bi-grip-horizontal grabme"></i></td>
                         <td class="fileCell">{{ form.image }}</td>
                         <td>{{ form.image.url }}</td>
@@ -150,6 +171,11 @@
                         <td>{{ form.featured }}</td>
                         <td></td>
                     </tr>
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <strong>{{ error|escape }}</strong>
+                        {% endfor %}
+                    {% endfor %}
                     {% endfor %}
                 </tbody>
             </table>
@@ -163,22 +189,23 @@
                         <th>File</th>
                         <th>Name</th>
                         <th>Delete</th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody class="sortable files">
                     {% for form in fileFormset %}
                     <tr class="file-formset-row">
                         {{ form.id }}
-                        <td class="orderCell" style="display:one">{{ form.order }}</td>
+                        <td class="orderCell" style="display:none">{{ form.order }}</td>
                         <td><i class="bi bi-grip-horizontal grabme"></i></td>
                         <td class="fileCell">{{ form.file }}</td>
                         <td>{{ form.name }}</td>
-                        {% if fileFormset.can_delete %}
-                            <td>{{ form.DELETE }}</td>
-                        {% endif %}
                         <td></td>
                     </tr>
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <strong>{{ error|escape }}</strong>
+                        {% endfor %}
+                    {% endfor %}
                     {% endfor %}
                 </tbody>
             </table>

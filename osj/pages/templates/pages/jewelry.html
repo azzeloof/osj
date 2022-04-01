@@ -163,7 +163,7 @@
                                 </div>
                             </div>
                             <div class="row sidebar-row">
-                                <button class="btn btn-warning text-purple"><i class="bi-download"></i> Download Files</button>
+                                <button class="btn btn-warning text-purple" href="#files"><i class="bi-download"></i> Download Files</button>
                             </div>
                             <div class="row sidebar-row">
                                 <div class="licence-block">
@@ -183,7 +183,7 @@
                               <button class="nav-link" id="files-tab" data-bs-toggle="tab" data-bs-target="#files" type="button" role="tab" aria-controls="files" aria-selected="false">Files</button>
                             </li>
                           </ul>
-                          <div class="tab-content" id="myTabContent">
+                          <div class="tab-content" id="tabContent">
                             <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
                                 <h3>Description</h3>
                                 {{ piece.description|safe }}
@@ -206,7 +206,7 @@
                                                 <td>{{ file.filename }}</td>
                                             {% endif %}
                                             <td>{{ file.downloads }}</td>
-                                            <td>{{ file.file.size|sizify }}</td>
+                                            <td>{% if file.file %}{{ file.file.size|sizify }}{% endif %}</td>
                                             <td><a href="/file/{{ file.id }}"><i class="bi-download"></i></a></td>
                                         </tr>
                                         {% endfor %}

@@ -4,6 +4,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from taggit.managers import TaggableManager
 from hitcount.models import HitCountMixin, HitCount
 from django_bleach.models import BleachField
+from .validators import validateFileSize
 
 
 class Thing(models.Model):
@@ -51,7 +52,7 @@ class File(models.Model):
     # Based on Image model
     name = models.CharField(max_length=256, blank=True)
     thing = models.ForeignKey(Thing, on_delete=models.CASCADE, related_name='file_set')
-    file = models.FileField(upload_to='files')
+    file = models.FileField(upload_to='files', validators=[validateFileSize])
     default = models.BooleanField(default=False)
     downloads = models.IntegerField(default=0)
     order = models.IntegerField()#default=0)

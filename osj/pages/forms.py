@@ -46,6 +46,10 @@ class ThingForm(forms.ModelForm):
         model = Thing
         fields = ['title', 'tagline', 'description', 'licence', 'repo', 'category', 'tags']
 
+    def __init__(self, *args, **kwargs):
+        super(ThingForm, self).__init__(*args, **kwargs)
+        self.fields['repo'].required = False
+
 
 class ThingImageForm(forms.ModelForm):
     
