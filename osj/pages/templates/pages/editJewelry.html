@@ -166,7 +166,11 @@
                         <td class="orderCell" style="display:none">{{ form.order }}</td>
                         <td><i class="bi bi-grip-horizontal grabme"></i></td>
                         <td class="fileCell">{{ form.image }}</td>
-                        <td>{{ form.image.url }}</td>
+                        <td>
+                            {% if form.instance.image %}
+                                <img class="thumbnail" src="/media/{{ form.instance.image }}"></img>
+                            {% endif %}
+                        </td>
                         <td>{{ form.alt }}</td>
                         <td>{{ form.featured }}</td>
                         <td></td>

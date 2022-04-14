@@ -171,3 +171,19 @@ p.filename {
     font-size: 24px;
     cursor: move;
 }
+
+.thumbnail {
+    max-height: 100px;
+    max-width: 100px;
+    height: auto;
+    width: auto;
+}
+
+.likeBox {
+    max-height: 200px;
+    overflow-y: scroll;
+    padding: 5px;
+    border-radius: 5px;
+    border-style: solid;
+    border-color: #404040;
+}

@@ -192,3 +192,4 @@ BLEACH_STRIP_TAGS = True
 # Strip comments, or leave them in.
 BLEACH_STRIP_COMMENTS = True
 
+PROFILE_PHOTO_SIZE = (500,500)

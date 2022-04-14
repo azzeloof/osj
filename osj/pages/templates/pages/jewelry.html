@@ -68,6 +68,12 @@
             });
         });
         </script>
+        <script>
+            function activateTab(tab){
+                $('.nav-tabs button[id="' + tab + '"]').tab('show');
+                window.scrollTo(0, document.getElementById(tab).offsetTop);
+            };
+        </script>
     {% endblock %}
 
     {% block content %}
@@ -163,7 +169,7 @@
                                 </div>
                             </div>
                             <div class="row sidebar-row">
-                                <button class="btn btn-warning text-purple" href="#files"><i class="bi-download"></i> Download Files</button>
+                                <button class="btn btn-warning text-purple" onclick="activateTab('files-tab')" href="#files-tab"></i> Download Files</button>
                             </div>
                             <div class="row sidebar-row">
                                 <div class="licence-block">

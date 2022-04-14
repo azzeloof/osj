@@ -59,6 +59,24 @@
                         </div>
                     </div>
                     <hr/>
+
+                    <div class="row">
+                        <div class="col-md-6">
+
+                        </div>
+                        <div class="col-md-6">
+                            {% if editable %}
+                                <h3>Liked Pieces</h3>
+                                <div class="likeBox">
+                                    {% for piece in liked %}
+                                        <p><a href="/jewelry/{{ piece.id }}">{{ piece }}</a> by {{ piece.creator }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <hr/>
+
                     <div class="row">
                         <div class="col-md-12">
                             <h3>Jewelry created by {{ profile.user.username }}:</h3>

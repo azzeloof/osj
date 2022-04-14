@@ -1,14 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
-from django.views.generic import CreateView, UpdateView, ListView, DetailView
+from django.views.generic import CreateView, UpdateView, ListView, DetailView, TemplateView
 from django.urls import reverse
+from django.contrib import messages
 from taggit.models import Tag
 import things
 import pages
 import articles
 import profiles
-from .forms import ThingForm, ThingImageFormset, ThingFileFormset
+from .forms import ThingForm, ThingImageFormset, ThingFileFormset, ProfilePhotoForm, ProfileDataForm
 import os
 import json
 from hitcount.views import HitCountDetailView
@@ -373,34 +374,43 @@ class ProfileDetailView(DetailView):
         if self.request.user.is_authenticated:
             context.update(getUserContext(self.request))
             if self.request.user == self.object.user:
-                context.update({'editable': True})
+                liked = things.models.Thing.objects.filter(likes=self.request.user)
+                context.update({
+                    'editable': True,
+                    'liked': liked
+                    })
         return context
 
 
-class ProfileUpdateView(UpdateView):
-    model = profiles.models.Profile
-    fields = '__all__'
-    template_name = 'pages/editProfile.html'
+def profileUpdateView(request, slug):
+    #https://stackoverflow.com/questions/54404250/django-populate-form-using-function-based-view-with-multiple-forms
+    profile = get_object_or_404(profiles.models.Profile, slug=slug)
+    if request.method == 'POST':
+        photo_form = ProfilePhotoForm(request.POST, request.FILES, instance=profile)
+        data_form = ProfileDataForm(request.POST, instance=profile)
+        valid = False
+        if photo_form.is_valid():
+            valid = True
+            photo_form.save()
+        if data_form.is_valid():
+            valid = True
+            data_form.save()
+    else:
+        photo_form = ProfilePhotoForm(instance=profile)
+        data_form = ProfileDataForm(instance=profile)
+    
+    context = {
+        'photo_form': photo_form,
+        'data_form': data_form
+    }
+    if request.user.is_authenticated:
+        # they had better be authenticated
+        context.update(getUserContext(request))
 
-    def get_context_data(self, **kwargs):
-        context = super(ProfileUpdateView, self).get_context_data(**kwargs)
-        if self.request.user.is_authenticated:
-            # they had better be authenticated
-            context.update(getUserContext(self.request))
-            if self.request.user == self.object.user:
-                context.update({'editable': True})
-        return context
-
-    def get_success_url(self):
-        return reverse('profile', kwargs={'slug': self.object.slug})
-
-    def dispatch(self, request, *args, **kwargs):
-        handler = super(ProfileUpdateView, self).dispatch(request, *args, **kwargs)
-        # Only allow editing if current user is owner
-        if self.object.user != request.user:
-            return HttpResponseForbidden(u"Can't touch this.")
-        return handler
-
+    if (request.method == 'POST' and valid):
+        return redirect('profileUpdate', slug=slug)
+    else:
+        return render(request, 'pages/editProfile.html', context)
 
 
 def downloadFile(request, pk):
