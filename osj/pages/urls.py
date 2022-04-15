@@ -16,6 +16,7 @@ urlpatterns = [
     path('articles/<int:objID>/', views.article, name='article'),
     path('jewelry/new/', login_required(views.JewelryCreateView.as_view()), name='newJewelry'),
     path('jewelry/<pk>/edit/', login_required(views.JewelryUpdateView.as_view()), name='editJewelry'),
+    path('jewelry/<pk>/delete/', login_required(views.JewelryDeleteView.as_view()), name='deleteJewelry'),
     #re_path(r'^$',views.like_button, name='like'),
     path('like/', views.like_button, name='like'),
     path('tagged/<str:tag>/', views.Tagged.as_view(), name='tagged'),

@@ -63,7 +63,7 @@
 {{ form.media }}
 <div class="container">
     <form method="POST" enctype='multipart/form-data' class="form m-2">{% csrf_token %}
-        <h3>Title</h3>
+        <h3 class="required-field">Title</h3>
         <div class="row mb-3 align-items-center">
             <div class="col-auto">
                 {{ form.title }}
@@ -78,14 +78,14 @@
         <div class="row mb-3">
             <div class="col-md-8">
                 <div class="row mb-3">
-                    <h3>Tagline</h3>
+                    <h3 class="required-field">Tagline</h3>
                     {{ form.tagline }}
                     {% for error in form.tagline.errors %}
                         <strong>{{ error|escape }}</strong>
                     {% endfor %}
                 </div>
                 <div class="row mb-3">
-                    <h3>Description</h3>
+                    <h3 class="required-field">Description</h3>
                     {{ form.description }}
                     {% for error in form.description.errors %}
                         <strong>{{ error|escape }}</strong>
@@ -105,7 +105,7 @@
                         <div id="repoHelp" class="form-text">External repository for project files</div>
                     </div>
                 </div>
-                <h3>Category</h3>
+                <h3 class="required-field">Category</h3>
                 <div class="row mb-3 align-items-center">
                     <div class="col-auto">
                         {{ form.category }}
@@ -117,7 +117,7 @@
                         <div id="categoryHelp" class="form-text">Choose the category that best describes your work!</div>
                     </div>
                 </div>
-                <h3>Tags</h3>
+                <h3 class="required-field">Tags</h3>
                 <div class="row mb-3 align-items-center">
                     <div class="col-auto">
                         {{ form.tags }}
@@ -126,10 +126,10 @@
                         {% endfor %}
                     </div>
                     <div class="col-auto">
-                        <div id="tagHelp" class="form-text">Enter some tags!</div>
+                        <div id="tagHelp" class="form-text">Enter some comma-seperated tags!</div>
                     </div>
                 </div>
-                <h3>Licence</h3>
+                <h3 class="required-field">Licence</h3>
                 <div class="row">
                     <div class="col-auto">
                         {{ form.licence }}
@@ -214,6 +214,7 @@
                 </tbody>
             </table>
         <button type="submit" class="save btn btn-primary">Save</button>
+        {% if thing %}<a href="/jewelry/{{ thing.pk }}/delete/" class="save btn btn-danger">Delete</a>{% endif %}
     </form>
 </div>
 

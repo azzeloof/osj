@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
 from django.views.generic import CreateView, UpdateView, ListView, DetailView, TemplateView
-from django.urls import reverse
+from django.views.generic.edit import DeleteView
+from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from taggit.models import Tag
 import things
@@ -176,6 +177,31 @@ class JewelryDetailView(HitCountDetailView):
                 context.update({'editable': True})
         return context
 
+
+class JewelryDeleteView(DeleteView):
+    model = things.models.Thing
+    success_url = reverse_lazy('jewelry')
+    template_name = 'pages/deleteJewelry.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(JewelryDeleteView, self).get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            context.update(getUserContext(self.request))
+        return context
+
+    def dispatch(self, request, *args, **kwargs):
+        obj = self.get_object()
+        if self.request.user.is_authenticated:
+            # they had better be
+            if obj.creator != self.request.user:
+                return HttpResponseForbidden("You don't have permission to do that!")
+            else:
+                return super(JewelryDeleteView, self).dispatch(request, *args, **kwargs)
+        else:
+            return HttpResponseForbidden("C'mon, you aren't even logged in!")
+
+
+
 def allArticles(request):
     articleObjs = articles.models.Article.objects.all()
     context = {
@@ -254,7 +280,8 @@ class JewelryCreateView(CreateView):
         form.save_m2m() # needed to save tags
         for fs in [imageFormset, fileFormset]:
             if fs.is_valid():
-                objSet = fs.save(commit=True)
+                objSet = fs.save(commit=False) # This used to be True, setting it to False fixed this error:
+                # "save() prohibited to prevent data loss due to unsaved related object"
                 for obj in objSet:
                     obj.thing = self.object
                     obj.save()

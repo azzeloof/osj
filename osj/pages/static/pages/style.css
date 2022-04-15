@@ -187,3 +187,8 @@ p.filename {
     border-style: solid;
     border-color: #404040;
 }
+
+.required-field::after {
+    content: "*";
+    color: red;
+}
