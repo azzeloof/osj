@@ -29,7 +29,7 @@
             var canvasData;
             $("#modalCrop").on("shown.bs.modal", function () {
                 $uploaded_image.cropper({
-                    viewMode: 1,
+                    //viewMode: 1,
                     aspectRatio: 1,
                     minCropBoxWidth: 10,
                     ready: function () {
@@ -40,7 +40,7 @@
             }).on("hidden.bs.modal", function () {
             cropBoxData = $uploaded_image.cropper("getCropBoxData");
             canvasData = $uploaded_image.cropper("getCanvasData");
-            $image.cropper("destroy");
+            $uploaded_image.cropper("destroy");
             });
 
             // Enable zoom in button
@@ -120,7 +120,9 @@
           <h4 class="modal-title">Crop the photo</h4>
         </div>
         <div class="modal-body">
-          <img src="" id="uploaded_image" style="max-width: 100%;">
+            <div class="img-container">
+                <img src="" id="uploaded_image" class="profile-photo" style="//max-width: 100%;">
+            </div>
         </div>
         <div class="modal-footer">
           <div class="btn-group pull-left" role="group">
