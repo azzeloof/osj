@@ -41,7 +41,7 @@
                     </li>
                 </ul>
                 <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-                    <input type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
+                    <input type="search" class="form-control form-control-dark" placeholder="Search... (disabled)" style="pointer-events: none;" saria-label="Search">
                   </form>
                 {% if user.is_authenticated %}
                     <div class="dropdown text-end">
@@ -54,7 +54,7 @@
                         </a>
                         <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1" style="">
                         <li><a class="dropdown-item" href="/jewelry/new">New Jewelry Piece</a></li>
-                        <li><a class="dropdown-item" href="/articles/new">New Article</a></li>
+                        <li><a class="dropdown-item disabled" href="/articles/new">New Article</a></li>
                         <li><a class="dropdown-item" href="/user/{{ currentuserprofile.slug }}">Profile</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="/auth/logout">Sign out</a></li>
@@ -81,38 +81,34 @@
 
       <!-- Section: Form -->
       <section class="">
+
+        <!--
+
         <form action="">
-          <!--Grid row-->
           <div class="row d-flex justify-content-center">
-            <!--Grid column-->
             <div class="col-auto">
               <p class="pt-2">
                 <strong>Sign up for our newsletter</strong>
               </p>
             </div>
-            <!--Grid column-->
   
-            <!--Grid column-->
             <div class="col-md-5 col-12">
-              <!-- Email input -->
               <div class="form-outline form-white mb-4">
                 <input type="email" id="form5Example21" class="form-control" />
                 <label class="form-label" for="form5Example21">Email address</label>
               </div>
             </div>
-            <!--Grid column-->
   
-            <!--Grid column-->
             <div class="col-auto">
-              <!-- Submit button -->
               <button type="submit" class="btn btn-outline-light mb-4">
                 Subscribe
               </button>
             </div>
-            <!--Grid column-->
           </div>
-          <!--Grid row-->
         </form>
+
+      -->
+
       </section>
       <!-- Section: Form -->
   
