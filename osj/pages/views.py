@@ -88,10 +88,6 @@ class JewelryListView(ListView):
                 catNames.append(category.name)
             queryset = queryset.distinct().filter(category__name__in=catNames)
         allowedFields = [f.name for f in things.models.Thing._meta.get_fields()] # maybe this list should just be hardcoded
-        print(category)
-        print(orderBy)
-        print(direction)
-        print(allowedFields)
         if orderBy in allowedFields:
             if orderBy == "likes":
                 queryset = queryset.annotate(nLikes=Count('likes')).order_by('nLikes')
@@ -353,15 +349,116 @@ def like_button(request):
             return HttpResponse(json.dumps(context), content_type='application/json')
 
 
-def tagged(request, slug):
+"""def tagged(request, slug=None):
+    # Set up queryset
     tag = get_object_or_404(Tag, slug=slug)
-    pieces = things.models.Thing.objects.filter(tags=tag)
-    context = {
-        'tag':tag,
-        'pieces':pieces,
-    }
-    return render(request, 'home.html', context)
+    queryset = things.models.Thing.objects.filter(tags=tag)
+    category = request.GET.get('category', None)
+    orderBy = request.GET.get('orderby', None)
+    direction = request.GET.get('direction', None)
+    area = request.GET.get('area', None)
+    if category:
+        queryset = queryset.distinct().filter(category__name=category)
+    elif area:
+        categories = get_object_or_404(things.models.SuperCategory, name=area).category_set.all()
+        catNames = []
+        for category in categories:
+            catNames.append(category.name)
+        queryset = queryset.distinct().filter(category__name__in=catNames)
+    allowedFields = [f.name for f in things.models.Thing._meta.get_fields()] # maybe this list should just be hardcoded
+    if orderBy in allowedFields:
+        if orderBy == "likes":
+            queryset = queryset.annotate(nLikes=Count('likes')).order_by('nLikes')
+        else:
+            queryset = queryset.order_by(orderBy)
+        if direction == 'descending':
+            pieces = queryset.reverse()
+        else:
+            pieces = queryset
+    else:
+        pieces = queryset
 
+    # Get context
+    context = {
+        'tag':tag
+    }
+    piecesContext = getJewelryContext(pieces)
+    categoryContext = {}
+    bodyParts = things.models.SuperCategory.objects.all()
+    for part in bodyParts:
+        categoryContext.update({
+            part.name: part.category_set.all()
+        })
+    context.update({
+        'pieces': piecesContext,
+        'categories': categoryContext
+        })
+    if category:
+        context.update({'category': category})
+    elif area:
+        context.update({'category': area})
+    if request.user.is_authenticated:
+            context.update(getUserContext(request))
+    
+    return render(request, 'pages/tagged.html', context)
+"""
+
+class Tagged(ListView):
+    model = things.models.Thing
+    template_name = 'pages/tagged.html'
+    paginate_by = 20
+
+    def get_queryset(self):
+        tag = get_object_or_404(Tag, slug=self.kwargs['tag'])
+        queryset = self.model.objects.filter(tags=tag)
+        category = self.request.GET.get('category', None)
+        orderBy = self.request.GET.get('orderby', None)
+        direction = self.request.GET.get('direction', None)
+        area = self.request.GET.get('area', None)
+        if category:
+            queryset = queryset.distinct().filter(category__name=category)
+        elif area:
+            categories = get_object_or_404(things.models.SuperCategory, name=area).category_set.all()
+            catNames = []
+            for category in categories:
+                catNames.append(category.name)
+            queryset = queryset.distinct().filter(category__name__in=catNames)
+        allowedFields = [f.name for f in self.model._meta.get_fields()] # maybe this list should just be hardcoded
+        if orderBy in allowedFields:
+            if orderBy == "likes":
+                queryset = queryset.annotate(nLikes=Count('likes')).order_by('nLikes')
+            else:
+                queryset = queryset.order_by(orderBy)
+            if direction == 'descending':
+                return queryset.reverse()
+            else:
+                return queryset
+        else:
+            return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(Tagged, self).get_context_data(**kwargs)
+        pieces = context['object_list']
+        piecesContext = getJewelryContext(pieces)
+        categoryContext = {}
+        bodyParts = things.models.SuperCategory.objects.all()
+        for part in bodyParts:
+            categoryContext.update({
+                part.name: part.category_set.all()
+            })
+        context.update({
+            'pieces': piecesContext,
+            'categories': categoryContext
+            })
+        category = self.request.GET.get('category', None)
+        area = self.request.GET.get('area', None)
+        if category:
+            context.update({'category': category})
+        elif area:
+            context.update({'category': area})
+        if self.request.user.is_authenticated:
+            context.update(getUserContext(self.request))
+        return context
 
 class ProfileDetailView(DetailView):
     model = profiles.models.Profile
