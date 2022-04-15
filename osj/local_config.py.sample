@@ -1,0 +1,36 @@
+
+# local_config.py.sample
+# Adam Zeloof
+
+# To use, save as local_config.py and change the settings below as needed
+
+
+DEBUG = True
+SECRET_KEY = 'some secret string'
+ALLOWED_HOSTS = []
+
+DATABASES = {
+     'default': {
+	# This sets up a mysql database, but others can be used
+         'ENGINE': 'django.db.backends.mysql',
+         'OPTIONS': {
+             'sql_mode': 'traditional',
+         },
+         'NAME': '',
+         'USER': '',
+         'PASSWORD': '',
+         'HOST': '',
+         'PORT': '',
+     }
+ }
+
+
+
+##### OPTIONAL PARAMETERS #####
+
+#SECURE_HSTS_SECONDS = 60
+#SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+#SECURE_SSL_REDIRECT = True
+#SESSION_COOKIE_SECURE = True
+#CSRF_COOKIE_SECURE = True
+#SECURE_HSTS_PRELOAD = True

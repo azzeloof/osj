@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+from local_config import *
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -21,12 +22,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-nrmxzzw_4cb_v6c(5hm!)++s7m&vl(a_@0^f9ijx-e#ll_ooe_'
+# SECRET_KEY = 'django-insecure-nrmxzzw_4cb_v6c(5hm!)++s7m&vl(a_@0^f9ijx-e#ll_ooe_'
+#SECRET_KEY = local_config.SECRET_KEY
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+#DEBUG = local_config.DEBUG
 
-ALLOWED_HOSTS = []
+#ALLOWED_HOSTS = local_config.ALLOWED_HOSTS
 
 
 # Application definition
@@ -82,12 +85,14 @@ WSGI_APPLICATION = 'osj.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': BASE_DIR / 'db.sqlite3',
+#    }
+#}
+
+#DATABASES = local_config.DATABASES
 
 
 # Password validation
@@ -193,3 +198,5 @@ BLEACH_STRIP_TAGS = True
 BLEACH_STRIP_COMMENTS = True
 
 PROFILE_PHOTO_SIZE = (500,500)
+
+#SECURE_HSTS_SECONDS = local_config.SECURE_HSTS_SECONDS
