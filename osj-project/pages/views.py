@@ -466,6 +466,7 @@ class Tagged(ListView):
     def get_context_data(self, **kwargs):
         context = super(Tagged, self).get_context_data(**kwargs)
         pieces = context['object_list']
+        context.update({'tag':self.kwargs['tag']})
         piecesContext = getJewelryContext(pieces)
         categoryContext = {}
         bodyParts = things.models.SuperCategory.objects.all()
