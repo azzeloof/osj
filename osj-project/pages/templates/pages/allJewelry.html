@@ -89,7 +89,9 @@
                             </div>
 
                             <div class="jewelry-grid">
-                                <h1>Jewelry{% if category %}: {{ category }}{% endif %}</h1>
+                                <div class="row m-2">
+                                    <h1>Jewelry{% if category %}: {{ category }}{% endif %}</h1>
+                                </div>
                                 <div class="grid">
                                     <div class=".grid-sizer"></div>
                                     {% for piece in pieces %}
