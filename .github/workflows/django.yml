@@ -39,7 +39,7 @@ jobs:
    runs-on: ubuntu-latest
    steps:
    - name: Deploy to Server
-     uses: appleboy/ssh-action@v0.1.2
+     uses: appleboy/ssh-action@master
      with:
         host: ${{ secrets.SSH_HOST }}
         key: ${{ secrets.SSH_KEY }}
@@ -54,6 +54,6 @@ jobs:
           python manage.py makemigrations
           python manage.py migrate
           python manage.py collectstatic --noinput
-          sudo -S <<< "fakepassword" ./restartServers.sh
+          echo "fakepass" | sudo -S ./restartServers.sh
           deactivate
           echo 'Deployment successful'
