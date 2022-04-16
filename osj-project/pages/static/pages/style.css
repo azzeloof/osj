@@ -1,0 +1,194 @@
+.grid-sizer,
+.grid-item {
+    width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.grid-image {
+    max-width: 100%;
+    margin-bottom: 5px;
+}
+
+.jewelry-box {
+    border: 1px solid #D3D3D3;
+    background: #FFFFFF;
+    margin: 20px;
+    padding-bottom: 10px;
+}
+
+.jewelry-box-title {
+    color: #000000;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 18px;
+    margin-left: 5px;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out
+}
+
+.jewelry-box-title:hover {
+    color: #68358a;
+}
+
+.splide__slide img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.main-img {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+#main-slider {
+    background: #FFFFFF;
+}
+
+.jewelry-sidebar{
+    margin-top: 0px;
+    border-left: 2px solid #470077;
+    height: 90%;
+    padding-left: 24px;
+}
+
+.jewelry-details {
+    margin-top: 40px;
+}
+
+.licence-block {
+    padding: 12px;
+    border: 2px solid #404040;
+    border-radius: 10px;
+    margin-top: 20px;
+    font-size: 10px;
+    text-align: center;
+}
+
+@media (min-width: 1200px) {
+    .container{
+        max-width: 1000px;
+    }
+}
+
+.bg-purple {
+    background-color: #470077;
+}
+
+.bg-orange {
+    background-color: #ffc107;
+}
+
+.text-purple {
+    color: #470077;
+}
+
+a {
+    color: #470077;
+    text-decoration: none;
+}
+
+.edit-button-col {
+    margin-right: 0px;
+    margin-left: auto;
+}
+
+.jewelry-header-subtitle {
+    margin: 0px;
+}
+
+.sidebar-row {
+    margin-bottom: 0px;
+}
+
+p.filename {
+    font-size: 12px;
+    font-style: italic;
+    color: #404040;
+}
+
+.likebtn {
+    font-size: 24px;
+    color: #db0000;
+}
+
+.tag-badge {
+    width: auto;
+    text-decoration: none;
+}
+
+.bootstrap-tagsinput .tag {
+    color: #000000;
+}
+
+.vertical-divider-wide {
+    width: 30px;
+    color: #404040;
+    height: 100%;
+    float: right;
+}
+
+.flexbox {
+    display: flex;
+}
+
+.sidebar {
+    margin-top: 40px;
+    margin-right: 20px;
+}
+
+.jewelry-grid {
+    flex: 1;
+    width: 100%;
+}
+
+.sidebar-btn:hover, .sidebar-btn:focus {
+	color: rgba(0, 0, 0, .85);
+	background-color: #ffc1077e;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out
+}
+
+.sidebar-selected {
+    background-color:#ffc107;
+}
+
+.sidebar-subcategory {
+	padding: .1875rem .5rem;
+	margin-left: 1rem;
+	text-decoration: none;
+}
+
+.profile-photo {
+    width: 100%;
+    height: auto;
+}
+
+.grabme {
+    margin: auto;
+    font-size: 24px;
+    cursor: move;
+}
+
+.thumbnail {
+    max-height: 100px;
+    max-width: 100px;
+    height: auto;
+    width: auto;
+}
+
+.likeBox {
+    max-height: 200px;
+    overflow-y: scroll;
+    padding: 5px;
+    border-radius: 5px;
+    border-style: solid;
+    border-color: #404040;
+}
+
+.required-field::after {
+    content: "*";
+    color: red;
+}
