@@ -1,5 +1,5 @@
 # OpenJewelry
-![Django](https://github.com/azzeloof/osj/actions/workflows/Django/badge.svg)
+![Django CI](https://github.com/azzeloof/osj/actions/workflows/django.yml/badge.svg)
 
 This is a Django project designed to be an online repository for open-source jewelry designs. It is very much a work in progress.
 
