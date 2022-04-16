@@ -54,6 +54,6 @@ jobs:
           python manage.py makemigrations
           python manage.py migrate
           python manage.py collectstatic --noinput
-          echo "fakepass" | sudo -S ./restartServers.sh
+          systemctl --user restart gunicorn.service
           deactivate
           echo 'Deployment successful'
