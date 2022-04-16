@@ -40,7 +40,7 @@ jobs:
         username: ${{secrets.SSH_USERNAME}}
         
         script: |
-          cd ~/osj
+          cd /home/adam/osj
           git pull
           source .venv/bin/activate
           python manage.py makemigrations
