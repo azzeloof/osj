@@ -1,10 +1,34 @@
 {% extends 'pages/base.html' %}
 
 {% block content %}
-    <h2>Log In</h2>
-    <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Log In</button>
-    </form>
+    <div class="jumbotron vertical-center">
+        <div class="col-12">
+
+        </div>
+    </div>
+
+    <div class="jumbotron d-flex align-items-center min-vh-100">
+        <div class="container text-center">
+            <div class="col-auto formBox">
+                <h1 class="p-3">Who's there?</h1>
+                <div class='page-content'>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group m-2">
+                            {{ form.username }}
+                            {{ form.username.errors }}
+                        </div>
+
+                        <div class="form-group m-2">
+                            {{ form.password }}
+                            {{ form.password_errors}}
+                        </div>
+                        <button type="submit" class="btn btn-warning">Let me in!</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+      </div>
+
+
 {% endblock %}

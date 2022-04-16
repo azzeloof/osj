@@ -376,60 +376,6 @@ def like_button(request):
             return HttpResponse(json.dumps(context), content_type='application/json')
 
 
-"""def tagged(request, slug=None):
-    # Set up queryset
-    tag = get_object_or_404(Tag, slug=slug)
-    queryset = things.models.Thing.objects.filter(tags=tag)
-    category = request.GET.get('category', None)
-    orderBy = request.GET.get('orderby', None)
-    direction = request.GET.get('direction', None)
-    area = request.GET.get('area', None)
-    if category:
-        queryset = queryset.distinct().filter(category__name=category)
-    elif area:
-        categories = get_object_or_404(things.models.SuperCategory, name=area).category_set.all()
-        catNames = []
-        for category in categories:
-            catNames.append(category.name)
-        queryset = queryset.distinct().filter(category__name__in=catNames)
-    allowedFields = [f.name for f in things.models.Thing._meta.get_fields()] # maybe this list should just be hardcoded
-    if orderBy in allowedFields:
-        if orderBy == "likes":
-            queryset = queryset.annotate(nLikes=Count('likes')).order_by('nLikes')
-        else:
-            queryset = queryset.order_by(orderBy)
-        if direction == 'descending':
-            pieces = queryset.reverse()
-        else:
-            pieces = queryset
-    else:
-        pieces = queryset
-
-    # Get context
-    context = {
-        'tag':tag
-    }
-    piecesContext = getJewelryContext(pieces)
-    categoryContext = {}
-    bodyParts = things.models.SuperCategory.objects.all()
-    for part in bodyParts:
-        categoryContext.update({
-            part.name: part.category_set.all()
-        })
-    context.update({
-        'pieces': piecesContext,
-        'categories': categoryContext
-        })
-    if category:
-        context.update({'category': category})
-    elif area:
-        context.update({'category': area})
-    if request.user.is_authenticated:
-            context.update(getUserContext(request))
-    
-    return render(request, 'pages/tagged.html', context)
-"""
-
 class Tagged(ListView):
     model = things.models.Thing
     template_name = 'pages/tagged.html'
