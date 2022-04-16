@@ -1,5 +1,17 @@
 {% extends 'pages/base.html' %}
 
+{% block scripts %}
+<script>
+  function formErrorBox(errors, inputTarget, errorSource) {
+    if (errors) {
+      jQuery(function($) {
+        $('#'+inputTarget).popover({content: $('#'+errorSource).html(), container: 'body', placement: 'right', html: true}).popover('show');
+      });
+    }
+  }
+</script>
+{% endblock %}
+
 {% block content %}
     <div class="jumbotron vertical-center">
         <div class="col-12">
@@ -16,12 +28,18 @@
                         {% csrf_token %}
                         <div class="form-group m-2">
                             {{ form.username }}
-                            {{ form.username.errors }}
+                            <div style="display: none;" id='usernameErrors'>
+                              {{ form.username.errors }}
+                            </div>
+                            <script>formErrorBox('{{ form.username.errors }}', 'usernameInput', 'usernameErrors');</script>
                         </div>
 
                         <div class="form-group m-2">
                             {{ form.password }}
-                            {{ form.password_errors}}
+                            <div style="display: none;" id='passwordErrors'>
+                              {{ form.password.errors }}
+                            </div>
+                            <script>formErrorBox('{{ form.password.errors }}', 'passwordInput', 'passwordErrors');</script>
                         </div>
                         <button type="submit" class="btn btn-warning">Let me in!</button>
                     </form>

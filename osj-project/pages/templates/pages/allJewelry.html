@@ -9,14 +9,39 @@
         </script>
         <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
         <script>
-            $(document).ready(function() {
-                $('.grid').masonry({
-                    // options
-                    itemSelector: '.grid-item',
-                    percentPosition: true,
-                    //columnWidth: 200
-                  });
-                
+            function reloadWithParam(parameter) {
+                const url = window.location.href.split('?')[0];
+                const queryString = window.location.search;
+                const urlParams = new URLSearchParams(queryString);
+                const entries = urlParams.entries();
+                var query = '?';
+                var parameterName = parameter.split('=')[0];
+                for(const entry of entries) {
+                    if (!(['page', parameterName].includes(entry[0]))) {
+                        query += `${entry[0]}=${entry[1]}&`;
+                    }
+                }
+                query += parameter;
+                var newUrl = url + query;
+                location.assign(newUrl);
+            };
+
+            function reloadWithoutParam(parameterName) {
+                const url = window.location.href.split('?')[0];
+                const queryString = window.location.search;
+                const urlParams = new URLSearchParams(queryString);
+                const entries = urlParams.entries();
+                var query = '?';
+                for(const entry of entries) {
+                    if (entry[0] != parameterName) {
+                        query += `${entry[0]}=${entry[1]}&`;
+                    }
+                }
+                var newUrl = url + query;
+                location.assign(newUrl);
+            };
+
+            $(document).ready(function() {                
                 const queryString = window.location.search;
                 const urlParams = new URLSearchParams(queryString);
                 const entries = urlParams.entries();
@@ -26,27 +51,24 @@
                 }
                 const order = params['orderby'];
                 const direction = params['direction'];
+                if (!(order)) {
+                    console.log('as');
+                    reloadWithParam('orderby=created');
+                }
+                if (!(direction)) {
+                    reloadWithParam('direction=descending');
+                }
                 $('[name="cat-{{ category }}"]').addClass("sidebar-selected");
                 $('[name="order-'+order+'"]').addClass("sidebar-selected");
                 $('[name="direction-'+direction+'"]').addClass("sidebar-selected");
-            });
 
-            function reloadWithParam(parameter) {
-                const url = window.location.href.split('?')[0];
-                const queryString = window.location.search;
-                const urlParams = new URLSearchParams(queryString);
-                const entries = urlParams.entries();
-                var query = '?';
-                var parameterName = parameter.split('=')[0];
-                for(const entry of entries) {
-                    if (!(['page', 'direction', parameterName].includes(entry[0]))) {
-                        query += `${entry[0]}=${entry[1]}&`;
-                    }
-                }
-                query += parameter;
-                var newUrl = url + query;
-                location.assign(newUrl);
-            };
+                $('.grid').masonry({
+                    // options
+                    itemSelector: '.grid-item',
+                    percentPosition: true,
+                    //columnWidth: 200
+                });
+            });
         </script>
     {% endblock %}
 
@@ -60,12 +82,12 @@
                                 <h4>Categories</h4>
                                 <ul class="list-unstyled ps-0">
                                     <li class="mb-1">
-                                        <div name="all" class="sidebar-btn {% if not category %} sidebar-selected {% endif %}"><a href="?" class="link-dark rounded">All Jewelry</a></div>
+                                        <div name="all" class="sidebar-btn {% if not category %} sidebar-selected {% endif %}"><a onClick="reloadWithoutParam('category')" class="link-dark rounded">All Jewelry</a></div>
                                         {% for category, subCats in categories.items %}
-                                            <div name="cat-{{ category }}" class="sidebar-btn"><a href="?area={{ category }}" class="link-dark rounded">{{ category }}</a></div>
+                                            <div name="cat-{{ category }}" class="sidebar-btn"><a onClick="reloadWithParam('area={{ category }}')" class="link-dark rounded">{{ category }}</a></div>
                                             <ul class="list-unstyled fw-normal pb-1 small">
                                                 {% for subCat in subCats %}
-                                                    <li name="cat-{{ subCat }}" class="sidebar-btn sidebar-subcategory"><a href="?category={{ subCat }}" class="link-dark rounded">{{ subCat }}</a></li>
+                                                    <li name="cat-{{ subCat }}" class="sidebar-btn sidebar-subcategory"><a onClick="reloadWithParam('category={{ subCat }}')" class="link-dark rounded">{{ subCat }}</a></li>
                                                 {% endfor %}
                                             </ul>
                                         {% endfor %}
