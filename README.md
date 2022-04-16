@@ -1,6 +1,6 @@
 # OpenJewelry
 
-This is a Django project designed to be an online repository for opne-source jewelry designs. It is very much a work in progress.
+This is a Django project designed to be an online repository for open-source jewelry designs. It is very much a work in progress.
 
 ## Deployment Notes
 - Clone the repo
