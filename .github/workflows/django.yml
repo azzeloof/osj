@@ -35,9 +35,10 @@ jobs:
    - name: Deploy to Server
      uses: appleboy/ssh-action@v0.1.2
      with:
-        host: ${{secrets.SSH_HOST}}
-        key: ${{secrets.SSH_KEY}}
-        username: ${{secrets.SSH_USERNAME}}
+        host: ${{ secrets.SSH_HOST }}
+        key: ${{ secrets.SSH_KEY }}
+        username: ${{ secrets.SSH_USERNAME }}
+        port: 22
         
         script: |
           cd /home/adam/osj
