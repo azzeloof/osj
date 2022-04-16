@@ -1,5 +1,7 @@
 {% extends 'pages/base.html' %}
 
+{% load tz %}
+
     {% block scripts %}
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"
             integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
@@ -37,7 +39,12 @@
                         <div class="col-auto">
                             <div class="row">
                                 <h6 class="jewelry-header-subtitle">{{ profile.user.first_name }} {{ profile.user.last_name }}</h6>
-                                <h6 class="jewelry-header-subtitle">Member Since {{ profile.user.date_joined }}</h6>
+                                <h6 class="jewelry-header-subtitle">
+                                    Member Since 
+                                    {% localtime on %}
+                                    {{ profile.user.date_joined }}
+                                    {% endlocaltime %}
+                                </h6>
                             </div>
                         </div>
                         <div class="col-auto edit-button-col">
