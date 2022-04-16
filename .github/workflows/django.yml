@@ -28,6 +28,11 @@ jobs:
     - name: Run Tests
       run: |
         cd osj-project
+        mkdir media
+        mkdir media/images
+        mkdir media/files
+        mkdir media/profile_photos
+        cp local_config.py.sample local_config.py
         python manage.py test
   
   deploy:

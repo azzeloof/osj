@@ -1,6 +1,7 @@
-
 # local_config.py.sample
 # Adam Zeloof
+
+import os
 
 # To use, save as local_config.py and change the settings below as needed
 
@@ -9,20 +10,28 @@ DEBUG = True
 SECRET_KEY = 'some secret string'
 ALLOWED_HOSTS = []
 
-DATABASES = {
-     'default': {
-	# This sets up a mysql database, but others can be used
-         'ENGINE': 'django.db.backends.mysql',
-         'OPTIONS': {
-             'sql_mode': 'traditional',
-         },
-         'NAME': '',
-         'USER': '',
-         'PASSWORD': '',
-         'HOST': '',
-         'PORT': '',
-     }
- }
+if os.getenv('GITHUB_WORKFLOW'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'db.sqlite3',
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+        # This sets up a mysql database, but others can be used
+            'ENGINE': 'django.db.backends.mysql',
+            'OPTIONS': {
+                'sql_mode': 'traditional',
+            },
+            'NAME': '',
+            'USER': '',
+            'PASSWORD': '',
+            'HOST': '',
+            'PORT': '',
+        }
+    }
 
 
 
