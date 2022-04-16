@@ -50,6 +50,7 @@ jobs:
           cd /home/adam/osj
           git pull
           source .venv/bin/activate
+          pip install -r requirements.txt
           cd osj-project
           python manage.py makemigrations
           python manage.py migrate

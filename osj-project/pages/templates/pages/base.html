@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static %}
+{% load tz %}
 
 <head>
     <title>OSJ</title>
@@ -22,6 +23,7 @@
 </head>
 
 <body class="d-flex flex-column min-vh-100">
+  {% localtime on %}
     <header class="p-2 bg-orange text-purple">
         <div class="container-flex">
             <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
@@ -125,5 +127,9 @@
 </footer>
   <!-- Footer -->
 
+  {% load tz_detect %}
+  {% tz_detect %}
+
+{% endlocaltime %}
 </body>
 

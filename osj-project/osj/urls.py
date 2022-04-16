@@ -25,4 +25,5 @@ urlpatterns = [
     path('auth/whatsnext', core_views.afterRegistration, name='afterRegistration'),
     path('tinymce/', include('tinymce.urls'), name='tinymce'),
     path('hitcount/', include(('hitcount.urls', 'hitcount'), namespace='hitcount')),
+    path('tz_detect/', include('tz_detect.urls')),
 ]
