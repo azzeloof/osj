@@ -531,6 +531,8 @@ def profileUpdateView(request, slug):
         # they had better be authenticated
         context.update(getUserContext(request))
 
+    if profile.user != request.user:
+        return HttpResponseForbidden(u"Can't touch this.")
     if (request.method == 'POST' and valid):
         return redirect('profileUpdate', slug=slug)
     else:
