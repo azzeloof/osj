@@ -54,6 +54,5 @@ jobs:
           python manage.py makemigrations
           python manage.py migrate
           python manage.py collectstatic --noinput
-          systemctl --user restart gunicorn.service
           deactivate
           echo 'Deployment successful'
