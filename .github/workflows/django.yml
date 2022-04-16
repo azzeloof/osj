@@ -54,7 +54,7 @@ jobs:
           python manage.py makemigrations
           python manage.py migrate
           python manage.py collectstatic --noinput
-          servie gunicorn restart
-          service nginx restart
+          systemctl restart gunicorn
+          systemctl restart nginx
           deactivate
           echo 'Deployment successful'
