@@ -42,5 +42,11 @@ jobs:
         script: |
           cd ~/osj
           git pull
-          sudo systemctl restart gunicorn
+          source .venv/bin/activate
+          python manage.py makemigrations
+          python manage.py migrate
+          python manage.py collectstatic --noinput
+          servie gunicorn restart
+          service nginx restart
+          deactivate
           echo 'Deployment successful'
