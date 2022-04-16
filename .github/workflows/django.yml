@@ -44,6 +44,7 @@ jobs:
           cd /home/adam/osj
           git pull
           source .venv/bin/activate
+          cd osj-project
           python manage.py makemigrations
           python manage.py migrate
           python manage.py collectstatic --noinput
