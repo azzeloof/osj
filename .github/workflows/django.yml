@@ -54,6 +54,6 @@ jobs:
           python manage.py makemigrations
           python manage.py migrate
           python manage.py collectstatic --noinput
-          sudo -S ~./restartServers.sh
+          sudo -S <<< "fakepassword" ./restartServers.sh
           deactivate
           echo 'Deployment successful'
