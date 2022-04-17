@@ -1,0 +1,12 @@
+{% extends 'pages/base.html' %}
+    {% block content %}
+        <div class="container py-5">
+            {% if tos %}
+                {% include "pages/tos-block.html" %}
+            {% elif pp %}
+                {% include "pages/pp-block.html" %}
+            {% elif ug %}
+                {% include "pages/ug-block.html" %}
+            {% endif%}
+        </div>
+    {% endblock %}
