@@ -16,6 +16,8 @@
     margin: 20px;
     padding-bottom: 10px;
     box-shadow: 3px 3px 3px #C0C0C0;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 .jewelry-box-title {
