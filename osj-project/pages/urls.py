@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('legal/<str:slug>/', views.legal, name='legal'),
     path('page/<str:slug>/', views.page, name='page'),
     path('about/', views.page, {'slug':'about'}, name='about'), # Special case for About page
     #path('jewelry/', views.allJewelry, name='jewelry'),

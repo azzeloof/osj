@@ -508,3 +508,20 @@ def downloadFile(request, pk):
     except:
         response = HttpResponse("File not found")
     return response
+
+
+def legal(request, slug):
+    context = {
+        "tos": False,
+        "pp": False,
+        "ug": False
+    }
+    if slug == "termsofservice":
+        context.update({"tos": True})
+    elif slug == "privacypolicy":
+        context.update({"pp": True})
+    elif slug == "userguidelines":
+        context.update({"ug": True})
+    if request.user.is_authenticated:
+        context.update(getUserContext(request))
+    return render(request, 'pages/legal.html', context)
