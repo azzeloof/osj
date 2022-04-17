@@ -6,17 +6,6 @@
             crossorigin="anonymous">
         </script>
         <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
-        <script>
-            $(document).ready(function() {
-                $('.grid').masonry({
-                    // options
-                    itemSelector: '.grid-item',
-                    percentPosition: true
-                  });
-
-                $('[name="{{ category }}"]').addClass("sidebar-selected");
-            });
-        </script>
     {% endblock %}
 
 
@@ -61,44 +50,24 @@
                     <hr/>
 
                     <div class="row">
-                        <div class="col-md-6">
-
-                        </div>
-                        <div class="col-md-6">
-                            {% if editable %}
-                                <h3>Liked Pieces</h3>
-                                <div class="likeBox">
-                                    {% for piece in liked %}
-                                        <p><a href="/jewelry/{{ piece.id }}">{{ piece }}</a> by {{ piece.creator }}</p>
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
+                        <div class="col-md-12">
+                            <h3>Jewelry created by {{ profile.user.username }}:</h3>
+                            {% include "pages/jewelry-grid-block.html" with pieces=pieces %}
                         </div>
                     </div>
-                    <hr/>
 
                     <div class="row">
                         <div class="col-md-12">
-                            <h3>Jewelry created by {{ profile.user.username }}:</h3>
-                            <div class="jewelry-grid">
-                                <div class="grid">
-                                    <div class=".grid-sizer"></div>
-                                    {% for piece in pieces %}
-                                        <div class="grid-item">
-                                            <div class="jewelry-box">
-                                                {% if piece.featuredImage.image %}
-                                                    <a href="/jewelry/{{ piece.piece.id }}"><image src="{{ piece.featuredImage.image.url }}" href="/jewelry/{{ piece.piece.id }}" class="grid-image"></a>
-                                                {% else %}
-                                                    <a href="/jewelry/{{ piece.piece.id }}"><image src="/media/profile_photos/default.png" class="grid-image"></a>
-                                                {% endif %}
-                                                <a class="jewelry-box-title" href="/jewelry/{{ piece.piece.id }}">{{ piece.piece.title }}</a>
-                                            </div>
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                            </div>
+                            {% if editable %}
+                            <hr/>
+                                <h3>My Likes:</h3>
+                                {% include "pages/jewelry-grid-block.html" with pieces=liked %}
+                            {% endif %}
                         </div>
+
                     </div>
+                    <hr/>
+
                 </div>
             </div>
           </div>
