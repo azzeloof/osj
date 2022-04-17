@@ -1,0 +1,43 @@
+
+{% load hitcount_tags %}
+
+<div>
+    <div class="grid">
+        <div class=".grid-sizer"></div>
+        {% for piece in pieces %}
+            <div class="grid-item">
+                <div class="jewelry-box">
+                    {% if piece.featuredImage.image %}
+                        <a href="/jewelry/{{ piece.piece.id }}"><image src="{{ piece.featuredImage.image.url }}" href="/jewelry/{{ piece.piece.id }}" class="grid-image"></a>
+                    {% else %}
+                        <a href="/jewelry/{{ piece.piece.id }}"><image src="/media/profile_photos/default.png" class="grid-image"></a>
+                    {% endif %}
+                    <p style="margin-bottom:3px;">
+                        <a class="jewelry-box-title" href="/jewelry/{{ piece.piece.id }}">{{ piece.piece.title }}</a>
+                        <span style="color: #404040;"> by <a href='/user/{{ piece.piece.creator }}'>{{ piece.piece.creator }}</a> </span>
+                    </p>
+                    <div class="jewelry-box-stats">
+                        <div class="row text-center">
+                            <div class="col-sm-auto">
+                                <p><i class="bi-calendar-event-fill"></i> {{ piece.created }}</p>
+                            </div>
+                            <div class="col-sm-auto">
+                                <div class="infobox">
+                                    <p><i class="bi-eye-fill" ></i> {% get_hit_count for piece.piece %}</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-auto">
+                                <div class="infobox">
+                                    <p><i class="bi-heart-fill"></i> {{ piece.likes }}</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-auto">
+                                <p><i class="bi-download"></i> {{ piece.downloads }}<p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>

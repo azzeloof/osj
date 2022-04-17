@@ -30,23 +30,9 @@
             <div class="row">
                 <div class="container">
                     <h2>Featured Pieces</h2>
-                    <div class="jewelry-grid">
-                        <div class="grid">
-                            <div class=".grid-sizer"></div>
-                            {% for piece in pieces %}
-                                <div class="grid-item">
-                                    <div class="jewelry-box">
-                                        {% if piece.featuredImage.image %}
-                                            <a href="/jewelry/{{ piece.piece.id }}"><image src="{{ piece.featuredImage.image.url }}" href="/jewelry/{{ piece.piece.id }}" class="grid-image"></a>
-                                        {% else %}
-                                            <a href="/jewelry/{{ piece.piece.id }}"><image src="/media/profile_photos/default.png" class="grid-image"></a>
-                                        {% endif %}
-                                        <a class="jewelry-box-title" href="/jewelry/{{ piece.piece.id }}">{{ piece.piece.title }}</a>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
+                    
+                    {% include "pages/jewelry-grid-block.html" %}
+
                 </div>
             </div>
         </div>

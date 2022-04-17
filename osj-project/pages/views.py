@@ -18,6 +18,12 @@ from osj.settings import MEDIA_ROOT
 import mimetypes
 from django.db.models import Count
 
+def getDownloadCount(piece):
+    files = piece.file_set.all()
+    downloads = 0
+    for fileObj in files:
+        downloads += fileObj.downloads
+    return downloads
 
 def getJewelryContext(jewelry):
     pieces = []
@@ -38,7 +44,9 @@ def getJewelryContext(jewelry):
             'created': piece.created.date,
             'modified': piece.modified.date,
             'featuredImage': featuredImage,
-            'category': piece.category
+            'category': piece.category,
+            'likes': len(piece.likes.all()),
+            'downloads': getDownloadCount(piece)
         })
     return pieces
 
@@ -445,7 +453,8 @@ class ProfileDetailView(DetailView):
         if self.request.user.is_authenticated:
             context.update(getUserContext(self.request))
             if self.request.user == self.object.user:
-                liked = things.models.Thing.objects.filter(likes=self.request.user)
+                likedPieces = things.models.Thing.objects.filter(likes=self.request.user)
+                liked = getJewelryContext(likedPieces)
                 context.update({
                     'editable': True,
                     'liked': liked

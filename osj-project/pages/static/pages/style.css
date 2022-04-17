@@ -15,6 +15,7 @@
     background: #FFFFFF;
     margin: 20px;
     padding-bottom: 10px;
+    box-shadow: 3px 3px 3px #C0C0C0;
 }
 
 .jewelry-box-title {
@@ -22,12 +23,23 @@
     text-decoration: none;
     font-weight: bold;
     font-size: 18px;
-    margin-left: 5px;
+    margin-left: 10px;
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out
 }
 
 .jewelry-box-title:hover {
     color: #68358a;
+}
+
+.jewelry-box-stats {
+    padding-left: 10px;
+    padding-right: 10px;
+    color: #808080;
+    font-size: 12px;
+}
+
+.jewelry-box-stats p {
+    margin-bottom: 0px;
 }
 
 .splide__slide img {
@@ -202,3 +214,4 @@ p.filename {
     margin-right: auto;
     box-shadow: 5px 5px 5px #C0C0C0, -5px -5px 5px #C0C0C0;
 }
+
