@@ -61,13 +61,6 @@
                 $('[name="cat-{{ category }}"]').addClass("sidebar-selected");
                 $('[name="order-'+order+'"]').addClass("sidebar-selected");
                 $('[name="direction-'+direction+'"]').addClass("sidebar-selected");
-
-                $('.grid').masonry({
-                    // options
-                    itemSelector: '.grid-item',
-                    percentPosition: true,
-                    //columnWidth: 200
-                });
             });
         </script>
     {% endblock %}

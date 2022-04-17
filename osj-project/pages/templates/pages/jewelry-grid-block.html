@@ -1,6 +1,17 @@
 
 {% load hitcount_tags %}
 
+<script>
+    jQuery(window).on('load', function($) {
+        jQuery('.grid').masonry({
+            // options
+            itemSelector: '.grid-item',
+            percentPosition: true,
+            //columnWidth: 200
+        });
+    });
+</script>
+
 <div>
     <div class="grid">
         <div class=".grid-sizer"></div>
