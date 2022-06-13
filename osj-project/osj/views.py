@@ -5,6 +5,7 @@ from osj.forms import RegistrationForm
 from django.contrib.auth.decorators import login_required
 from pages.views import getUserContext
 
+
 def registration(request):
     #https://simpleisbetterthancomplex.com/tutorial/2017/02/18/how-to-create-user-sign-up-view.html
     if request.method == 'POST':
