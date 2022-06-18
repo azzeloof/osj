@@ -13,6 +13,7 @@ def validateFileSize(uploadedFile):
     else:
         return uploadedFile
 
+
 def validateNumberOfFiles(thing):
     if File.objects.filter(thing_id=thing).count() >= MAX_N_FILES:
         raise ValidationError("Too many files! Only " + str(MAX_N_FILES) + " are allowed.")
