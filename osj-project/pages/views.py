@@ -59,14 +59,22 @@ def getUserContext(request):
     return context
 
 
-def index(request):
-    pieces = things.models.Thing.objects.filter(featured=True).order_by('-id')[:9]
-    context = {
-        'pieces': getJewelryContext(pieces)
-    }
-    if request.user.is_authenticated:
-        context.update(getUserContext(request))
-    return render(request, 'pages/index.html', context)
+class Index(ListView):
+    model = things.models.Thing
+    template_name = 'pages/index.html'
+
+    def get_queryset(self):
+        queryset = self.model.objects.filter(featured=True)
+        queryset = queryset.order_by('date_featured')[::-1]
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(ListView, self).get_context_data(**kwargs)
+        pieces = context['object_list']
+        context = {'pieces': getJewelryContext(pieces)}
+        if self.request.user.is_authenticated:
+            context.update(getUserContext(self.request))
+        return context
 
 
 def page(request, slug):

@@ -4,7 +4,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from taggit.managers import TaggableManager
 from hitcount.models import HitCountMixin, HitCount
 from django_bleach.models import BleachField
-from .validators import validateFileSize
+from .validators import validateFileSize, validateNumberOfFiles
 
 
 class Thing(models.Model):
@@ -31,6 +31,7 @@ class Thing(models.Model):
     # hitcounts: https://dev.to/thepylot/how-to-track-number-of-hits-views-for-chosen-objects-in-django-django-packages-series-2-3bcb
     hitcount_generic = GenericRelation(HitCount, object_id_field='object_pk', related_query_name='hitcount_generic_relation')
     featured = models.BooleanField(default=False)
+    date_featured = models.DateTimeField(null=True)
 
 
 class Image(models.Model):
@@ -51,7 +52,7 @@ class File(models.Model):
     # Model to handle files attached to things
     # Based on Image model
     name = models.CharField(max_length=256, blank=True)
-    thing = models.ForeignKey(Thing, on_delete=models.CASCADE, related_name='file_set')
+    thing = models.ForeignKey(Thing, on_delete=models.CASCADE, related_name='file_set', validators=[validateNumberOfFiles])
     file = models.FileField(upload_to='files', validators=[validateFileSize])
     default = models.BooleanField(default=False)
     downloads = models.IntegerField(default=0)
