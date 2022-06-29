@@ -347,6 +347,7 @@ class JewelryUpdateView(UpdateView):
         self.object.save()
         form.save_m2m() # needed to save tags
         for fs in [imageFormset, fileFormset]:
+            #print(fs.deleted_forms)
             if fs.is_valid():
                 objSet = fs.save(commit=True)
                 for obj in objSet:

@@ -173,7 +173,7 @@
                         </td>
                         <td>{{ form.alt }}</td>
                         <td>{{ form.featured }}</td>
-                        <td></td>
+                        <td>{{ form.DELETE }}</td>
                     </tr>
                     {% for field in form %}
                         {% for error in field.errors %}
@@ -203,7 +203,7 @@
                         <td><i class="bi bi-grip-horizontal grabme"></i></td>
                         <td class="fileCell">{{ form.file }}</td>
                         <td>{{ form.name }}</td>
-                        <td></td>
+                        <td>{{ form.DELETE }}</td>
                     </tr>
                     {% for field in form %}
                         {% for error in field.errors %}
