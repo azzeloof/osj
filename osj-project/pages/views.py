@@ -14,7 +14,7 @@ from .forms import ThingForm, ThingImageFormset, ThingFileFormset, ProfilePhotoF
 import os
 import json
 from hitcount.views import HitCountDetailView
-from osj.settings import MEDIA_ROOT
+from osj.settings import MEDIA_ROOT, BASE_DIR
 import mimetypes
 from django.db.models import Count
 
@@ -353,6 +353,17 @@ class JewelryUpdateView(UpdateView):
                 for obj in objSet:
                     obj.thing = self.object
                     obj.save()
+                for obj in fs.deleted_objects:
+                    if (obj.image):
+                        try:
+                            os.remove(os.path.join(MEDIA_ROOT, str(obj.image)))
+                        except:
+                            print("could not remove " + os.path.join(MEDIA_ROOT, str(obj.image)))
+                    elif (obj.file):
+                        try:
+                            os.remove(os.path.join(MEDIA_ROOT, str(obj.file)))
+                        except:
+                            print("could not remove " + os.path.join(MEDIA_ROOT, str(obj.file)))
             #else:
             #    print(fs.errors)
         return redirect(reverse('jewelryPiece', kwargs={'pk': self.object.id}))
