@@ -44,7 +44,18 @@ INSTALLED_APPS = [
     'taggit',
     'hitcount',
     'django_bleach',
-    'tz_detect'
+    'tz_detect',
+    'django.contrib.sites.apps.SitesConfig',
+    'django.contrib.humanize.apps.HumanizeConfig',
+    'django_nyt.apps.DjangoNytConfig',
+    'mptt',
+    'sekizai',
+    'sorl.thumbnail',
+    'wiki.apps.WikiConfig',
+    'wiki.plugins.attachments.apps.AttachmentsConfig',
+    'wiki.plugins.notifications.apps.NotificationsConfig',
+    'wiki.plugins.images.apps.ImagesConfig',
+    'wiki.plugins.macros.apps.MacrosConfig'
 ]
 
 MIDDLEWARE = [
@@ -71,6 +82,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.contrib.messages.context_processors.messages',
+                "sekizai.context_processors.sekizai",
             ],
         },
     },
@@ -200,3 +213,7 @@ PROFILE_PHOTO_SIZE = (500,500)
 
 MAX_FILE_SIZE =  52428800
 MAX_N_FILES = 2
+
+WIKI_ACCOUNT_HANDLING = False
+
+SITE_ID = 1

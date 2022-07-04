@@ -36,4 +36,6 @@ urlpatterns = [
     path('tinymce/', include('tinymce.urls'), name='tinymce'),
     path('hitcount/', include(('hitcount.urls', 'hitcount'), namespace='hitcount')),
     path('tz_detect/', include('tz_detect.urls')),
+    path('notifications/', include('django_nyt.urls')),
+    path('wiki/', include('wiki.urls')),
 ]
