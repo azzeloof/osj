@@ -545,3 +545,10 @@ def legal(request, slug):
     if request.user.is_authenticated:
         context.update(getUserContext(request))
     return render(request, 'pages/legal.html', context)
+
+
+def notifications(request):
+    context = {}
+    if request.user.is_authenticated:
+        context.update(getUserContext(request))
+    return render(request, 'pages/notifications.html', context)

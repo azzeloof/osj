@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'taggit',
     'hitcount',
     'django_bleach',
-    'tz_detect'
+    'tz_detect',
+    'notifications',
 ]
 
 MIDDLEWARE = [

@@ -15,9 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
-from django.urls import include, path
+from django.urls import include, path, re_path
 from osj import views as core_views
 from osj.forms import UserLoginForm
+import notifications.urls
 
 urlpatterns = [
     path('', include('pages.urls'), name='index'),
@@ -36,4 +37,5 @@ urlpatterns = [
     path('tinymce/', include('tinymce.urls'), name='tinymce'),
     path('hitcount/', include(('hitcount.urls', 'hitcount'), namespace='hitcount')),
     path('tz_detect/', include('tz_detect.urls')),
+    re_path('^inbox/notifications/', include(notifications.urls, namespace='notifications')),
 ]
