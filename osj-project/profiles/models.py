@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django_bleach.models import BleachField
+from notifications.signals import notify
 
 # Based on solution at https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html
 
@@ -19,6 +20,11 @@ class Profile(models.Model):
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance, slug=instance.username)
+        sender = User.objects.get(username="adam")
+        recipient = instance
+        verb = "Welcome to OpenJewelry!"
+        description = "Thank you for joining the OpenJewelry commnuity! We're glad to have you here."
+        notify.send(sender=sender, recipient=recipient, verb=verb, description=description)
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
