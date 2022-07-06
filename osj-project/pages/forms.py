@@ -1,6 +1,7 @@
 from cProfile import Profile
 from django import forms
 from things.models import Thing, Image, File, Category, Licence
+from django.contrib.auth.models import User
 from profiles.models import Profile
 from tinymce.widgets import TinyMCE
 #import taggit
@@ -105,4 +106,20 @@ class ProfileDataForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['description']
+
+
+class UserDataForm(forms.ModelForm):
+    first_name = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+    last_name = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={'class': 'form-control'})
+    )
+
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email']
     

@@ -94,15 +94,33 @@
         </div>
     </form>
     <hr/>
-    <div class="px-4">
-        <h3>Description</h3>
-        <p>Tell us a bit about yourself</p>
-    </div>
-    <form method="POST" enctype='multipart/form-data' id="data_form" class="message-form m-4">{% csrf_token %}
-        {{ data_form.media }}
-        <div class="row m-2">
-            {{ data_form.description }}
-            {% for error in data_form.description.errors %}
+    <form method="POST" enctype='multipart/form-data' class="message-form m-4">{% csrf_token %} <!--id="data_form"-->
+        {{ profile_data_form.media }}
+        {{ user_data_form.media }}
+
+        <div class="row">
+            <div class="col-md-4">
+                <label for="id_first_name" class="form-label">First Name</label>
+                {{ user_data_form.first_name }}
+            </div>
+            <div class="col-md-4">
+                <label for="id_last_name" class="form-label">First Name</label>
+                {{ user_data_form.last_name }}
+            </div>
+            <div class="col-md-4">
+                <label for="id_email" class="form-label">Email</label>
+                {{ user_data_form.email }}
+            </div>
+        </div>
+
+        <hr/>
+        <div class="row">
+            <div class="">
+                <h3>Description</h3>
+                <p>Tell us a bit about yourself</p>
+            </div>
+            {{ profile_data_form.description }}
+            {% for error in profile_data_form.description.errors %}
                 <strong>{{ error|escape }}</strong>
             {% endfor %}
         </div>

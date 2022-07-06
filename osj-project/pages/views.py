@@ -10,7 +10,7 @@ import things
 import pages
 import articles
 import profiles
-from .forms import ThingForm, ThingImageFormset, ThingFileFormset, ProfilePhotoForm, ProfileDataForm
+from .forms import ThingForm, ThingImageFormset, ThingFileFormset, ProfilePhotoForm, ProfileDataForm, UserDataForm
 import os
 import json
 from hitcount.views import HitCountDetailView
@@ -487,21 +487,27 @@ def profileUpdateView(request, slug):
     profile = get_object_or_404(profiles.models.Profile, slug=slug)
     if request.method == 'POST':
         photo_form = ProfilePhotoForm(request.POST, request.FILES, instance=profile)
-        data_form = ProfileDataForm(request.POST, instance=profile)
+        user_data_form = UserDataForm(request.POST, instance=profile.user)
+        profile_data_form = ProfileDataForm(request.POST, instance=profile)
         valid = False
         if photo_form.is_valid():
             valid = True
             photo_form.save()
-        if data_form.is_valid():
+        if profile_data_form.is_valid():
             valid = True
-            data_form.save()
+            profile_data_form.save()
+        if user_data_form.is_valid():
+            valid = True
+            user_data_form.save()
     else:
         photo_form = ProfilePhotoForm(instance=profile)
-        data_form = ProfileDataForm(instance=profile)
+        profile_data_form = ProfileDataForm(instance=profile)
+        user_data_form = UserDataForm(instance=profile.user)
     
     context = {
         'photo_form': photo_form,
-        'data_form': data_form
+        'profile_data_form': profile_data_form,
+        'user_data_form': user_data_form
     }
     if request.user.is_authenticated:
         # they had better be authenticated
