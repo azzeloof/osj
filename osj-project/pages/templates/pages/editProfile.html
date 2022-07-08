@@ -110,6 +110,7 @@
             <div class="col-md-4">
                 <label for="id_email" class="form-label">Email</label>
                 {{ user_data_form.email }}
+                <div id="emailHelp" class="form-text">If you change your email, you will need to verify the new address before using your account again.</div>
             </div>
         </div>
 
@@ -125,6 +126,7 @@
             {% endfor %}
         </div>
         <button type="submit" class="save btn btn-primary m-2">Save</button>
+        <a class="btn btn-warning" href="/auth/password_change">Change Password</a>
     </form>
 </div>
 

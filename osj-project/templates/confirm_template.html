@@ -1,0 +1,12 @@
+{% extends 'pages/base.html' %}
+
+{% block content %}
+
+    {% if success %}
+        <h1>Email Verified</h1>
+        <p>Hey {{ user.username }}, thank you for verifying your email address!</p>
+        {% else %}
+            <p>Error, invalid token!</p>
+    {% endif %}
+
+{% endblock %}

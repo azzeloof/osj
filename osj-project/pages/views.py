@@ -53,8 +53,8 @@ def getJewelryContext(jewelry):
 
 def getUserContext(request):
     context = {
-        #'user': request.user,
-        'currentuserprofile': profiles.models.Profile.objects.get(user=request.user)
+        'user': request.user,
+        #'currentuserprofile': profiles.models.Profile.objects.get(user=request.user)
     }
     return context
 
@@ -495,6 +495,11 @@ def profileUpdateView(request, slug):
             photo_form.save()
         if profile_data_form.is_valid():
             valid = True
+            currentEmail = profile.user.email
+            newEmail = user_data_form.data['email']
+            if currentEmail != newEmail:
+                # The email has changed
+                profile.email_verified = False
             profile_data_form.save()
         if user_data_form.is_valid():
             valid = True

@@ -51,8 +51,8 @@
                 {% if user.is_authenticated %}
                     <div class="dropdown text-end">
                         <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                        {% if currentuserprofile.image %}
-                            <img src="{{ currentuserprofile.image.url }}" alt="profile photo" class="rounded-circle" width="45" height="45">
+                        {% if user.profile.image %}
+                            <img src="{{ user.profile.image.url }}" alt="profile photo" class="rounded-circle" width="45" height="45">
                         {% else %}
                             <img src="/media/profile_photos/default.png" alt="profile photo" class="rounded-circle" width="45" height="45">
                         {% endif %}
@@ -67,7 +67,7 @@
                         <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1" style="">
                         <li><a class="dropdown-item" href="/jewelry/new"><i class="bi bi-gem"></i> New Jewelry Piece</a></li>
                         <!--<li><a class="dropdown-item disabled" href="/articles/new"><i class="bi bi-newspaper"></i> New Article</a></li>-->
-                        <li><a class="dropdown-item" href="/user/{{ currentuserprofile.slug }}"><i class="bi bi-person-circle"></i> Profile</a></li>
+                        <li><a class="dropdown-item" href="/user/{{ user.profile.slug }}"><i class="bi bi-person-circle"></i> Profile</a></li>
                         <li>
                             <a class="dropdown-item" href="/notifications"><i class="bi bi-bell"></i> Notifications
                                 {% if unread_count %}
@@ -88,6 +88,14 @@
             </div>
         </div>
     </header>
+
+    {% if user.is_authenticated %}
+        {% if not user.profile.email_verified %}
+            <div class="alert alert-primary" role="alert">
+                Your account is not verified! Please click the link in the verification email, or <a href="/newVerificationLink">click here</a> to request a new link.
+            </div>
+        {% endif %}
+    {% endif %}
 
     <div class="container-fluid p-0">
         {% block content %}
