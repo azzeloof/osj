@@ -217,3 +217,21 @@ p.filename {
     box-shadow: 5px 5px 5px #C0C0C0, -5px -5px 5px #C0C0C0;
 }
 
+.message-sender {
+    margin-bottom: 0px;
+    font-size: small;
+    color: #808080;
+}
+
+.message-verb {
+    margin-bottom: 0px;
+}
+
+.message-description {
+    margin-bottom: 0px;
+    color: #808080;
+}
+
+.alert {
+    margin-bottom: 0px;
+}

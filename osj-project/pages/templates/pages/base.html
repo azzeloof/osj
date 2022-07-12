@@ -2,6 +2,7 @@
 <html lang="en">
 {% load static %}
 {% load tz %}
+{% load notifications_tags %}
 
 <head>
     <title>OSJ</title>
@@ -24,7 +25,7 @@
 
 <body class="d-flex flex-column min-vh-100">
   {% localtime on %}
-    <header class="p-2 bg-orange text-purple">
+    <header class="py-2 px-4 bg-orange text-purple">
         <div class="container-flex">
             <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
                 <h1 class="d-flex align-items-center mb-2 mb-lg-0 text-decoration-none">OJ</h1>
@@ -39,8 +40,13 @@
                         <a class="nav-link main text-purple px-4" href="/jewelry/?orderby=created&direction=descending">Jewelry</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link main text-purple px-4" href="/help">Help</a>
+                    </li>
+                    <!--
+                    <li class="nav-item">
                         <a class="nav-link main text-purple px-4" href="/articles">Articles</a>
                     </li>
+                    -->
                 </ul>
                 <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
                     <input type="search" class="form-control form-control-dark" placeholder="Search... (disabled)" style="pointer-events: none;" saria-label="Search">
@@ -48,18 +54,34 @@
                 {% if user.is_authenticated %}
                     <div class="dropdown text-end">
                         <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                        {% if currentuserprofile.image %}
-                            <img src="{{ currentuserprofile.image.url }}" alt="profile photo" class="rounded-circle" width="32" height="32">
+                        {% if user.profile.image %}
+                            <img src="{{ user.profile.image.url }}" alt="profile photo" class="rounded-circle" width="45" height="45">
                         {% else %}
-                            <img src="/media/profile_photos/default.png" alt="profile photo" class="rounded-circle" width="32" height="32">
+                            <img src="/media/profile_photos/default.png" alt="profile photo" class="rounded-circle" width="45" height="45">
+                        {% endif %}
+                        {% notifications_unread as unread_count %}
+                        {% if unread_count %}
+                            <span class="position-absolute top-30 start-70 translate-middle badge rounded-pill bg-danger">
+                                {{ unread_count }}
+                                <span class="visually-hidden">unread messages</span>
+                            </span>
                         {% endif %}
                         </a>
                         <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1" style="">
-                        <li><a class="dropdown-item" href="/jewelry/new">New Jewelry Piece</a></li>
-                        <li><a class="dropdown-item disabled" href="/articles/new">New Article</a></li>
-                        <li><a class="dropdown-item" href="/user/{{ currentuserprofile.slug }}">Profile</a></li>
+                        <li><a class="dropdown-item" href="/jewelry/new"><i class="bi bi-gem"></i> New Jewelry Piece</a></li>
+                        <!--<li><a class="dropdown-item disabled" href="/articles/new"><i class="bi bi-newspaper"></i> New Article</a></li>-->
+                        <li><a class="dropdown-item" href="/user/{{ user.profile.slug }}"><i class="bi bi-person-circle"></i> Profile</a></li>
+                        <li>
+                            <a class="dropdown-item" href="/notifications"><i class="bi bi-bell"></i> Notifications
+                                {% if unread_count %}
+                                    <span class="badge rounded-pill bg-danger">
+                                        {{ unread_count }}
+                                    </span>
+                                {% endif %}
+                            </a>
+                        </li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="/auth/logout">Sign out</a></li>
+                        <li><a class="dropdown-item" href="/auth/logout"><i class="bi bi-lock"></i> Sign out</a></li>
                         </ul>
                     </div>
                 {% else %}
@@ -70,6 +92,14 @@
         </div>
     </header>
 
+    {% if user.is_authenticated %}
+        {% if not user.profile.email_verified %}
+            <div class="alert alert-primary" role="alert">
+                Your account is not verified! Please click the link in the verification email, or <a href="/newVerificationLink">click here</a> to request a new link.
+            </div>
+        {% endif %}
+    {% endif %}
+
     <div class="container-fluid p-0">
         {% block content %}
         {% endblock %}
@@ -77,7 +107,7 @@
     
     
 <!-- Footer -->
-<footer class="bg-dark text-center text-white mt-auto">
+<footer class="bg-secondary text-center text-white mt-auto">
     <!-- Grid container -->
     <div class="container p-4">
 
@@ -117,9 +147,10 @@
       <!-- Section: Text -->
       <section class="mb-4">
         <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt distinctio earum
-          repellat quaerat voluptatibus placeat nam, commodi optio pariatur est quia magnam
-          eum harum corrupti dicta, aliquam sequi voluptate quas.
+          OpenJewelry is in beta! It's an experiment, and we're thrilled that you've decided to join in.
+          Because we're constantly working to improve the site, please excuse any bugs.
+          Better yet, <a href="https://github.com/azzeloof/osj/issues" target="_blank">report them</a>!
+          You can also check out the <a href="/help">help page</a>.
         </p>
       </section>
 

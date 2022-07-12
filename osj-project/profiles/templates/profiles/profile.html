@@ -52,7 +52,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <h3>Jewelry created by {{ profile.user.username }}:</h3>
-                            {% include "pages/jewelry-grid-block.html" with pieces=pieces %}
+                            {% include "things/jewelry-grid-block.html" with pieces=pieces %}
                         </div>
                     </div>
 
@@ -61,11 +61,15 @@
                             {% if editable %}
                                 <hr/>
                                 <h3>My Likes:</h3>
-                                {% include "pages/jewelry-grid-block.html" with pieces=liked %}
+                                {% include "things/jewelry-grid-block.html" with pieces=liked %}
                             {% endif %}
                         </div>
 
                     </div>
+
+                    <div class="row">
+                        <p><a href="/reports/new/profile/{{ profile.id }}">Report this content</a></p>
+                    </diV>
 
                 </div>
             </div>

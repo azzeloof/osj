@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'pages.apps.PagesConfig',
     'profiles.apps.ProfilesConfig',
     'things.apps.ThingsConfig',
+    'reports.apps.ReportsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,7 +45,10 @@ INSTALLED_APPS = [
     'taggit',
     'hitcount',
     'django_bleach',
-    'tz_detect'
+    'tz_detect',
+    'notifications',
+    'anymail',
+    'django_email_verification'
 ]
 
 MIDDLEWARE = [
@@ -200,3 +204,17 @@ PROFILE_PHOTO_SIZE = (500,500)
 
 MAX_FILE_SIZE =  52428800
 MAX_N_FILES = 2
+
+def verified_callback(user):
+    user.profile.email_verified = True
+
+EMAIL_VERIFIED_CALLBACK = verified_callback
+EMAIL_FROM_ADDRESS = 'noreply@aliasaddress.com'
+EMAIL_MAIL_SUBJECT = 'Confirm your email'
+EMAIL_MAIL_HTML = 'mail_body.html'
+EMAIL_MAIL_PLAIN = 'mail_body.txt'
+EMAIL_TOKEN_LIFE = 60 * 60
+EMAIL_PAGE_TEMPLATE = 'confirm_template.html'
+EMAIL_PAGE_DOMAIN = 'http://mydomain.com/'
+EMAIL_MULTI_USER = True  # optional (defaults to False)
+

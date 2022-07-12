@@ -1,6 +1,7 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, UsernameField, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, UsernameField, AuthenticationForm, PasswordResetForm, PasswordChangeForm
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 
 
 class RegistrationForm(UserCreationForm):
@@ -74,4 +75,42 @@ class UserLoginForm(AuthenticationForm):
         }
     ))
 
+
+class UserPasswordResetForm(PasswordResetForm):
+    def __init__(self, *args, **kwargs):
+        super(UserPasswordResetForm, self).__init__(*args, **kwargs)
+
+    email = forms.EmailField(widget=forms.EmailInput(
+        attrs = {
+            'class': 'form-control title-input',
+            'placeholder': 'email',
+            'id': 'emailInput'
+        }
+    ))
+    
+class UserPasswordChangeForm(PasswordChangeForm):
+    def __init__(self, *args, **kwargs):
+        super(UserPasswordChangeForm, self).__init__(*args, **kwargs)
+
+    old_password = forms.CharField(widget=forms.PasswordInput(
+        attrs = {
+            'class': 'form-control title-input',
+            'placeholder': 'old password',
+            'id': 'oldPasswordInput'
+        }
+    ))
+    new_password1 = forms.CharField(widget=forms.PasswordInput(
+        attrs = {
+            'class': 'form-control title-input',
+            'placeholder': 'new password',
+            'id': 'newPassword1Input'
+        }
+    ))
+    new_password2 = forms.CharField(widget=forms.PasswordInput(
+        attrs = {
+            'class': 'form-control title-input',
+            'placeholder': 'confirm password',
+            'id': 'newPassword2Input'
+        }
+    ))
     

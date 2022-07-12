@@ -5,7 +5,10 @@ from taggit.managers import TaggableManager
 from hitcount.models import HitCountMixin, HitCount
 from django_bleach.models import BleachField
 from .validators import validateFileSize, validateNumberOfFiles
-
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from notifications.signals import notify
+from reports.models import Report
 
 class Thing(models.Model):
     def __str__(self):
@@ -32,6 +35,7 @@ class Thing(models.Model):
     hitcount_generic = GenericRelation(HitCount, object_id_field='object_pk', related_query_name='hitcount_generic_relation')
     featured = models.BooleanField(default=False)
     date_featured = models.DateTimeField(null=True)
+    reports = GenericRelation(Report)
 
 
 class Image(models.Model):

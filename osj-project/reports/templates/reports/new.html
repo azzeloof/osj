@@ -1,0 +1,18 @@
+{% extends 'pages/base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h2>New Report</h2>
+        {% if model == "thing" %}
+            <p>For <a href="/jewelry/{{ target.id }}">{{ target }}</a> by <a href="/user/{{ target.creator }}">{{ target.creator }}</a></p>
+        {% elif model == "profile" %}
+        <p>For <a href="/user/{{ target.id }}">{{ target }}</a></p>
+        {% endif %}
+        <p>Thank you for taking the time to report content on OpenJewelry. Before reporting, please review our <a href="/legal/userguidelines/">User Guidelines</a>.
+        <form method="POST" enctype="multipart/form-data" id="report-form" class="report-form">
+            {% csrf_token %}
+            {{ report_form.description }}
+            <button type="submit" class="save btn btn-primary m-2">Send</button>
+        </form>
+    </div>
+{% endblock %}

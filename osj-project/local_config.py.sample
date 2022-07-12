@@ -10,6 +10,14 @@ DEBUG = True
 SECRET_KEY = 'some secret string'
 ALLOWED_HOSTS = []
 
+EMAIL_BACKEND = 'anymail.backends.sendinblue.EmailBackend'
+ANYMAIL = {
+    "SENDINBLUE_API_KEY": "",
+}
+
+DEFAULT_FROM_EMAIL = 'adam@open.jewelry'
+SERVER_EMAIL = 'noreply@open.jewelry'
+
 if os.getenv('GITHUB_WORKFLOW'):
     DATABASES = {
         'default': {
