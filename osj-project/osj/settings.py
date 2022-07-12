@@ -210,11 +210,11 @@ def verified_callback(user):
 
 EMAIL_VERIFIED_CALLBACK = verified_callback
 EMAIL_FROM_ADDRESS = 'noreply@open.jewelry'
-EMAIL_MAIL_SUBJECT = 'Confirm your email'
+EMAIL_MAIL_SUBJECT = 'Confirm your OpenJewelry account'
 EMAIL_MAIL_HTML = 'mail_body.html'
 EMAIL_MAIL_PLAIN = 'mail_body.txt'
 EMAIL_TOKEN_LIFE = 60 * 60
 EMAIL_PAGE_TEMPLATE = 'confirm_template.html'
-EMAIL_PAGE_DOMAIN = 'http://open.jewelry/'
+EMAIL_PAGE_DOMAIN = 'https://open.jewelry/'
 EMAIL_MULTI_USER = True  # optional (defaults to False)
 
