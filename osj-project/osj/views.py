@@ -5,6 +5,14 @@ from osj.forms import RegistrationForm
 from django.contrib.auth.decorators import login_required
 from django_email_verification import send_email
 
+
+def getUserContext(request):
+    context = {
+        'user': request.user,
+        #'currentuserprofile': profiles.models.Profile.objects.get(user=request.user)
+    }
+    return context
+
 def registration(request):
     #https://simpleisbetterthancomplex.com/tutorial/2017/02/18/how-to-create-user-sign-up-view.html
     if request.method == 'POST':
@@ -36,10 +44,3 @@ def newVerificationLink(request):
     user = request.user
     send_email(user)
     return redirect('index')
-
-def getUserContext(request):
-    context = {
-        'user': request.user,
-        #'currentuserprofile': profiles.models.Profile.objects.get(user=request.user)
-    }
-    return context

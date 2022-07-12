@@ -9,6 +9,7 @@ urlpatterns = [
     path('legal/<str:slug>/', views.legal, name='legal'),
     path('page/<str:slug>/', views.page, name='page'),
     path('about/', views.page, {'slug':'about'}, name='about'), # Special case for About page
+    path('help/', views.page, {'slug':'help'}, name='help'), # Special case for Help page
     path('file/<int:pk>/', views.downloadFile, name='downloadFile'),
     path('notifications', views.notifications, name="notifications"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
