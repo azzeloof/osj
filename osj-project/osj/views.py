@@ -3,7 +3,6 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from osj.forms import RegistrationForm
 from django.contrib.auth.decorators import login_required
-from pages.views import getUserContext
 from django_email_verification import send_email
 
 def registration(request):
@@ -37,3 +36,10 @@ def newVerificationLink(request):
     user = request.user
     send_email(user)
     return redirect('index')
+
+def getUserContext(request):
+    context = {
+        'user': request.user,
+        #'currentuserprofile': profiles.models.Profile.objects.get(user=request.user)
+    }
+    return context

@@ -23,6 +23,9 @@ from django_email_verification import urls as email_urls  # include the urls
 
 urlpatterns = [
     path('', include('pages.urls'), name='index'),
+    path('jewelry/', include('things.urls')),
+    path('user/', include('profiles.urls')),
+    path('articles/', include('articles.urls')),
     path('reports/', include('reports.urls'), name='reports'),
     path('admin/', admin.site.urls),
     path(
