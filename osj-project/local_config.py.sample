@@ -41,6 +41,7 @@ else:
         }
     }
 
+GOOGLE_ANALYTICS_KEY = ''
 
 
 ##### OPTIONAL PARAMETERS #####
