@@ -42,7 +42,8 @@ else:
     }
 
 GOOGLE_ANALYTICS_KEY = ''
-
+KOFI_USERNAME = '' # For the floating widget
+KOFI_KEY = '' # For the link
 
 ##### OPTIONAL PARAMETERS #####
 
