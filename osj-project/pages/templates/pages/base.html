@@ -28,7 +28,7 @@
 
       gtag('config', '{{ google_analytics_key }}');
     </script>
-    -->
+  -->
     {% block scripts %}
     {% endblock %}
     <link rel="stylesheet" type="text/css" href="{% static 'pages/style.css' %}">
@@ -120,56 +120,50 @@
 <!-- Footer -->
 <footer class="bg-secondary text-center text-white mt-auto">
     <!-- Grid container -->
-    <div class="container p-4">
-
-      <!-- Section: Form -->
-      <section class="">
-
-        <!--
-
-        <form action="">
-          <div class="row d-flex justify-content-center">
-            <div class="col-auto">
-              <p class="pt-2">
-                <strong>Sign up for our newsletter</strong>
-              </p>
-            </div>
-  
-            <div class="col-md-5 col-12">
-              <div class="form-outline form-white mb-4">
-                <input type="email" id="form5Example21" class="form-control" />
-                <label class="form-label" for="form5Example21">Email address</label>
-              </div>
-            </div>
-  
-            <div class="col-auto">
-              <button type="submit" class="btn btn-outline-light mb-4">
-                Subscribe
-              </button>
-            </div>
-          </div>
-        </form>
-
-      -->
-
-      </section>
-      <!-- Section: Form -->
+    <div class="container-fluid px-4 pt-4">
   
       <!-- Section: Text -->
-      <section class="mb-4">
+      <div class="row">
+        <div class="col-md-4">
+          <p>This website is open source and is free to use, but hosting costs money! If you want to kick a dollor or two towards costs, 
+          <a href='https://ko-fi.com/{{ kofi_key }}' target='_blank'>click here</a></p>
+        </div>
+
+        <div class="col-md-4">
+          <p>Make sure to read our <a href="/legal/privacypolicy">Privacy Policy</a>, <a href="/legal/termsofservice">Terms of Service</a>, and <a href="/legal/userguidelines">User Guidelines</a></p>
+        </div>
+
+        <div class="col-md-4">
+          <p>
+            Want to contribute to the development of OpenJewelry/ see what's going on under the hood?
+            <a href="https://github.com/azzeloof/osj" target='_blank'>Check out the project on GitHub</a>.
+          </p>
+        </div>
+      </div>
+
+      <section class="mb-1">
         <p>
-          OpenJewelry is in beta! It's an experiment, and we're thrilled that you've decided to join in.
-          Because we're constantly working to improve the site, please excuse any bugs.
-          Better yet, <a href="https://github.com/azzeloof/osj/issues" target="_blank">report them</a>!
-          You can also check out the <a href="/help">help page</a>.
+            OpenJewelry is in beta! It's an experiment, and we're thrilled that you've decided to join in.
+            Because we're constantly working to improve the site, please excuse any bugs.
+            Better yet, <a href="https://github.com/azzeloof/osj/issues" target="_blank">report them</a>.
         </p>
       </section>
-
-      <section class="mb-4">
-        <p>Make sure to read our <a href="/legal/privacypolicy">Privacy Policy</a>, <a href="/legal/termsofservice">Terms of Service<a>, and <a href="/legal/userguidelines">User Guidelines<a></p>
-      </section>
       <!-- Section: Text -->
 
+      <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
+      <script>
+        kofiWidgetOverlay.draw('{{ kofi_username }}', {
+          'type': 'floating-chat',
+          'floating-chat.donateButton.text': 'Support us',
+          'floating-chat.donateButton.background-color': '#470077',
+          'floating-chat.donateButton.text-color': '#fff'
+        });
+      </script>
+  </div>
+
+    <div class="text-center p-4" style="background-color: rgba(255, 255, 255, 0.2);">
+      🔨 with 💜 on 🌎
+    </div>
 </footer>
   <!-- Footer -->
 
