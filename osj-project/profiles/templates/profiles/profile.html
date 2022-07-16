@@ -11,9 +11,9 @@
     <meta property="og:description" content="{{ page.content | slice:'0:100'}}" />
     <meta property="og:type" content="website" />
     {% if profile.image %}
-        <meta property="og:image" content="{{ request.get_host }}{{ profile.image.url }}" />
+        <meta property="og:image" content="https://{{ request.get_host }}{{ profile.image.url }}" />
     {% else %}
-        <meta property="og:image" content="{{ request.get_host }}/media/profile_photos/default.png" />
+        <meta property="og:image" content="https://{{ request.get_host }}/media/profile_photos/default.png" />
     {% endif %}
 {% endblock %}
 
