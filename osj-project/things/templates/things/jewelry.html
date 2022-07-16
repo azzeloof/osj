@@ -74,9 +74,10 @@
                 window.scrollTo(0, document.getElementById(tab).offsetTop);
             };
         </script>
+
     <meta property="og:url" content="https://{{ request.get_host }}{{ request.get_full_path }}" />
     <meta property="og:title" content="OpenJewelry - {{ piece.title }}" />
-    <meta property="og:description" content="{{ piece.description | slice:'0:100'}}" />
+    <meta property="og:description" content="{{ piece.description | slice:'0:100'|striptags }}" />
     <meta property="og:type" content="website" />
     {% if featuredImage.image %}
         <meta property="og:image" content="https://{{ request.get_host }}{{ featuredImage.image.url }}" />
@@ -90,7 +91,7 @@
     <meta property="twitter:domain" content="{{ request.get_host }}">
     <meta property="twitter:url" content="https://{{ request.get_host }}{{ request.get_full_path }}">
     <meta name="twitter:title" content="OpenJewelry - {{ piece.title }}">
-    <meta name="twitter:description" content="{{ piece.description | slice:'0:100'}}">
+    <meta name="twitter:description" content="{{ piece.description | slice:'0:100'|striptags }}">
 
     {% endblock %}
 
