@@ -1,8 +1,12 @@
 {% extends 'pages/base.html' %}
-
+{% load static %}
 {% load param_replace %}
 
     {% block scripts %}
+        <meta property="og:title" content="OpenJewelry - Tagged:{{ tag }}" />
+        <meta property="og:description" content="The Internet's home for wearable art of all kinds" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="{{ request.get_host }}{% static 'pages/osj-logo-full.png' %}" />
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"
             integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
             crossorigin="anonymous">
@@ -88,8 +92,8 @@
                                 </ul>
                             </div>
 
-                            <div class="jewelry-grid">
-                                <div class="row m-2">
+                            <div class="jewelry-grid mt-3">
+                                <div class="row">
                                     <h1>Jewelry tagged as: <span class="m-1 badge bg-secondary tag-badge">{{ tag }}</span><sup><a href="/jewelry/?orderby=created&direction=descending"><i class="bi bi-x-square"></i></a></sup></h1> 
                                 </div>
                                 <div class="grid">

@@ -1,5 +1,21 @@
 {% extends 'pages/base.html' %}
-    {% block content %}
+
+{% load static %}
+
+{% block scripts %}
+    {% if tos %}
+        <meta property="og:title" content="OpenJewelry - Terms of Service" />
+    {% elif pp %}
+        <meta property="og:title" content="OpenJewelry - Privacy Policy" />
+    {% elif ug %}
+        <meta property="og:title" content="OpenJewelry - User Guidelines" />
+    {% endif %}
+    <meta property="og:description" content="The Internet's home for wearable art of all kinds" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="{{ request.build_absolute_uri | slice:":-1" }}{% static 'pages/osj-logo-full.png' %}" />
+{% endblock %}
+
+{% block content %}
         <div class="container py-5">
             {% if tos %}
                 {% include "pages/tos-block.html" %}

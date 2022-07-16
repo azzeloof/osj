@@ -74,11 +74,20 @@
                 window.scrollTo(0, document.getElementById(tab).offsetTop);
             };
         </script>
+
+    <meta property="og:title" content="OpenJewelry - {{ piece.title }}" />
+    <meta property="og:description" content="{{ piece.description | slice:'0:100'}}" />
+    <meta property="og:type" content="website" />
+    {% if featuredImage.image %}
+        <meta property="og:image" content="{{ request.get_host }}{{ featuredImage.image.url }}" />
+    {% else %}
+        <meta property="og:image" content="{{ request.get_host }}/media/profile_photos/default.png" />
+    {% endif %}
     {% endblock %}
 
     {% block content %}
         <div class="page-content">
-            <div class="container">
+            <div class="container mt-3">
                 <div class="row">
                     <div class="row align-items-center">
                         <div class="col-auto">

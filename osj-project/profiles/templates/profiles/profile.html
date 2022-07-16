@@ -1,12 +1,21 @@
 {% extends 'pages/base.html' %}
 
-    {% block scripts %}
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-            crossorigin="anonymous">
-        </script>
-        <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
-    {% endblock %}
+{% block scripts %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous">
+    </script>
+    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+
+    <meta property="og:title" content="OpenJewelry - {{ profile.user.username }}" />
+    <meta property="og:description" content="{{ page.content | slice:'0:100'}}" />
+    <meta property="og:type" content="website" />
+    {% if profile.image %}
+        <meta property="og:image" content="{{ request.get_host }}{{ profile.image.url }}" />
+    {% else %}
+        <meta property="og:image" content="{{ request.get_host }}/media/profile_photos/default.png" />
+    {% endif %}
+{% endblock %}
 
 
     {% block content %}
@@ -17,7 +26,7 @@
         </div>
 
         <div class="jumbotron d-flex min-vh-100">
-            <div class="container">
+            <div class="container mt-3">
                 <div class='page-content'>
                     <div class="row align-items-center">
                         <div class="col-auto">
