@@ -148,11 +148,22 @@ class JewelryDetailView(HitCountDetailView):
             })
             downloads += fileObj.downloads
         context = super(JewelryDetailView, self).get_context_data(**kwargs)
+        hasFeatured = False
+        if len(images) > 0:
+            for image in images:
+                if image.featured:
+                    hasFeatured = True
+                    featuredImage = image
+            if hasFeatured == False:
+                featuredImage = images[0]
+        else:
+            featuredImage = None
         context.update({
             'piece': piece,
             'created': piece.created.date,
             'modified': piece.modified.date,
             'files': fileContext,
+            'featuredImage': featuredImage,
             'images': images,
             'likes': nLikes,
             'downloads': downloads
