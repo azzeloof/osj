@@ -7,14 +7,24 @@
     </script>
     <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
 
+    <meta property="og:url" content="https://{{ request.get_host }}{{ request.get_full_path }}" />
     <meta property="og:title" content="OpenJewelry - {{ profile.user.username }}" />
     <meta property="og:description" content="{{ page.content | slice:'0:100'}}" />
     <meta property="og:type" content="website" />
     {% if profile.image %}
         <meta property="og:image" content="https://{{ request.get_host }}{{ profile.image.url }}" />
+        <meta name="twitter:image" content="https://{{ request.get_host }}{{ profile.image.url }}">
     {% else %}
         <meta property="og:image" content="https://{{ request.get_host }}/media/profile_photos/default.png" />
+        <meta name="twitter:image" content="https://{{ request.get_host }}/media/profile_photos/default.png">
     {% endif %}
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="{{ request.get_host }}">
+    <meta property="twitter:url" content="https://{{ request.get_host }}{{ request.get_full_path }}">
+    <meta name="twitter:title" content="OpenJewelry - {{ profile.user.username }}">
+    <meta name="twitter:description" content="The Internet's home for wearable art of all kinds">
+
 {% endblock %}
 
 

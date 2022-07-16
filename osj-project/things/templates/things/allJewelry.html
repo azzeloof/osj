@@ -3,11 +3,18 @@
 {% load param_replace %}
 
 {% block scripts %}
-
+    <meta property="og:url" content="https://{{ request.get_host }}{{ request.get_full_path }}" />
     <meta property="og:title" content="OpenJewelry - All Pieces" />
     <meta property="og:description" content="The Internet's home for wearable art of all kinds" />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://{{ request.get_host }}{% static 'pages/osj-logo-full.png' %}" />
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="{{ request.get_host }}">
+    <meta property="twitter:url" content="https://{{ request.get_host }}{{ request.get_full_path }}">
+    <meta name="twitter:title" content="OpenJewelry - All Pieces">
+    <meta name="twitter:description" content="The Internet's home for wearable art of all kinds">
+    <meta name="twitter:image" content="https://{{ request.get_host }}{% static 'pages/osj-logo-full.png' %}">
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"
             integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
