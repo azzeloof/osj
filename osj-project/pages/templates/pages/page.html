@@ -5,7 +5,7 @@
     <meta property="og:title" content="OpenJewelry - {{ page.title }}" />
     <meta property="og:description" content="{{ page.content | slice:'0:100'}}" />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="{{ request.build_absolute_uri | slice:":-1" }}{% static 'pages/osj-logo-full.png' %}" />
+    <meta property="og:image" content="https://{{ request.get_host }}{% static 'pages/osj-logo-full.png' %}" />
 {% endblock %}
 
     {% block content %}
