@@ -105,6 +105,10 @@ a {
     text-decoration: none;
 }
 
+p a {
+    font-weight: bold;
+}
+
 .edit-button-col {
     margin-right: 0px;
     margin-left: auto;
