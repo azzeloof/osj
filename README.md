@@ -1,9 +1,17 @@
 # OpenJewelry
 ![Django CI](https://github.com/azzeloof/osj/actions/workflows/django.yml/badge.svg)
+[![Twitter](https://img.shields.io/twitter/url/https/twitter.com/open_jewelry.svg?style=social&label=Follow%20%40open_jewelry)](https://twitter.com/open_jewelry)
 
-This is a Django project designed to be an online repository for open-source jewelry designs. It is very much a work in progress.
+OpenJewelry was designed to be the internet's home for wearable art of all kinds. It was built on the open-source framework Django, and all of its source code is available here. It is also very much a work in progress :)
+
+The official site is at [https://open.jewelry](https://open.jewelry)
+
+<div align="center">
+<img src="assets/logo/osj-logo-full.svg" width="400" />
+</div>
 
 ## Deployment Notes
+If you want your own copy of OpenJewelry to mess around or contribute some bug fixes or new features, here's how you can get started:
 - Clone the repo
 - Make a Pyhton virtual environment in the root directory (.env or similar, ideally pick something included in .gitignore)
 - Enter the environment, and run `pip install -r requirements.txt`
