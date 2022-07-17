@@ -2,7 +2,8 @@
 {% load  static %}
 
 {% block scripts %}
-    <meta property="og:title" content="OpenJewelry - {{ page.title }}" />
+    <title>OpenJewelry: {{ page.title }}</title>
+    <meta property="og:title" content="OpenJewelry: {{ page.title }}" />
     <meta property="og:description" content="{{ page.content | slice:'0:100'|striptags }}" />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://{{ request.get_host }}{% static 'pages/osj-logo-full.png' %}" />
@@ -10,20 +11,17 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta property="twitter:domain" content="{{ request.get_host }}">
     <meta property="twitter:url" content="https://{{ request.get_host }}{{ request.get_full_path }}">
-    <meta name="twitter:title" content="OpenJewelry - {{ page.title }}">
+    <meta name="twitter:title" content="OpenJewelry: {{ page.title }}">
     <meta name="twitter:description" content="{{ page.content | slice:'0:100'|striptags }}">
     <meta name="twitter:image" content="https://{{ request.get_host }}{% static 'pages/osj-logo-full.png' %}">
 {% endblock %}
 
-    {% block content %}
-        <div class="page">
-        <!--<div class="jumbotron d-flex align-items-center min-vh-100">-->
-            <div class="container py-3 page-content">
-                <h1>{{ page.title }}</h1>
-                <hr>
-                {{ page.content|safe }}
-            </div>
+{% block content %}
+    <div class="page">
+        <div class="container py-3 page-content">
+            <h1>{{ page.title }}</h1>
+            <hr>
+            {{ page.content|safe }}
         </div>
-        <!--</div>-->
-
-    {% endblock %}
+    </div>
+{% endblock %}
