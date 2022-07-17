@@ -1,5 +1,8 @@
 # OpenJewelry
 ![Django CI](https://github.com/azzeloof/osj/actions/workflows/django.yml/badge.svg)
+[![Twitter](https://img.shields.io/twitter/url/https/twitter.com/open_jewelry.svg?style=social&label=Follow%20%40open_jewelry)](https://twitter.com/open_jewelry)
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/K3K1DSJ1I)
 
 OpenJewelry was designed to be the internet's home for wearable art of all kinds. It was built on the open-source framework Django, and all of its source code is available here. It is also very much a work in progress :)
 
