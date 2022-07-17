@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 {% load static %}
 {% load tz %}
 {% load notifications_tags %}
 
 <head>
-    <title>OpenJewelry</title>
     <meta charset="utf-8">
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>-->
     <script
-			  src="https://code.jquery.com/jquery-3.6.0.min.js"
-			  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-			  crossorigin="anonymous">
+	    src="https://code.jquery.com/jquery-3.6.0.min.js"
+		integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+		crossorigin="anonymous">
     </script>
     <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -35,13 +35,13 @@
 </head>
 
 <body class="d-flex flex-column min-vh-100">
-  {% localtime on %}
+    {% localtime on %}
     <header class="py-2 px-4 bg-orange text-purple">
         <div class="container-flex">
             <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
                 <!--<h1 class="d-flex align-items-center mb-2 mb-lg-0 text-decoration-none">OJ</h1>-->
                 <a class="navbar-brand" href="/">
-                  <img src="{% static 'pages/osj-logo-notext.png' %}" height="30"> Open Jewelry
+                    <img src="{% static 'pages/osj-logo-notext.png' %}" height="30"> Open Jewelry
                 </a>
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                     <li class="nav-item">
@@ -124,55 +124,56 @@
 <footer class="bg-secondary text-center text-white mt-auto">
     <!-- Grid container -->
     <div class="container-fluid px-4 pt-4">
-  
+
       <!-- Section: Text -->
-      <div class="row">
-        <div class="col-md-4">
-          <p>This website is open source and is free to use, but hosting costs money! If you want to kick a dollar or two towards costs, 
-          <a href='https://ko-fi.com/{{ kofi_key }}' target='_blank'>click here</a></p>
+        <div class="row">
+            <div class="col-md-4">
+                <p>This website is open source and is free to use, but hosting costs money! If you want to kick a dollar or two towards costs, 
+                <a href='https://ko-fi.com/{{ kofi_key }}' target='_blank'>click here</a></p>
+            </div>
+
+            <div class="col-md-4">
+                <p>Make sure to read our <a href="/legal/privacypolicy">Privacy Policy</a>, <a href="/legal/termsofservice">Terms of Service</a>, and <a href="/legal/userguidelines">User Guidelines</a></p>
+            </div>
+
+            <div class="col-md-4">
+                <p>
+                    Want to contribute to the development of OpenJewelry/ see what's going on under the hood?
+                    <a href="https://github.com/azzeloof/osj" target='_blank'>Check out the project on GitHub</a>.
+                </p>
+            </div>
         </div>
 
-        <div class="col-md-4">
-          <p>Make sure to read our <a href="/legal/privacypolicy">Privacy Policy</a>, <a href="/legal/termsofservice">Terms of Service</a>, and <a href="/legal/userguidelines">User Guidelines</a></p>
-        </div>
+        <section class="mb-1">
+            <p>
+                OpenJewelry is in beta! It's an experiment, and we're thrilled that you've decided to join in.
+                Because we're constantly working to improve the site, please excuse any bugs.
+                Better yet, <a href="https://github.com/azzeloof/osj/issues" target="_blank">report them</a>.
+            </p>
+        </section>
+        <!-- Section: Text -->
 
-        <div class="col-md-4">
-          <p>
-            Want to contribute to the development of OpenJewelry/ see what's going on under the hood?
-            <a href="https://github.com/azzeloof/osj" target='_blank'>Check out the project on GitHub</a>.
-          </p>
-        </div>
-      </div>
-
-      <section class="mb-1">
-        <p>
-            OpenJewelry is in beta! It's an experiment, and we're thrilled that you've decided to join in.
-            Because we're constantly working to improve the site, please excuse any bugs.
-            Better yet, <a href="https://github.com/azzeloof/osj/issues" target="_blank">report them</a>.
-        </p>
-      </section>
-      <!-- Section: Text -->
-
-      <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
-      <script>
-        kofiWidgetOverlay.draw('{{ kofi_username }}', {
-          'type': 'floating-chat',
-          'floating-chat.donateButton.text': 'Support us',
-          'floating-chat.donateButton.background-color': '#470077',
-          'floating-chat.donateButton.text-color': '#fff'
-        });
-      </script>
-  </div>
+        <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
+        <script>
+            kofiWidgetOverlay.draw('{{ kofi_username }}', {
+            'type': 'floating-chat',
+            'floating-chat.donateButton.text': 'Support us',
+            'floating-chat.donateButton.background-color': '#470077',
+            'floating-chat.donateButton.text-color': '#fff'
+            });
+        </script>
+    </div>
 
     <div class="text-center p-4" style="background-color: rgba(255, 255, 255, 0.2);">
-      🔨 with 💜 on 🌎
+        🔨 with 💜 on 🌎
     </div>
 </footer>
   <!-- Footer -->
 
-  {% load tz_detect %}
-  {% tz_detect %}
+{% load tz_detect %}
+{% tz_detect %}
 
 {% endlocaltime %}
+
 </body>
 

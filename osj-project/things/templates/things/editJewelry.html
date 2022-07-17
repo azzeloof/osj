@@ -2,13 +2,13 @@
 {% load static %}
 
 {% block scripts %}
+    <title>OpenJewelry: Edit</title>
     <script src="https://unpkg.com/@yaireo/tagify"></script>
     <script src="https://unpkg.com/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
     <link href="https://unpkg.com/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
-    <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
-         rel = "stylesheet">
-         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-      <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel = "stylesheet">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
     <script>
         $(document).ready(function() {
             console.log("{{tags}}");
@@ -24,271 +24,240 @@
             });
             $(".sortable").sortable({
                 handle: ".grabme",
-                /*
-                update: function() {
-                    $(".sortable").sortable("refresh");
-                    rows = this.children;
-                    nRows = rows.length;
-                    // last row is the "add" button
-                    for (var i=0; i<nRows-1; i++) {
-                        row = rows[i]
-                        // check if row has a file
-                        var hasImage = false;
-                        for (var item in row.children) {
-                            cell = row.children[item];
-                            if (cell.className == "fileCell") {
-                                if (cell.innerHTML.includes("Currently:")) {
-                                    hasImage = true;
-                                }
-                            }
-                        }
-                        if (hasImage) {
-                            for (var item in row.children) {
-                                cell = row.children[item]
-                                if (cell.className == "orderCell") {
-                                    cell.children[0].value = i;
-                                }
-                            }
-                        }
-                    }
-                },
-                */
             });
-        });
-        
+        });   
     </script>
 {% endblock %}
 
 {% block content %}
-{{ form.media }}
-<div class="container mt-3">
-    <form method="POST" enctype='multipart/form-data' class="form m-2">{% csrf_token %}
-        <h3 class="required-field">Title</h3>
-        <div class="row mb-3 align-items-center">
-            <div class="col-auto">
-                {{ form.title }}
-                {% for error in form.title.errors %}
-                    <strong>{{ error|escape }}</strong>
-                {% endfor %}
-            </div>
-            <div class="col-auto">
-                <div id="titleHelp" class="form-text">Make it a good one!</div>
-            </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-md-8">
-                <div class="row mb-3">
-                    <h3 class="required-field">Tagline</h3>
-                    {{ form.tagline }}
-                    {% for error in form.tagline.errors %}
+    {{ form.media }}
+    <div class="container mt-3">
+        <form method="POST" enctype='multipart/form-data' class="form m-2">{% csrf_token %}
+            <h3 class="required-field">Title</h3>
+            <div class="row mb-3 align-items-center">
+                <div class="col-auto">
+                    {{ form.title }}
+                    {% for error in form.title.errors %}
                         <strong>{{ error|escape }}</strong>
                     {% endfor %}
                 </div>
-                <div class="row mb-3">
-                    <h3 class="required-field">Description</h3>
-                    {{ form.description }}
-                    {% for error in form.description.errors %}
-                        <strong>{{ error|escape }}</strong>
-                    {% endfor %}
+                <div class="col-auto">
+                    <div id="titleHelp" class="form-text">Make it a good one!</div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <h3>Repo</h3>
-                <div class="row mb-3 align-items-center">
-                    <div class="col-auto">
-                        {{ form.repo }}
-                        {% for error in form.repo.errors %}
+            <div class="row mb-3">
+                <div class="col-md-8">
+                    <div class="row mb-3">
+                        <h3 class="required-field">Tagline</h3>
+                        {{ form.tagline }}
+                        {% for error in form.tagline.errors %}
                             <strong>{{ error|escape }}</strong>
                         {% endfor %}
                     </div>
-                    <div class="col-auto">
-                        <div id="repoHelp" class="form-text">External repository for project files</div>
-                    </div>
-                </div>
-                <h3 class="required-field">Category</h3>
-                <div class="row mb-3 align-items-center">
-                    <div class="col-auto">
-                        {{ form.category }}
-                        {% for error in form.category.errors %}
-                            <strong>{{ error|escape }}</strong>
-                        {% endfor %}
-                    </div>
-                    <div class="col-auto">
-                        <div id="categoryHelp" class="form-text">Choose the category that best describes your work!</div>
-                    </div>
-                </div>
-                <h3 class="required-field">Tags</h3>
-                <div class="row mb-3 align-items-center">
-                    <div class="col-auto">
-                        {{ form.tags }}
-                        {% for error in form.tags.errors %}
-                            <strong>{{ error|escape }}</strong>
-                        {% endfor %}
-                    </div>
-                    <div class="col-auto">
-                        <div id="tagHelp" class="form-text">Enter some comma-seperated tags!</div>
-                    </div>
-                </div>
-                <h3 class="required-field">Licence</h3>
-                <div class="row">
-                    <div class="col-auto">
-                        {{ form.licence }}
-                        {% for error in form.licence.errors %}
+                    <div class="row mb-3">
+                        <h3 class="required-field">Description</h3>
+                        {{ form.description }}
+                        {% for error in form.description.errors %}
                             <strong>{{ error|escape }}</strong>
                         {% endfor %}
                     </div>
                 </div>
-                <div class="row">
-                    <div id="licenceHelp" class="form-text">Choose an appropriate licence. Make sure to fully read and understand before selecting!</div>
-                    <h5>Preview:</h5>
-                    <div id="licenceText"></div>
+                <div class="col-md-4">
+                    <h3>Repo</h3>
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-auto">
+                            {{ form.repo }}
+                            {% for error in form.repo.errors %}
+                                <strong>{{ error|escape }}</strong>
+                            {% endfor %}
+                        </div>
+                        <div class="col-auto">
+                            <div id="repoHelp" class="form-text">External repository for project files</div>
+                        </div>
+                    </div>
+                    <h3 class="required-field">Category</h3>
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-auto">
+                            {{ form.category }}
+                            {% for error in form.category.errors %}
+                                <strong>{{ error|escape }}</strong>
+                            {% endfor %}
+                        </div>
+                        <div class="col-auto">
+                            <div id="categoryHelp" class="form-text">Choose the category that best describes your work!</div>
+                        </div>
+                    </div>
+                    <h3 class="required-field">Tags</h3>
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-auto">
+                            {{ form.tags }}
+                            {% for error in form.tags.errors %}
+                                <strong>{{ error|escape }}</strong>
+                            {% endfor %}
+                        </div>
+                        <div class="col-auto">
+                            <div id="tagHelp" class="form-text">Enter some comma-seperated tags!</div>
+                        </div>
+                    </div>
+                    <h3 class="required-field">Licence</h3>
+                    <div class="row">
+                        <div class="col-auto">
+                            {{ form.licence }}
+                            {% for error in form.licence.errors %}
+                                <strong>{{ error|escape }}</strong>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div id="licenceHelp" class="form-text">Choose an appropriate licence. Make sure to fully read and understand before selecting!</div>
+                        <h5>Preview:</h5>
+                        <div id="licenceText"></div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <h2>Images:</h2> 
-            {{ imageFormset.non_form_errors }}
-            {{ imageFormset.management_form }}
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Image</th>
-                        <th>Preview</th>
-                        <th>Alt Text</th>
-                        <th>Featured</th>
-                        <th>Delete</th>
-                    </tr>
-                </thead>
-                <tbody class="sortable images">
-                    {% for form in imageFormset %}
-                    <tr class="image-formset-row" id="img-{{ form.id.value }} ">
-                        {{ form.id }}
-                        <td class="orderCell" style="display:none">{{ form.order }}</td>
-                        <td><i class="bi bi-grip-horizontal grabme"></i></td>
-                        <td class="fileCell">{{ form.image }}</td>
-                        <td>
-                            {% if form.instance.image %}
-                                <img class="thumbnail" src="/media/{{ form.instance.image }}"></img>
-                            {% endif %}
-                        </td>
-                        <td>{{ form.alt }}</td>
-                        <td>{{ form.featured }}</td>
-                        <td>{{ form.DELETE }}</td>
-                    </tr>
-                    {% for field in form %}
-                        {% for error in field.errors %}
-                            <strong>{{ error|escape }}</strong>
+            <h2>Images:</h2> 
+                {{ imageFormset.non_form_errors }}
+                {{ imageFormset.management_form }}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Image</th>
+                            <th>Preview</th>
+                            <th>Alt Text</th>
+                            <th>Featured</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody class="sortable images">
+                        {% for form in imageFormset %}
+                        <tr class="image-formset-row" id="img-{{ form.id.value }} ">
+                            {{ form.id }}
+                            <td class="orderCell" style="display:none">{{ form.order }}</td>
+                            <td><i class="bi bi-grip-horizontal grabme"></i></td>
+                            <td class="fileCell">{{ form.image }}</td>
+                            <td>
+                                {% if form.instance.image %}
+                                    <img class="thumbnail" src="/media/{{ form.instance.image }}"></img>
+                                {% endif %}
+                            </td>
+                            <td>{{ form.alt }}</td>
+                            <td>{{ form.featured }}</td>
+                            <td>{{ form.DELETE }}</td>
+                        </tr>
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <strong>{{ error|escape }}</strong>
+                            {% endfor %}
                         {% endfor %}
-                    {% endfor %}
-                    {% endfor %}
-                </tbody>
-            </table>
-        <h2>Files:</h2>
-            {{ fileFormset.non_form_errors }}
-            {{ fileFormset.management_form }}
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>File</th>
-                        <th>Name</th>
-                        <th>Delete</th>
-                    </tr>
-                </thead>
-                <tbody class="sortable files">
-                    {% for form in fileFormset %}
-                    <tr class="file-formset-row">
-                        {{ form.id }}
-                        <td class="orderCell" style="display:none">{{ form.order }}</td>
-                        <td><i class="bi bi-grip-horizontal grabme"></i></td>
-                        <td class="fileCell">{{ form.file }}</td>
-                        <td>{{ form.name }}</td>
-                        <td>{{ form.DELETE }}</td>
-                    </tr>
-                    {% for field in form %}
-                        {% for error in field.errors %}
-                            <strong>{{ error|escape }}</strong>
                         {% endfor %}
-                    {% endfor %}
-                    {% endfor %}
-                </tbody>
-            </table>
-            <p>Max 50mb per file</p>
-        <button type="submit" class="save btn btn-primary">Save</button>
-        {% if thing %}<a href="/jewelry/{{ thing.pk }}/delete/" class="save btn btn-danger">Delete</a>{% endif %}
-    </form>
-</div>
+                    </tbody>
+                </table>
+            <h2>Files:</h2>
+                {{ fileFormset.non_form_errors }}
+                {{ fileFormset.management_form }}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>File</th>
+                            <th>Name</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody class="sortable files">
+                        {% for form in fileFormset %}
+                        <tr class="file-formset-row">
+                            {{ form.id }}
+                            <td class="orderCell" style="display:none">{{ form.order }}</td>
+                            <td><i class="bi bi-grip-horizontal grabme"></i></td>
+                            <td class="fileCell">{{ form.file }}</td>
+                            <td>{{ form.name }}</td>
+                            <td>{{ form.DELETE }}</td>
+                        </tr>
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <strong>{{ error|escape }}</strong>
+                            {% endfor %}
+                        {% endfor %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <p>Max 50mb per file</p>
+            <button type="submit" class="save btn btn-primary">Save</button>
+            {% if thing %}<a href="/jewelry/{{ thing.pk }}/delete/" class="save btn btn-danger">Delete</a>{% endif %}
+        </form>
+    </div>
 
-<script src="{% static 'pages/formset/jquery.formset.js' %}"></script>
-<script type="text/javascript">
-    $('.image-formset-row').formset({
-        addText: '<i class="bi-file-plus" style="font-size: 2rem;"></i>',
-        deleteText: '<i class="bi-trash-fill" style="font-size: 2rem;"></i>',
-        prefix: 'image_set',
-        //added: function(row) {
-        //    row.attr("id", "asd");
-        //}
-    });
-</script>
-<script type="text/javascript">
-    $('.file-formset-row').formset({
-        addText: '<i class="bi-file-plus" style="font-size: 2rem;"></i>',
-        deleteText: '<i class="bi-trash-fill" style="font-size: 2rem;"></i>',
-        prefix: 'file_set'
-    });
-</script>
+    <script src="{% static 'pages/formset/jquery.formset.js' %}"></script>
+    <script type="text/javascript">
+        $('.image-formset-row').formset({
+            addText: '<i class="bi-file-plus" style="font-size: 2rem;"></i>',
+            deleteText: '<i class="bi-trash-fill" style="font-size: 2rem;"></i>',
+            prefix: 'image_set',
+            //added: function(row) {
+            //    row.attr("id", "asd");
+            //}
+        });
+    </script>
+    <script type="text/javascript">
+        $('.file-formset-row').formset({
+            addText: '<i class="bi-file-plus" style="font-size: 2rem;"></i>',
+            deleteText: '<i class="bi-trash-fill" style="font-size: 2rem;"></i>',
+            prefix: 'file_set'
+        });
+    </script>
 
-<script>
-    function generateLicenceData() {
-        licences = {};
-        {% for licence in licences %}
-            licences["{{ licence }}"] = {
-                "url": "{{ licence.url }}",
-                "html": '{{ licence.html|safe }}',
-            }
-        {% endfor %}
-    }
-
-    function updateLicenceText() {
-        licenceSelector = document.getElementById('id_licence');
-        licenceText = document.getElementById('licenceText');
-        if(licenceSelector.value){
-            selectedLicence = licenceSelector[licenceSelector.value].text;
-            licenceText.innerHTML = licences[selectedLicence].html;
+    <script>
+        function generateLicenceData() {
+            licences = {};
+            {% for licence in licences %}
+                licences["{{ licence }}"] = {
+                    "url": "{{ licence.url }}",
+                    "html": '{{ licence.html|safe }}',
+                }
+            {% endfor %}
         }
-    }
 
-    $("#id_licence").change(function() {
-        updateLicenceText();
-    });
+        function updateLicenceText() {
+            licenceSelector = document.getElementById('id_licence');
+            licenceText = document.getElementById('licenceText');
+            if(licenceSelector.value){
+                selectedLicence = licenceSelector[licenceSelector.value].text;
+                licenceText.innerHTML = licences[selectedLicence].html;
+            }
+        }
 
-    $(window).load(function() {
-        generateLicenceData();
-        updateLicenceText();
-      });
-</script>
-<script>
-    $('form').submit(function() {
-        $('.sortable.images').find('tr:visible').each(function(index) {
-            fileCell = $(this).find('td.fileCell');
-            hasHTML = (typeof fileCell.html() != 'undefined');
-            hasVal = (typeof fileCell.find('input').val() != 'undefined');
-            if ((hasHTML && fileCell.html().includes("Currently:")) || (hasVal && fileCell.find('input').val() !== '')) {
-                $(this).find('td.orderCell input').val(index);
-            }    
+        $("#id_licence").change(function() {
+            updateLicenceText();
         });
-        $('.sortable.files').find('tr:visible').each(function(index) {
-            //console.log($(this));
-            fileCell = $(this).find('td.fileCell');
-            hasHTML = (typeof fileCell.html() != 'undefined');
-            hasVal = (typeof fileCell.find('input').val() != 'undefined');
-            if ((hasHTML && fileCell.html().includes("Currently:")) || (hasVal && fileCell.find('input').val() !== '')) {
-                $(this).find('td.orderCell input').val(index);
-                //console.log(fileCell.html());
-                //console.log(fileCell.find('input').val());
-            }    
-        });
-    });
-</script>
 
+        $(window).load(function() {
+            generateLicenceData();
+            updateLicenceText();
+        });
+    </script>
+    <script>
+        $('form').submit(function() {
+            $('.sortable.images').find('tr:visible').each(function(index) {
+                fileCell = $(this).find('td.fileCell');
+                hasHTML = (typeof fileCell.html() != 'undefined');
+                hasVal = (typeof fileCell.find('input').val() != 'undefined');
+                if ((hasHTML && fileCell.html().includes("Currently:")) || (hasVal && fileCell.find('input').val() !== '')) {
+                    $(this).find('td.orderCell input').val(index);
+                }    
+            });
+            $('.sortable.files').find('tr:visible').each(function(index) {
+                //console.log($(this));
+                fileCell = $(this).find('td.fileCell');
+                hasHTML = (typeof fileCell.html() != 'undefined');
+                hasVal = (typeof fileCell.find('input').val() != 'undefined');
+                if ((hasHTML && fileCell.html().includes("Currently:")) || (hasVal && fileCell.find('input').val() !== '')) {
+                    $(this).find('td.orderCell input').val(index);
+                    //console.log(fileCell.html());
+                    //console.log(fileCell.find('input').val());
+                }    
+            });
+        });
+    </script>
 {% endblock %}
