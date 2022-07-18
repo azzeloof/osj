@@ -103,10 +103,11 @@
 a {
     color: #470077;
     text-decoration: none;
+    font-weight: bold;
 }
 
-p a {
-    font-weight: bold;
+.nav-link, .navbar-brand {
+    font-weight: normal;
 }
 
 .edit-button-col {
