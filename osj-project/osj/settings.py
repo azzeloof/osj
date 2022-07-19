@@ -48,7 +48,18 @@ INSTALLED_APPS = [
     'tz_detect',
     'notifications',
     'anymail',
-    'django_email_verification'
+    'django_email_verification',
+    'django.contrib.sites.apps.SitesConfig',
+    'django.contrib.humanize.apps.HumanizeConfig',
+    'django_nyt.apps.DjangoNytConfig',
+    'mptt',
+    'sekizai',
+    'sorl.thumbnail',
+    'wiki.apps.WikiConfig',
+    'wiki.plugins.attachments.apps.AttachmentsConfig',
+    #'wiki.plugins.notifications.apps.NotificationsConfig',
+    'wiki.plugins.images.apps.ImagesConfig',
+    'wiki.plugins.macros.apps.MacrosConfig'
 ]
 
 MIDDLEWARE = [
@@ -76,7 +87,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'pages.context_processors.google_analytics_key',
-                'pages.context_processors.kofi_creds'
+                'pages.context_processors.kofi_creds',
+                'sekizai.context_processors.sekizai'
             ],
         },
     },
@@ -220,3 +232,8 @@ EMAIL_PAGE_TEMPLATE = 'confirm_template.html'
 EMAIL_PAGE_DOMAIN = 'https://open.jewelry/'
 EMAIL_MULTI_USER = True  # optional (defaults to False)
 
+
+### Wiki Settings
+WIKI_ACCOUNT_HANDLING = False
+LOGOUT_URL = '/auth/logout'
+LOGIN_URL = '/auth/login'

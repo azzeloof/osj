@@ -244,3 +244,8 @@ p.filename {
 body {
     font-family: 'Raleway';
 }
+
+.wiki-article .thumbnail {
+    max-width: 1000px;
+    max-height: 1000px;
+}
