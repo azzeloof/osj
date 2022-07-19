@@ -58,5 +58,7 @@ urlpatterns = [
     path('tz_detect/', include('tz_detect.urls')),
     re_path('^inbox/notifications/', include(notifications.urls, namespace='notifications')),
     path('email/', include(email_urls)),  # connect them to an arbitrary path
-    path('newVerificationLink/', core_views.newVerificationLink, name='newVerificationLink')
+    path('newVerificationLink/', core_views.newVerificationLink, name='newVerificationLink'),
+    path('notifications/', include('django_nyt.urls')),
+    path('wiki/', include('wiki.urls'))
 ]

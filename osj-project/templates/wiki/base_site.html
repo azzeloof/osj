@@ -1,38 +1,105 @@
-{% extends 'pages/base.html' %}
-
+{% extends "wiki/base_site.html" %}
+{% load static %}
 {% load sekizai_tags i18n wiki_tags static %}
 
-    {% block content %}
-    <div class="container" style="margin-top: 60px;">
+{% block wiki_site_title %} - Wiki{% endblock %}
 
-      {% wiki_messages %}
 
-      <!-- Reserved for breadcrumbs -->
-      {% block wiki_breadcrumbs %}{% endblock %}
+{% block wiki_navbar %}
+<link rel="stylesheet" type="text/css" href="{% static 'pages/style.css' %}">
+<nav class="navbar navbar-expand-lg bg-orange text-purple">
+<div class="container">
+  {% block wiki_header_branding %}
+        <a class="navbar-brand" href="{% url 'wiki:root' %}"><img src="{% static 'pages/osj-logo-notext.png' %}" height="30"> OpenJewelry Wiki</a>
+  {% endblock %}
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
 
-      <!-- Main page contents go here -->
-      {% block wiki_contents %}{% endblock %}
+  <div class="collapse navbar-collapse" id="navbarColor02">
+  {% block wiki_header_navlinks %}
+  <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'wiki:root' %}">Wiki Root</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/">OpenJewelry Home</a>
+      </li>
+  </ul>
+  {% endblock %}
+    {% if user.is_authenticated %}
+            <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+              <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle">
+                <!--<span class="badge badge-light notification-cnt">0</span>-->
+                {{ user }}
+                <b class="caret"></b>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                {% if "ACCOUNT_HANDLING"|wiki_settings %}
+                  <a href="{% url 'wiki:profile_update' %}" class="dropdown-item">
+                    <i class="fa fa-cog"></i>
+                    {% trans "Account Settings" %}
+                  </a>
+                {% endif %}
+                  <a href="{{ "LOGOUT_URL"|wiki_settings }}" class="dropdown-item">
+                    <i class="fa fa-power-off"></i>
+                    {% trans "Log out" %}
+                  </a>
+                {% if user.is_superuser %}
+                  <a href="{% url 'wiki:deleted_list' %}" class="dropdown-item">
+                    <i class="fa fa-trash"></i>
+                    {% trans "Deleted articles" %}
+                  </a>
+                {% endif %}
+                {% if "wiki.plugins.notifications"|plugin_enabled %}
+                  {% include "wiki/plugins/notifications/menubaritem.html" %}
+                {% endif %}
+                {% if "wiki.plugins.globalhistory"|plugin_enabled %}
+                  {% include "wiki/plugins/globalhistory/menubaritem.html" %}
+                {% endif %}
+              </div>
+            </li>
+            </ul>
+    {% else %}
+    <ul class="navbar-nav">
+      <li class="nav-item">
+      <a class="nav-link" href="{% login_url as wiki_login_url %}{{ wiki_login_url }}">{% trans "Log in" %}</a>
+      </li>
+      {% if "ACCOUNT_HANDLING"|wiki_settings and "ACCOUNT_SIGNUP_ALLOWED"|wiki_settings %}
+      <li class="nav-item">
+      <a class="nav-link" href="{% url 'wiki:signup' %}">{% trans "Sign up" %}</a>
+      </li>
+      {% endif %}
+  </ul>
+  {% endif %}
 
-      <footer id="wiki-footer">
-        <hr />
-        {% block wiki_footer_logo %}
-        <a href="https://github.com/django-wiki/django-wiki" class="float-right"><img src="{% static "wiki/img/github_icon.png" %}" /></a>
-        {% endblock %}
-        {% block wiki_footer_prepend %}
-        {% endblock %}
-        <p>{% blocktrans %}Powered by <a href="http://www.django-wiki.org">django-wiki</a>, an open source application under the <a href="http://www.gnu.org/licenses/quick-guide-gplv3.html">GPLv3</a> license. Let knowledge be the cure.{% endblocktrans %}</p>
-        <div class="clearfix"></div>
-      </footer>
+
+    <form class="form-inline" method="GET" action="{% spaceless %}
+          {% if article or urlpath %}
+              {% url 'wiki:search' article_id=article.id path=urlpath.path %}
+            {% else %}
+              {% url 'wiki:search' %}
+            {% endif %}
+          {% endspaceless %}"
+    >
+    <div class="input-group">
+      <input type="search" class="form-control" aria-label="Search" name="q" placeholder="{% spaceless %}
+              {% if article or urlpath %}
+                 {% trans "Search from current article..." %}
+              {% else %}
+                {% trans "Search whole wiki..." %}
+              {% endif %}
+            {% endspaceless %}" />
+      <div class="input-group-append">
+        <button class="btn btn-outline-light my-sm-0" type="submit"><span class="fa fa-search"></span></button>
       </div>
+      </div>
+    </form>
+  </div>
 
-    </div> <!-- /container -->
+</div>
+</nav>
+{% endblock %}
 
-    {% endblock %}
 
-    <script src="{% static "wiki/js/jquery-3.6.0.min.js" %}"></script>
-    <script src="{% static "wiki/js/core.js" %}"></script>
-    <script src="{% static "wiki/js/popper.js" %}"></script>
-    <script src="{% static "wiki/bootstrap/js/bootstrap.bundle.min.js" %}"></script>
-
-    <script src="{% static "wiki/js/respond.min.js" %}"></script>
-    {% render_block "js" %}
