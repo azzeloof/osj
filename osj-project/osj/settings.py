@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'pages.apps.PagesConfig',
     'profiles.apps.ProfilesConfig',
     'things.apps.ThingsConfig',
+    'reports.apps.ReportsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -45,17 +46,9 @@ INSTALLED_APPS = [
     'hitcount',
     'django_bleach',
     'tz_detect',
-    'django.contrib.sites.apps.SitesConfig',
-    'django.contrib.humanize.apps.HumanizeConfig',
-    'django_nyt.apps.DjangoNytConfig',
-    'mptt',
-    'sekizai',
-    'sorl.thumbnail',
-    'wiki.apps.WikiConfig',
-    'wiki.plugins.attachments.apps.AttachmentsConfig',
-    'wiki.plugins.notifications.apps.NotificationsConfig',
-    'wiki.plugins.images.apps.ImagesConfig',
-    'wiki.plugins.macros.apps.MacrosConfig'
+    'notifications',
+    'anymail',
+    'django_email_verification'
 ]
 
 MIDDLEWARE = [
@@ -82,8 +75,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'django.contrib.messages.context_processors.messages',
-                "sekizai.context_processors.sekizai",
+                'pages.context_processors.google_analytics_key',
+                'pages.context_processors.kofi_creds'
             ],
         },
     },
@@ -214,6 +207,16 @@ PROFILE_PHOTO_SIZE = (500,500)
 MAX_FILE_SIZE =  52428800
 MAX_N_FILES = 2
 
-WIKI_ACCOUNT_HANDLING = False
+def verified_callback(user):
+    user.profile.email_verified = True
 
-SITE_ID = 1
+EMAIL_VERIFIED_CALLBACK = verified_callback
+EMAIL_FROM_ADDRESS = 'noreply@open.jewelry'
+EMAIL_MAIL_SUBJECT = 'Confirm your OpenJewelry account'
+EMAIL_MAIL_HTML = 'mail_body.html'
+EMAIL_MAIL_PLAIN = 'mail_body.txt'
+EMAIL_TOKEN_LIFE = 60 * 60
+EMAIL_PAGE_TEMPLATE = 'confirm_template.html'
+EMAIL_PAGE_DOMAIN = 'https://open.jewelry/'
+EMAIL_MULTI_USER = True  # optional (defaults to False)
+

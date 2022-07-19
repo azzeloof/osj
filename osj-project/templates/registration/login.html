@@ -42,6 +42,14 @@
                             <script>formErrorBox('{{ form.password.errors }}', 'passwordInput', 'passwordErrors');</script>
                         </div>
                         <button type="submit" class="btn btn-warning">Let me in!</button>
+                        <a href={% url 'password_reset' %} class="btn btn-danger">Reset Password</a>
+                        {% if form.non_field_errors %}
+                          <div class="form-errors">
+                            {% for error in form.non_field_errors %}
+                              {{ error }}
+                            {% endfor %}
+                          </div>
+                        {% endif %}
                     </form>
                 </div>
             </div>

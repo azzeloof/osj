@@ -1,0 +1,18 @@
+{% extends 'pages/base.html' %}
+
+{% block scripts %}
+    <title>OpenJewelry: Delete Piece</title>
+{% endblock %}
+
+{% block content %}
+    <div class="jumbotron d-flex align-items-center min-vh-100">
+        <div class="container text-center">
+            <form method="post">{% csrf_token %}
+                <p>Are you sure you want to delete "{{ object }}"?</p>
+                {{ form }}
+                <input type="submit" value="Confirm">
+            </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

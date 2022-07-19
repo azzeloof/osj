@@ -1,0 +1,182 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+{% load param_replace %}
+
+{% block scripts %}
+    <title>OpenJewelry: All Pieces</title>
+    <meta property="og:url" content="https://{{ request.get_host }}{{ request.get_full_path }}" />
+    <meta property="og:title" content="OpenJewelry: All Pieces" />
+    <meta property="og:description" content="The Internet's home for wearable art of all kinds" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://{{ request.get_host }}{% static 'pages/osj-logo-full.png' %}" />
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="{{ request.get_host }}">
+    <meta property="twitter:url" content="https://{{ request.get_host }}{{ request.get_full_path }}">
+    <meta name="twitter:title" content="OpenJewelry: All Pieces">
+    <meta name="twitter:description" content="The Internet's home for wearable art of all kinds">
+    <meta name="twitter:image" content="https://{{ request.get_host }}{% static 'pages/osj-logo-full.png' %}">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous">
+    </script>
+    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+    <script>
+        function reloadWithParam(parameter) {
+            const url = window.location.href.split('?')[0];
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const entries = urlParams.entries();
+            var query = '?';
+            var parameterName = parameter.split('=')[0];
+            for(const entry of entries) {
+                if (!(['page', parameterName].includes(entry[0]))) {
+                    query += `${entry[0]}=${entry[1]}&`;
+                }
+            }
+            query += parameter;
+            var newUrl = url + query;
+            location.assign(newUrl);
+        };
+
+        function reloadWithoutParam(parameterName) {
+            const url = window.location.href.split('?')[0];
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const entries = urlParams.entries();
+            var query = '?';
+            for(const entry of entries) {
+                if (entry[0] != parameterName) {
+                    query += `${entry[0]}=${entry[1]}&`;
+                }
+            }
+            var newUrl = url + query;
+            location.assign(newUrl);
+        };
+
+        $(document).ready(function() {                
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const entries = urlParams.entries();
+            params = {};
+            for (const entry of entries) {
+                params[entry[0]] = entry[1];
+            }
+            const order = params['orderby'];
+            const direction = params['direction'];
+            if (!(order)) {
+                    console.log('as');
+                reloadWithParam('orderby=created');
+            }
+            if (!(direction)) {
+                reloadWithParam('direction=descending');
+            }
+            $('[name="cat-{{ category }}"]').addClass("sidebar-selected");
+            $('[name="order-'+order+'"]').addClass("sidebar-selected");
+            $('[name="direction-'+direction+'"]').addClass("sidebar-selected");
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div>
+                    <div class="flexbox">
+                        <div class="sidebar" style="width: 240px;">
+                            <h4>Categories</h4>
+                            <ul class="list-unstyled ps-0">
+                                <li class="mb-1">
+                                    <div name="all" class="sidebar-btn {% if not category %} sidebar-selected {% endif %}"><a onClick="reloadWithoutParam('category')" class="link-dark rounded">All Jewelry</a></div>
+                                    {% for category, subCats in categories.items %}
+                                        <div name="cat-{{ category }}" class="sidebar-btn"><a onClick="reloadWithParam('area={{ category }}')" class="link-dark rounded">{{ category }}</a></div>
+                                        <ul class="list-unstyled fw-normal pb-1 small">
+                                            {% for subCat in subCats %}
+                                                <li name="cat-{{ subCat }}" class="sidebar-btn sidebar-subcategory"><a onClick="reloadWithParam('category={{ subCat }}')" class="link-dark rounded">{{ subCat }}</a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endfor %}
+                                </li>
+                                <li class="border-top my-3"></li>
+                            </ul>
+                            <h4>Sort By</h4>
+                            <h6>Filters</h6>
+                            <ul class="list-unstyled ps-0">
+                                <li name="order-created" class="sidebar-btn sidebar-subcategory"><a onClick="reloadWithParam('orderby=created')" class="link-dark rounded">Date Created</a></li>
+                                <li name="order-hitcount_generic" class="sidebar-btn sidebar-subcategory"><a onClick="reloadWithParam('orderby=hitcount_generic')" class="link-dark rounded">Views</a></li>
+                                <li name="order-likes" class="sidebar-btn sidebar-subcategory"><a onClick="reloadWithParam('orderby=likes')" class="link-dark rounded">Likes</a></li>
+                                <li class="border-top my-3"></li>
+                            </ul>
+                            <h6>Direction</h6>
+                            <ul class="list-unstyled ps-0">
+                                <li name="direction-ascending" class="sidebar-btn sidebar-subcategory"><a onClick="reloadWithParam('direction=ascending')" class="link-dark rounded">Ascending</a></li>
+                                <li name="direction-descending" class="sidebar-btn sidebar-subcategory"><a onClick="reloadWithParam('direction=descending')" class="link-dark rounded">Descending</a></li>
+                                <li class="border-top my-3"></li>
+                            </ul>
+                        </div>
+
+                        <div class="jewelry-grid mt-3">
+                            <h1>Jewelry{% if category %}: {{ category }}{% endif %}</h1>
+                            {% include "things/jewelry-grid-block.html" with pieces=pieces %}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+            
+        <div class="row">
+            <div class="col-md-12">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" aria-label="First" href="?{% param_replace page=1 %}">&laquo;&laquo;</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" aria-label="Previous" href="?{% param_replace page=page_obj.previous_page_number %}">&laquo;</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link" aria-label="First">&laquo;&laquo;</span>
+                            </li>
+                            <li class="page-item disabled">
+                                <a class="page-link" aria-label="Previous">&laquo;</a>
+                            </li>
+                        {% endif %}
+
+                        {% for n in page_obj.paginator.page_range %}
+                            {% if page_obj.number == n %}
+                                <li class="page-item active" aria-current="page">
+                                    <a class="page-link" href="#">{{ n }}</a>
+                                </li>
+                            {% elif n > page_obj.number|add:'-4' and n < page_obj.number|add:'4' %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?{% param_replace page=n %}">{{ n }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" aria-label="Next" href="?{% param_replace page=page_obj.next_page_number %}">&raquo;</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" aria-label="Last" href="?{% param_replace page=paginator.num_pages %}">&raquo;&raquo;</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link" aria-label="Next">&raquo;</span>
+                            </li>
+                            <li class="page-item disabled">
+                                <a class="page-link" aria-label="Last">&raquo;&raquo;</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+{% endblock %}

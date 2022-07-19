@@ -1,0 +1,55 @@
+{% extends 'pages/base.html' %}
+
+{% block scripts %}
+    <title>OpenJewelry: Notifications</title>
+    <script>
+        function httpGet(url) {
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.open("GET", url, false);
+            xmlHttp.send( null );
+            console.log(xmlHttp.responseText);
+            location.reload(); 
+        }
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="container py-5">
+        <h2>My Notifications</h2>
+        <table class="table table-hover mt-5">
+            <tbody>
+                {% for notification in user.notifications.all %}
+                    {% if notification.unread %}
+                        <tr class="table-default">
+                    {% else %}
+                        <tr class="table-secondary">
+                    {% endif %}
+                        <td>
+                            <div class="row">
+                                <p class="message-sender"><i class="bi bi-chat-left-dots"></i> {{ notification.actor_content_type }} | {{ notification.actor }}</p>
+                            </div>
+                            <div class="row">
+                                {% if notification.unread %}
+                                    <a class="message-verb" style="font-weight:bold;" onclick="httpGet('{% url 'notifications:mark_as_read' notification.slug %}');">{{ notification.verb }}</a> <!-href="{% url 'notifications:mark_as_read' notification.slug %}"-->
+                                {% else %}
+                                    <p class="message-verb">{{ notification.verb }}</p>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td>
+                            <p class="message-description">{{ notification.description }}</p>
+                        </td>
+                        <td>
+                            <div class="row">
+                                {{ notification.timestamp|date:'M' }} {{ notification.timestamp|date:'d' }}, {{ notification.timestamp|date:'Y' }}
+                            </div>
+                            <div class="row">
+                                {{ notification.timestamp|date:'P' }}
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

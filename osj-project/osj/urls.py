@@ -15,12 +15,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
-from django.urls import include, path
+from django.urls import include, path, re_path
 from osj import views as core_views
-from osj.forms import UserLoginForm
+from osj.forms import UserLoginForm, UserPasswordResetForm, UserPasswordChangeForm
+import notifications.urls
+from django_email_verification import urls as email_urls  # include the urls
 
 urlpatterns = [
     path('', include('pages.urls'), name='index'),
+    path('jewelry/', include('things.urls')),
+    path('user/', include('profiles.urls')),
+    path('articles/', include('articles.urls')),
+    path('reports/', include('reports.urls'), name='reports'),
     path('admin/', admin.site.urls),
     path(
         'auth/login/',
@@ -30,12 +36,27 @@ urlpatterns = [
             ),
         name='login'
         ),
+    path(
+        'auth/password_reset/',
+        auth_views.PasswordResetView.as_view(
+            template_name="registration/password_reset_form.html",
+            form_class=UserPasswordResetForm
+            ),
+        ),
+    path(
+        'auth/password_change/',
+        auth_views.PasswordChangeView.as_view(
+            template_name="registration/password_change_form.html",
+            form_class=UserPasswordChangeForm
+            ),
+        ),
     path('auth/', include('django.contrib.auth.urls')),
     path('auth/register', core_views.registration, name='registration'),
     path('auth/whatsnext', core_views.afterRegistration, name='afterRegistration'),
     path('tinymce/', include('tinymce.urls'), name='tinymce'),
     path('hitcount/', include(('hitcount.urls', 'hitcount'), namespace='hitcount')),
     path('tz_detect/', include('tz_detect.urls')),
-    path('notifications/', include('django_nyt.urls')),
-    path('wiki/', include('wiki.urls')),
+    re_path('^inbox/notifications/', include(notifications.urls, namespace='notifications')),
+    path('email/', include(email_urls)),  # connect them to an arbitrary path
+    path('newVerificationLink/', core_views.newVerificationLink, name='newVerificationLink')
 ]

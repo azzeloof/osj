@@ -1,0 +1,242 @@
+{% extends 'pages/base.html' %}
+{% load sizify %}
+{% load hitcount_tags %}
+
+{% block scripts %}
+    <title>OpenJewelry: {{piece.title}}</title>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@3.6.12/dist/js/splide.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@3.6.12/dist/css/splide.min.css">
+    <script>
+        document.addEventListener( 'DOMContentLoaded', function () {
+            var main = new Splide( '#main-slider', {
+                type        : 'fade',
+                rewind      : true,
+                autoWidth   : true,
+                heightRatio : .75,
+                pagination  : false,
+                arrows      : false,
+            });
+            
+            var thumbnails = new Splide( '#thumbnail-slider', {
+                fixedHeight : 120,
+                autoWidth: true,
+                gap         : 10,
+                rewind      : true,
+                pagination  : false,
+                isNavigation: true,
+                breakpoints : {
+                    600: {
+                        fixedHeight: 60,
+                    },
+                },
+            });
+            
+            main.sync( thumbnails );
+            main.mount();
+            thumbnails.mount();
+        });
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        // AJAX CALL
+        $(document).ready(function() {
+            $('.likebtn').click(function(){
+                $.ajax({
+                        type: "POST",
+                        url: "{% url 'like' %}",
+                        data: {'piece_id': $(this).attr('name'),'operation':'like_submit','csrfmiddlewaretoken': '{{ csrf_token }}'},
+                        dataType: "json",
+                        success: function(response) {
+                            selector = document.getElementsByName(response.piece_id);
+                                    if(response.liked==true){
+                                        $('.likebtn').html('<i class="bi-heart-fill"></i>');
+                                        $('#like-counter').html(response.likes);
+                                    }
+                                    else if(response.liked==false){
+                                        $('.likebtn').html('<i class="bi-heart"></i>');
+                                        $('#like-counter').html(response.likes);
+                                    }
+                        }
+                    });
+            });
+        });
+    </script>
+    <script>
+        function activateTab(tab){
+            $('.nav-tabs button[id="' + tab + '"]').tab('show');
+            window.scrollTo(0, document.getElementById(tab).offsetTop);
+        };
+    </script>
+
+    <meta property="og:url" content="https://{{ request.get_host }}{{ request.get_full_path }}" />
+    <meta property="og:title" content="OpenJewelry: {{ piece.title }}" />
+    <meta property="og:description" content="{{ piece.description | slice:'0:100'|striptags }}" />
+    <meta property="og:type" content="website" />
+    {% if featuredImage.image %}
+        <meta property="og:image" content="https://{{ request.get_host }}{{ featuredImage.image.url }}" />
+        <meta name="twitter:image" content="https://{{ request.get_host }}{{ featuredImage.image.url }}">
+    {% else %}
+        <meta property="og:image" content="https://{{ request.get_host }}/media/profile_photos/default.png" />
+        <meta name="twitter:image" content="https://{{ request.get_host }}/media/profile_photos/default.png">
+    {% endif %}
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="{{ request.get_host }}">
+    <meta property="twitter:url" content="https://{{ request.get_host }}{{ request.get_full_path }}">
+    <meta name="twitter:title" content="OpenJewelry: {{ piece.title }}">
+    <meta name="twitter:description" content="{{ piece.description | slice:'0:100'|striptags }}">
+
+{% endblock %}
+
+{% block content %}
+    <div>
+        <div class="container mt-3">
+            <div class="row">
+                <div class="row align-items-center">
+                    <div class="col-auto">
+                        <h1>{{ piece.title }}</h1>
+                    </div>
+                    <div class="col-auto">
+                        <div class="row">
+                            <h6 class="jewelry-header-subtitle">by <a href='/user/{{ piece.creator }}'>{{ piece.creator }}</a></h6>
+                        </div>
+                        <div class="row">
+                            {% if created == modified %}
+                                <h6 class="jewelry-header-subtitle">created {{ created }}</h6>
+                            {% else %}
+                                <h6 class="jewelry-header-subtitle">created {{ created }}, updated {{ modified }}</h6>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-auto edit-button-col">
+                        {% if editable %}
+                            <a href="/jewelry/{{ piece.id }}/edit" style="font-size: 2rem;" class="bi-pencil-square"></a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div id="main-slider" class="splide">
+                        <div class="splide__track">
+                            <ul class="splide__list">
+                                {% for image in images %}
+                                    <li class="splide__slide">
+                                        <img class="main-img" src="{{ image.image.url }}", alt="{{ image.image.alt }}">
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="thumbnail-slider" class="splide">
+                        <div class="splide__track">
+                            <ul class="splide__list">
+                                {% for image in images %}
+                                    <li class="splide__slide">
+                                        <img src="{{ image.image.url }}", alt="{{ image.image.alt }}" class="splide-display-image">
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="jewelry-sidebar">
+                        <div class="row sidebar-row">
+                            {{ piece.tagline|safe }}
+                        </div>
+                        <div class="sidebar-row">
+                            {% if piece.repo %}
+                                <p>Project repo: <a href={{ piece.repo }}>{{ piece.repo }}<a></p>
+                            {% endif %}
+                        </div>
+                        <div class="row sidebar-row">
+                            <p>Category: {{ piece.category }}</p>
+                        </div>
+                        <div class="row sidebar-row">
+                            <p>
+                                Tags:
+                                {% for tag in piece.tags.all %}
+                                    {% if tag.slug %}
+                                        <a href="{% url 'tagged' tag.slug %}" class="m-1 badge bg-secondary tag-badge">{{ tag }}</a>
+                                    {% endif %}
+                                {% endfor %}
+                            </p>
+                        </div>
+                        <div class="row sidebar-row">
+                            <div class="col-sm-4">
+                                <div class="infobox">
+                                    <p><i class="bi-eye-fill" style="font-size: 24px;"></i> {% get_hit_count for piece %}</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="infobox">
+                                    {% if liked %} 
+                                        <a name="{{ piece.id }}" class="likebtn" id="co"><i class="bi-heart-fill"></i></a> <span id="like-counter" style="padding-bottom:3px;">{{ likes }}</span>
+                                    {% else %}
+                                        <a name="{{ piece.id }}" class="likebtn" id="co"><i class="bi-heart"></i></a> <span id="like-counter" style="padding-bottom:3px;">{{ likes }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <p><i style="font-size:24px;" class="bi-download"></i> {{ downloads }}<p>
+                            </div>
+                        </div>
+                        <div class="row sidebar-row">
+                            <button class="btn btn-warning text-purple" onclick="activateTab('files-tab')" href="#files-tab"></i> Download Files</button>
+                        </div>
+                        <div class="row sidebar-row">
+                            <div class="licence-block">
+                                {{ piece.licence.html|safe }}
+                            </div>
+                        </div>
+                        <div class="row sidebar-row">
+                            <p><a href="/reports/new/thing/{{ piece.id }}">Report this content</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="jewelry-details">
+                <div class="row">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                          <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab" aria-controls="home" aria-selected="true">Description</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="files-tab" data-bs-toggle="tab" data-bs-target="#files" type="button" role="tab" aria-controls="files" aria-selected="false">Files</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="tabContent">
+                        <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
+                            <h3>Description</h3>
+                            {{ piece.description|safe }}
+                        </div>
+                        <div class="tab-pane fade" id="files" role="tabpanel" aria-labelledby="files-tab">
+                            <h3>Files</h3>
+                            <table class="table table-striped">
+                                <thead>
+                                    <th>File</th>
+                                    <th>Downloads</th>
+                                    <th>Size</th>
+                                    <th></th>
+                                </thead>
+                                <tbody>
+                                    {% for file in files %}
+                                    <tr>
+                                        {% if file.name %}
+                                            <td>{{ file.name }} <p class="filename">{{ file.filename }}</p></td>
+                                        {% else %}
+                                            <td>{{ file.filename }}</td>
+                                        {% endif %}
+                                        <td>{{ file.downloads }}</td>
+                                        <td>{% if file.file %}{{ file.file.size|sizify }}{% endif %}</td>
+                                        <td><a href="/file/{{ file.id }}"><i class="bi-download"></i></a></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

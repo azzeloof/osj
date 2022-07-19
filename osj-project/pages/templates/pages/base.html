@@ -1,33 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
+
 {% load static %}
 {% load tz %}
+{% load notifications_tags %}
 
 <head>
-    <title>OSJ</title>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>-->
     <script
-			  src="https://code.jquery.com/jquery-3.6.0.min.js"
-			  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-			  crossorigin="anonymous">
+	    src="https://code.jquery.com/jquery-3.6.0.min.js"
+		integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+		crossorigin="anonymous">
     </script>
     <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script> 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
     <link rel="shortcut icon" type="image/png" href="{% static 'pages/favicon.ico' %}"/>
+    <!--
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ google_analytics_key }}"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', '{{ google_analytics_key }}');
+    </script>
+  -->
     {% block scripts %}
     {% endblock %}
     <link rel="stylesheet" type="text/css" href="{% static 'pages/style.css' %}">
 </head>
 
 <body class="d-flex flex-column min-vh-100">
-  {% localtime on %}
-    <header class="p-2 bg-orange text-purple">
+    {% localtime on %}
+    <header class="py-2 px-4 bg-orange text-purple">
         <div class="container-flex">
             <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                <h1 class="d-flex align-items-center mb-2 mb-lg-0 text-decoration-none">OJ</h1>
+                <!--<h1 class="d-flex align-items-center mb-2 mb-lg-0 text-decoration-none">OJ</h1>-->
+                <a class="navbar-brand" href="/">
+                    <img src="{% static 'pages/osj-logo-notext.png' %}" height="30"> OpenJewelry
+                </a>
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                     <li class="nav-item">
                         <a class="nav-link main text-purple px-4" href="/">Home</a>
@@ -39,8 +55,13 @@
                         <a class="nav-link main text-purple px-4" href="/jewelry/?orderby=created&direction=descending">Jewelry</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link main text-purple px-4" href="/help">Help</a>
+                    </li>
+                    <!--
+                    <li class="nav-item">
                         <a class="nav-link main text-purple px-4" href="/articles">Articles</a>
                     </li>
+                    -->
                 </ul>
                 <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
                     <input type="search" class="form-control form-control-dark" placeholder="Search... (disabled)" style="pointer-events: none;" saria-label="Search">
@@ -48,18 +69,34 @@
                 {% if user.is_authenticated %}
                     <div class="dropdown text-end">
                         <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                        {% if currentuserprofile.image %}
-                            <img src="{{ currentuserprofile.image.url }}" alt="profile photo" class="rounded-circle" width="32" height="32">
+                        {% if user.profile.image %}
+                            <img src="{{ user.profile.image.url }}" alt="profile photo" class="rounded-circle" width="45" height="45">
                         {% else %}
-                            <img src="/media/profile_photos/default.png" alt="profile photo" class="rounded-circle" width="32" height="32">
+                            <img src="/media/profile_photos/default.png" alt="profile photo" class="rounded-circle" width="45" height="45">
+                        {% endif %}
+                        {% notifications_unread as unread_count %}
+                        {% if unread_count %}
+                            <span class="position-absolute top-30 start-70 translate-middle badge rounded-pill bg-danger">
+                                {{ unread_count }}
+                                <span class="visually-hidden">unread messages</span>
+                            </span>
                         {% endif %}
                         </a>
                         <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1" style="">
-                        <li><a class="dropdown-item" href="/jewelry/new">New Jewelry Piece</a></li>
-                        <li><a class="dropdown-item disabled" href="/articles/new">New Article</a></li>
-                        <li><a class="dropdown-item" href="/user/{{ currentuserprofile.slug }}">Profile</a></li>
+                        <li><a class="dropdown-item" href="/jewelry/new"><i class="bi bi-gem"></i> New Jewelry Piece</a></li>
+                        <!--<li><a class="dropdown-item disabled" href="/articles/new"><i class="bi bi-newspaper"></i> New Article</a></li>-->
+                        <li><a class="dropdown-item" href="/user/{{ user.profile.slug }}"><i class="bi bi-person-circle"></i> Profile</a></li>
+                        <li>
+                            <a class="dropdown-item" href="/notifications"><i class="bi bi-bell"></i> Notifications
+                                {% if unread_count %}
+                                    <span class="badge rounded-pill bg-danger">
+                                        {{ unread_count }}
+                                    </span>
+                                {% endif %}
+                            </a>
+                        </li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="/auth/logout">Sign out</a></li>
+                        <li><a class="dropdown-item" href="/auth/logout"><i class="bi bi-lock"></i> Sign out</a></li>
                         </ul>
                     </div>
                 {% else %}
@@ -70,6 +107,14 @@
         </div>
     </header>
 
+    {% if user.is_authenticated %}
+        {% if not user.profile.email_verified %}
+            <div class="alert alert-primary" role="alert">
+                Your account is not verified! Please click the link in the verification email, or <a href="/newVerificationLink">click here</a> to request a new link.
+            </div>
+        {% endif %}
+    {% endif %}
+
     <div class="container-fluid p-0">
         {% block content %}
         {% endblock %}
@@ -77,63 +122,59 @@
     
     
 <!-- Footer -->
-<footer class="bg-dark text-center text-white mt-auto">
+<footer class="bg-secondary text-center text-white mt-auto">
     <!-- Grid container -->
-    <div class="container p-4">
+    <div class="container-fluid px-4 pt-4">
 
-      <!-- Section: Form -->
-      <section class="">
-
-        <!--
-
-        <form action="">
-          <div class="row d-flex justify-content-center">
-            <div class="col-auto">
-              <p class="pt-2">
-                <strong>Sign up for our newsletter</strong>
-              </p>
-            </div>
-  
-            <div class="col-md-5 col-12">
-              <div class="form-outline form-white mb-4">
-                <input type="email" id="form5Example21" class="form-control" />
-                <label class="form-label" for="form5Example21">Email address</label>
-              </div>
-            </div>
-  
-            <div class="col-auto">
-              <button type="submit" class="btn btn-outline-light mb-4">
-                Subscribe
-              </button>
-            </div>
-          </div>
-        </form>
-
-      -->
-
-      </section>
-      <!-- Section: Form -->
-  
       <!-- Section: Text -->
-      <section class="mb-4">
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt distinctio earum
-          repellat quaerat voluptatibus placeat nam, commodi optio pariatur est quia magnam
-          eum harum corrupti dicta, aliquam sequi voluptate quas.
-        </p>
-      </section>
+        <div class="row">
+            <div class="col-md-4">
+                <p>This website is open source and is free to use, but hosting costs money! If you want to kick a dollar or two towards costs, 
+                <a href='https://ko-fi.com/{{ kofi_key }}' target='_blank'>click here</a></p>
+            </div>
 
-      <section class="mb-4">
-        <p>Make sure to read our <a href="/legal/privacypolicy">Privacy Policy</a>, <a href="/legal/termsofservice">Terms of Service<a>, and <a href="/legal/userguidelines">User Guidelines<a></p>
-      </section>
-      <!-- Section: Text -->
+            <div class="col-md-4">
+                <p>Make sure to read our <a href="/legal/privacypolicy">Privacy Policy</a>, <a href="/legal/termsofservice">Terms of Service</a>, and <a href="/legal/userguidelines">User Guidelines</a></p>
+            </div>
 
+            <div class="col-md-4">
+                <p>
+                    Want to contribute to the development of OpenJewelry/ see what's going on under the hood?
+                    <a href="https://github.com/azzeloof/osj" target='_blank'>Check out the project on GitHub</a>.
+                </p>
+            </div>
+        </div>
+
+        <section class="mb-1">
+            <p>
+                OpenJewelry is in beta! It's an experiment, and we're thrilled that you've decided to join in.
+                Because we're constantly working to improve the site, please excuse any bugs.
+                Better yet, <a href="https://github.com/azzeloof/osj/issues" target="_blank">report them</a>.
+            </p>
+        </section>
+        <!-- Section: Text -->
+
+        <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
+        <script>
+            kofiWidgetOverlay.draw('{{ kofi_username }}', {
+            'type': 'floating-chat',
+            'floating-chat.donateButton.text': 'Support us',
+            'floating-chat.donateButton.background-color': '#470077',
+            'floating-chat.donateButton.text-color': '#fff'
+            });
+        </script>
+    </div>
+
+    <div class="text-center p-4" style="background-color: rgba(255, 255, 255, 0.2);">
+        🔨 with 💜 on 🌎
+    </div>
 </footer>
   <!-- Footer -->
 
-  {% load tz_detect %}
-  {% tz_detect %}
+{% load tz_detect %}
+{% tz_detect %}
 
 {% endlocaltime %}
+
 </body>
 

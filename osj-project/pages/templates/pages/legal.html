@@ -1,12 +1,42 @@
 {% extends 'pages/base.html' %}
-    {% block content %}
-        <div class="container py-5">
-            {% if tos %}
-                {% include "pages/tos-block.html" %}
-            {% elif pp %}
-                {% include "pages/pp-block.html" %}
-            {% elif ug %}
-                {% include "pages/ug-block.html" %}
-            {% endif%}
-        </div>
-    {% endblock %}
+
+{% load static %}
+
+{% block scripts %}
+    {% if tos %}
+        <title>OpenJewelry: Terms of Service</title>
+        <meta property="og:title" content="OpenJewelry: Terms of Service" />
+        <meta name="twitter:title" content="OpenJewelry: Terms of Service">
+    {% elif pp %}
+        <title>OpenJewelry: Privacy Policy</title>
+        <meta property="og:title" content="OpenJewelry: Privacy Policy" />
+        <meta name="twitter:title" content="OpenJewelry: Privacy Policy">
+    {% elif ug %}
+        <title>OpenJewelry: User Guidelines</title>
+        <meta property="og:title" content="OpenJewelry: User Guidelines" />
+        <meta name="twitter:title" content="OpenJewelry: User Guidelines">
+    {% endif %}
+    
+    <meta property="og:url" content="https://{{ request.get_host }}{{ request.get_full_path }}" />
+    <meta property="og:description" content="The Internet's home for wearable art of all kinds" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://{{ request.get_host }}{% static 'pages/osj-logo-full.png' %}" />
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="{{ request.get_host }}">
+    <meta property="twitter:url" content="https://{{ request.get_host }}{{ request.get_full_path }}">
+    <meta name="twitter:description" content="The Internet's home for wearable art of all kinds">
+    <meta name="twitter:image" content="https://{{ request.get_host }}{% static 'pages/osj-logo-full.png' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="container py-5">
+        {% if tos %}
+            {% include "pages/tos-block.html" %}
+        {% elif pp %}
+            {% include "pages/pp-block.html" %}
+        {% elif ug %}
+            {% include "pages/ug-block.html" %}
+        {% endif%}
+    </div>
+{% endblock %}
