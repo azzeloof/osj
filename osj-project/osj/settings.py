@@ -237,3 +237,5 @@ EMAIL_MULTI_USER = True  # optional (defaults to False)
 WIKI_ACCOUNT_HANDLING = False
 LOGOUT_URL = '/auth/logout'
 LOGIN_URL = '/auth/login'
+
+SITE_ID = 1
