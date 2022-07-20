@@ -6,7 +6,30 @@
 
 
 {% block wiki_navbar %}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <link rel="stylesheet" type="text/css" href="{% static 'pages/style.css' %}">
+
+
+<link rel="shortcut icon" type="image/png" href="{% static 'pages/favicon.ico' %}"/>
+
+{% if article %}
+    <meta property="og:title" content="OpenJewelry Wiki: {{ article }}" />
+    <meta name="twitter:title" content="OpenJewelry Wiki: {{ article }}">
+{% else %}
+    <meta property="og:title" content="OpenJewelry Wiki" />
+    <meta name="twitter:title" content="OpenJewelry Wiki">
+{% endif %}
+
+<meta property="og:description" content="The Internet's home for wearable art of all kinds" />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://{{ request.get_host }}{% static 'pages/osj-logo-full.png' %}" />
+
+<meta name="twitter:card" content="summary_large_image">
+<meta property="twitter:domain" content="{{ request.get_host }}">
+<meta property="twitter:url" content="https://{{ request.get_host }}{{ request.get_full_path }}">
+<meta name="twitter:description" content="The Internet's home for wearable art of all kinds">
+<meta name="twitter:image" content="https://{{ request.get_host }}{% static 'pages/osj-logo-full.png' %}">
+
 <nav class="navbar navbar-expand-lg bg-orange text-purple">
 <div class="container">
   {% block wiki_header_branding %}
@@ -73,7 +96,6 @@
       {% endif %}
   </ul>
   {% endif %}
-
 
     <form class="form-inline" method="GET" action="{% spaceless %}
           {% if article or urlpath %}
