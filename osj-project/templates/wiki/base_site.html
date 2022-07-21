@@ -30,6 +30,24 @@
 <meta name="twitter:description" content="The Internet's home for wearable art of all kinds">
 <meta name="twitter:image" content="https://{{ request.get_host }}{% static 'pages/osj-logo-full.png' %}">
 
+<script
+src="https://code.jquery.com/jquery-3.6.0.min.js"
+integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+crossorigin="anonymous">
+</script>
+
+<script>
+    $(document).ready(function() {
+        if ($.trim($(".wiki-article").html()) == '') {
+            $(".wiki-article").html(`
+            <div class="alert alert-primary" role="alert">
+                This page is empty, but you can help with that! If you'd like to start it, click the edit button above.
+            </div>
+            `);
+        }
+    });
+</script>
+
 <nav class="navbar navbar-expand-lg bg-orange text-purple">
 <div class="container">
   {% block wiki_header_branding %}
@@ -124,4 +142,8 @@
 </nav>
 {% endblock %}
 
+{% block wiki_footer_logo %}
+<p>Make sure to read our <a href="/legal/privacypolicy">Privacy Policy</a>, <a href="/legal/termsofservice">Terms of Service</a>, and <a href="/legal/userguidelines">User Guidelines</a></p>
+<a href="https://github.com/django-wiki/django-wiki" class="float-right"><img src="{% static "wiki/img/github_icon.png" %}" /></a>
+{% endblock %}
 
