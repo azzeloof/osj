@@ -6,5 +6,6 @@ def google_analytics_key(request):
 def kofi_creds(request):
     return {
         'kofi_username': settings.KOFI_USERNAME,
-        'kofi_key': settings.KOFI_KEY
+        'kofi_key': settings.KOFI_KEY,
+        'discord_invite_code': settings.DISCORD_INVITE_CODE
         }
