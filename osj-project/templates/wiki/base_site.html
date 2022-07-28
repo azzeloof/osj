@@ -36,6 +36,16 @@ integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
 crossorigin="anonymous">
 </script>
 
+<script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
+<script>
+    kofiWidgetOverlay.draw('{{ kofi_username }}', {
+    'type': 'floating-chat',
+    'floating-chat.donateButton.text': 'Support us',
+    'floating-chat.donateButton.background-color': '#470077',
+    'floating-chat.donateButton.text-color': '#fff'
+    });
+</script>
+
 <script>
     $(document).ready(function() {
         if ($.trim($(".wiki-article").html()) == '') {
@@ -143,6 +153,9 @@ crossorigin="anonymous">
 {% endblock %}
 
 {% block wiki_footer_logo %}
+<div>
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a>&nbsp The contents of this Wiki are licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+</div>
 <p>Make sure to read our <a href="/legal/privacypolicy">Privacy Policy</a>, <a href="/legal/termsofservice">Terms of Service</a>, and <a href="/legal/userguidelines">User Guidelines</a></p>
 <a href="https://github.com/django-wiki/django-wiki" class="float-right"><img src="{% static "wiki/img/github_icon.png" %}" /></a>
 {% endblock %}
