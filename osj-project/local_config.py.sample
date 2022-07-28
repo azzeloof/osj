@@ -45,6 +45,8 @@ GOOGLE_ANALYTICS_KEY = ''
 KOFI_USERNAME = '' # For the floating widget
 KOFI_KEY = '' # For the link
 
+DISCORD_INVITE_CODE = ''
+
 ##### OPTIONAL PARAMETERS #####
 
 #SECURE_HSTS_SECONDS = 60

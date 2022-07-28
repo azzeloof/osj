@@ -162,12 +162,12 @@
                             </p>
                         </div>
                         <div class="row sidebar-row">
-                            <div class="col-sm-4">
+                            <div class="col-sm-auto">
                                 <div class="infobox">
                                     <p><i class="bi-eye-fill" style="font-size: 24px;"></i> {% get_hit_count for piece %}</p>
                                 </div>
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-sm-auto">
                                 <div class="infobox">
                                     {% if liked %} 
                                         <a name="{{ piece.id }}" class="likebtn" id="co"><i class="bi-heart-fill"></i></a> <span id="like-counter" style="padding-bottom:3px;">{{ likes }}</span>
@@ -176,13 +176,17 @@
                                     {% endif %}
                                 </div>
                             </div>
-                            <div class="col-sm-4">
+                            {% if downloads %}
+                            <div class="col-sm-auto">
                                 <p><i style="font-size:24px;" class="bi-download"></i> {{ downloads }}<p>
                             </div>
+                            {% endif %}
                         </div>
+                        {% if files %}
                         <div class="row sidebar-row">
                             <button class="btn btn-warning text-purple" onclick="activateTab('files-tab')" href="#files-tab"></i> Download Files</button>
                         </div>
+                        {% endif %}
                         <div class="row sidebar-row">
                             <div class="licence-block">
                                 {{ piece.licence.html|safe }}
