@@ -42,9 +42,11 @@
                                     <p><i class="bi-heart-fill"></i> {{ piece.likes }}</p>
                                 </div>
                             </div>
+                            {% if piece.downloads %}
                             <div class="col-sm-auto">
-                                <p><i class="bi-download"></i> {{ piece.downloads }}<p>
+                                    <p><i class="bi-download"></i> {{ piece.downloads }}<p>
                             </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
